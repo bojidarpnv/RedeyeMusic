@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
+using RedeyeMusic.Services.Data.Interfaces;
+using RedeyeMusic.Web.Infrastructure.Extensions;
 
 namespace RedeyeMusic
 {
@@ -30,6 +32,7 @@ namespace RedeyeMusic
                 options.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
             })
                 .AddEntityFrameworkStores<RedeyeMusicDbContext>();
+            builder.Services.AddApplicationService(typeof(ISongService));
             builder.Services.AddControllersWithViews();
 
             WebApplication app = builder.Build();

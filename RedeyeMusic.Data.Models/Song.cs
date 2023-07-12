@@ -16,9 +16,14 @@ namespace RedeyeMusic.Data.Models
         [MaxLength(DurationMaxLengthInSeconds)]
         public int Duration { get; set; }
 
+        public int ListenCount { get; set; }
+
 
         [StringLength(LyricsMaxLength)]
         public string? Lyrics { get; set; }
+
+        [Required]
+        public string ImageUrl { get; set; } = null!;
 
         [Required]
         public string FilePath { get; set; } = null!;

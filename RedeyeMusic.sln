@@ -3,19 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeyeMusic.Web", "RedeyeMusic\RedeyeMusic.Web.csproj", "{A71EA253-CC38-4B78-B7C5-70F109279F80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedeyeMusic.Web", "RedeyeMusic\RedeyeMusic.Web.csproj", "{A71EA253-CC38-4B78-B7C5-70F109279F80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeyeMusic.Common", "RedeyeMusic.Common\RedeyeMusic.Common.csproj", "{E07F52AE-DDF7-4E07-B26A-F5913BEFAACF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedeyeMusic.Common", "RedeyeMusic.Common\RedeyeMusic.Common.csproj", "{E07F52AE-DDF7-4E07-B26A-F5913BEFAACF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{E2567DD2-920A-4DC8-B9B2-298A10A5A16C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{2623B068-DF2A-4F2F-A925-46B5D8E40FFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeyeMusic.Data", "RedeyeMusic.Data\RedeyeMusic.Data.csproj", "{4255CE77-5FC2-40D0-86DC-BE36F5C66116}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedeyeMusic.Data", "RedeyeMusic.Data\RedeyeMusic.Data.csproj", "{4255CE77-5FC2-40D0-86DC-BE36F5C66116}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeyeMusic.Data.Models", "RedeyeMusic.Data.Models\RedeyeMusic.Data.Models.csproj", "{5D0A7778-684B-454D-9680-2DFC9E0BCAAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedeyeMusic.Data.Models", "RedeyeMusic.Data.Models\RedeyeMusic.Data.Models.csproj", "{5D0A7778-684B-454D-9680-2DFC9E0BCAAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeyeMusic.Web.ViewModels", "RedeyeMusic.Web.ViewModels\RedeyeMusic.Web.ViewModels.csproj", "{99859ACC-8BA8-4065-BB6E-08E4B4121EA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedeyeMusic.Web.ViewModels", "RedeyeMusic.Web.ViewModels\RedeyeMusic.Web.ViewModels.csproj", "{99859ACC-8BA8-4065-BB6E-08E4B4121EA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{59C9662A-A8A1-4762-8808-863A34DD5ED4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeyeMusic.Services.Data", "RedeyeMusic.Services.Data\RedeyeMusic.Services.Data.csproj", "{20D47D30-EE40-437F-9A31-C3F0D236F00B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeyeMusic.Web.Infrastructure", "RedeyeMusic.Web.Infrastructure\RedeyeMusic.Web.Infrastructure.csproj", "{9FC7C905-9B69-4AEB-968C-F167D211E05E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +49,14 @@ Global
 		{99859ACC-8BA8-4065-BB6E-08E4B4121EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99859ACC-8BA8-4065-BB6E-08E4B4121EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99859ACC-8BA8-4065-BB6E-08E4B4121EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20D47D30-EE40-437F-9A31-C3F0D236F00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D47D30-EE40-437F-9A31-C3F0D236F00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D47D30-EE40-437F-9A31-C3F0D236F00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D47D30-EE40-437F-9A31-C3F0D236F00B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FC7C905-9B69-4AEB-968C-F167D211E05E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FC7C905-9B69-4AEB-968C-F167D211E05E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FC7C905-9B69-4AEB-968C-F167D211E05E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FC7C905-9B69-4AEB-968C-F167D211E05E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +66,8 @@ Global
 		{4255CE77-5FC2-40D0-86DC-BE36F5C66116} = {2623B068-DF2A-4F2F-A925-46B5D8E40FFD}
 		{5D0A7778-684B-454D-9680-2DFC9E0BCAAE} = {2623B068-DF2A-4F2F-A925-46B5D8E40FFD}
 		{99859ACC-8BA8-4065-BB6E-08E4B4121EA0} = {E2567DD2-920A-4DC8-B9B2-298A10A5A16C}
+		{20D47D30-EE40-437F-9A31-C3F0D236F00B} = {59C9662A-A8A1-4762-8808-863A34DD5ED4}
+		{9FC7C905-9B69-4AEB-968C-F167D211E05E} = {E2567DD2-920A-4DC8-B9B2-298A10A5A16C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9A7A56C8-49EC-45E0-B8FA-EDEE0CBCBC96}

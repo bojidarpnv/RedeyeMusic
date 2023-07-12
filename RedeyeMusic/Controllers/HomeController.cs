@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.ViewModels.Home;
 using System.Diagnostics;
 
@@ -6,16 +7,17 @@ namespace RedeyeMusic.Controllers
 {
     public class HomeController : Controller
     {
-
-
-        public HomeController()
+        private readonly ISongService songService;
+        public HomeController(ISongService songService)
         {
-
+            this.songService = songService;
         }
 
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+            IEnumerable<IndexViewModel> viewModel = await this.songService.GetAll();
+            return View(viewModel);
         }
 
 
