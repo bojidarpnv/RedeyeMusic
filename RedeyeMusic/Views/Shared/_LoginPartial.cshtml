@@ -7,31 +7,32 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Artist" asp-action="BecomeArtist">Become an Artist</a>
+        <li class="nav-item mt-1">
+            <a class="nav-link text-light" asp-area="" asp-controller="Artist" asp-action="BecomeArtist">Become an Artist</a>
         </li>
-        <li class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img class="rounded-circle" src="~/images/Icon.png" style="width:50px; height=50px">
+        <li class="nav-item dropdown mt-1">
+                <a class="nav-link dropdown-toggle"  id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     @User.Identity?.Name
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" type="button-submit" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
-                <nav class="dropdown-item">
-                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <button type="submit" class="nav-link btn text-dark">Logout</button>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" type="button-submit" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a></li>
+                <li class="dropdown-item">
+                    <form class="dropdown-item" type="button-submit" role="button" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <input type="submit" value="LogOut">
                     </form>
-                </nav>
-                </div>
+                </li>
+                </ul>
         </li>
     
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
     

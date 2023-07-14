@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Home Page";
     var songs = Model.ToList();
+    var popularSongs = Model.OrderByDescending(s => s.ListenCount).ToList();
+
 }
 @if (!songs.Any())
 {
@@ -15,38 +17,67 @@
         <p class="lead">
             @if (User.Identity?.IsAuthenticated ?? false)
             {
-                <a asp-controller="Song" asp-action="Add" class="btn btn-primary
-btn-lg"
+                <a asp-controller="Song" asp-action="Add" class="btn btn-primary btn-lg"
                    role="button">Add Song</a>
             }
         </p>
     </div>
 }
-<div class="mb-5"></div>
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        @for (int i = 0; i < songs.Count(); i++)
-        {
-            var song = songs[i];
-            <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
-                <img class="d-block w-100" style="height:500px"
-                     src="@song.ImageUrl" alt="@song.Title">
-                
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>
-                        <a class="btn btn-primary" asp-controller="Song" aspaction="Details"
-                           asp-route-id="@song.Id"> @song.Title</a>
-                    </h5>
-                </div>
-            </div>
-        }
+<div class="homeview text-white pt-2">
+    <ul class="homeview-nav nav m-4 nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="text-white nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Popular</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="text-white nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Discover</button>
+        </li>
+
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab" tabindex="0">
+            @for (int i = 0; i < popularSongs.Count(); i++)
+            {
+                var song = popularSongs[i];
+                <a class="white song m-2 ms-4 col-md-6 row align-items-center" href="@Url.Action("Details", "Song", new {id = song.Id})">
+                    
+                    <div class="col d-flex">
+                        <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
+                        <div class="white ms-1">
+                            <div class="white">@song.Title</div>
+                            <small class="white">Song Description</small>
+                        </div>
+                    </div>
+                    <div class="col-2 text-decoration-none">03:00<btn class="btn-play btn-submit"><i class="bi bi-play ml-2"></i></btn></div>
+                    <small class="white col-2"><i class="bi bi-ear"></i> @song.ListenCount</small>
+                    
+
+                </a>
+            }
+           </div>
+        <div class="tab-pane fade" id="pills-disvoer" role="tabpanel" aria-labelledby="pills-discover-tab" tabindex="0">
+            @for(int i = 0; i< songs.Count(); i++)
+            {
+                var song = songs[i];
+                <a class="white song m-2 ms-4 col-md-6 row align-items-center" href="@Url.Action("Details", "Song", new {id = song.Id})">
+                    <div class="white col-1 h3">@i</div>
+                    <div class="col d-flex">
+                        <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
+                        <div class="white ms-1">
+                            <div class="white">@song.Title</div>
+                            <small class="white">Song Description</small>
+                        </div>
+                    </div>
+                    <div class="col-2">03:00<btn class="btn-play btn-submit"><i class="bi bi-play ml-2"></i></btn></div>
+
+                </a>
+            }
+        
+        </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bstarget="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bstarget="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
 </div>
+
+
+
+
+
+    

@@ -1,0 +1,56 @@
+﻿body{
+    background-color:grey;
+}
+footer {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 30px;
+    width: 100%;
+    
+}
+.container{
+    min-height: 500px;
+    background-position: 20% 30%;
+}
+body a{
+    text-decoration:none;
+}
+.main {
+    background-color: grey;
+}
+.btn {
+    color: white;
+    background-color: red;
+    outline-color: red;
+}
+.btn-primary{
+    background-color:red;
+    border-color:red;
+}
+.song:hover{
+    border:solid thin grey;
+    cursor: pointer;
+    transform:translateY(-5px)
+}
+.song {
+    background-color: #b30000;
+    text-decoration: none;
+    background: linear-gradient(90deg, rgba(116,7,7,1) 0%, rgba(152,11,11,1) 26%, rgba(203,14,14,1) 75%, rgba(0,0,0,0.03125) 100%);
+    transition: all 0.3s ease;
+}
+.homeview-nav .nav-item .active{
+    text-decoration-color:none;
+    color: white;
+    background-color: red;
+    border-color: red;
+}
+
+.btn-play {
+    background-color: transparent;
+    
+}
+.white{
+    color:white;
+    text-decoration:none;
+}

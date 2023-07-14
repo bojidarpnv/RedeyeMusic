@@ -10,4 +10,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RedeyeMusic.Data.Models\RedeyeMusic.Data.Models.csproj" />
+    <ProjectReference Include="..\RedeyeMusic.Data\RedeyeMusic.Data.csproj" />
+  </ItemGroup>
+
 </Project>
