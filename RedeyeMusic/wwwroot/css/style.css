@@ -54,3 +54,6 @@ body a{
     color:white;
     text-decoration:none;
 }
+.toast-container .toast-error {
+    background-color: #BD362F;
+}

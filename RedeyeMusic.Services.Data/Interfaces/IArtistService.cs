@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RedeyeMusic.Web.ViewModels.Artist;
+using RedeyeMusic.Web.ViewModels.Genre;
 
 namespace RedeyeMusic.Services.Data.Interfaces
 {
-    internal interface IArtistService
+    public interface IArtistService
     {
+        Task<bool> ArtistExistsByUserIdAsync(string userId);
+
+        public Task<ICollection<GenreSelectViewModel>> SelectGenresAsync();
+        Task CreateFirstSongAsync(string userId, string userName, AddSongFormModel song);
     }
 }

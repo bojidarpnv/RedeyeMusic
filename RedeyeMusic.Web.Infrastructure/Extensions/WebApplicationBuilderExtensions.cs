@@ -25,7 +25,7 @@
                 {
                     throw new InvalidOperationException($"No interface is provided or the service with name:{ImplementationType.Name}");
                 }
-                services.AddScoped(serviceType, ImplementationType);
+                services.AddScoped(interfaceType, ImplementationType);
             }
 
         }

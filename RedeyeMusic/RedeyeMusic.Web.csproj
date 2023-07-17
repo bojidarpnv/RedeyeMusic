@@ -29,4 +29,8 @@
     <ProjectReference Include="..\RedeyeMusic.Web.ViewModels\RedeyeMusic.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\songs\Mp3s\" />
+  </ItemGroup>
+
 </Project>

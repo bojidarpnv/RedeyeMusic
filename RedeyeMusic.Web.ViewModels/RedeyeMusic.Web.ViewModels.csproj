@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RedeyeMusic.Common\RedeyeMusic.Common.csproj" />
     <ProjectReference Include="..\RedeyeMusic.Data.Models\RedeyeMusic.Data.Models.csproj" />
   </ItemGroup>
