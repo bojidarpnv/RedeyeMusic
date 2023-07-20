@@ -2,11 +2,6 @@
 using RedeyeMusic.Data;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.ViewModels.Genre;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RedeyeMusic.Services.Data
 {
@@ -18,7 +13,7 @@ namespace RedeyeMusic.Services.Data
             this.dbContext = dbContext;
         }
 
-        public Task CreateAsync(string genreName)
+        public Task CreateGenreAsync(string genreName)
         {
             throw new NotImplementedException();
         }
@@ -35,6 +30,6 @@ namespace RedeyeMusic.Services.Data
                 .ToArrayAsync();
             return allGenres;
         }
-        
+
     }
 }

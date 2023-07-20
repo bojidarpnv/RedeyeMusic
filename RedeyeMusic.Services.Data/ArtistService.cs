@@ -3,7 +3,6 @@ using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.ViewModels.Artist;
-using RedeyeMusic.Web.ViewModels.Song;
 
 namespace RedeyeMusic.Services.Data
 {
@@ -37,10 +36,7 @@ namespace RedeyeMusic.Services.Data
             return await this.dbContext.Artists.AnyAsync(a => a.Name == artistName);
         }
 
-        public Task CreateFirstSongAsync(string userId, string userName, AddSongFormModel song)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public async Task<int?> GetArtistIdByUserIdAsync(string userId)
         {

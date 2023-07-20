@@ -1,0 +1,16 @@
+﻿@model AlbumSelectViewModel
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form method="post" enctype="multipart/form-data" asp-action="Create" asp-controller="Album">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control"
+                       placeholder="Album Name">
+                <span asp-validation-for="Name" class="small textdanger"></span>
+            </div>
+            <div class="text-center">
+                <input class="btn btn-primary mt-3 " type="submit" value="Become an Artist" />
+            </div>
+        </form>
+    </div>
+</div>

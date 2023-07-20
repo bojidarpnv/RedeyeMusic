@@ -19,7 +19,7 @@ namespace RedeyeMusic.Data.Models
         public int ListenCount { get; set; }
 
 
-        [StringLength(DescriptionMaxLength)]
+        [StringLength(LyricsMaxLength)]
         public string? Lyrics { get; set; }
 
         [Required]

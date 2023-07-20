@@ -6,6 +6,7 @@ using RedeyeMusic.Web.ViewModels.Genre;
 using RedeyeMusic.Web.ViewModels.Home;
 using RedeyeMusic.Web.ViewModels.Song;
 
+
 namespace RedeyeMusic.Services.Data
 {
     public class SongService : ISongService
@@ -25,20 +26,47 @@ namespace RedeyeMusic.Services.Data
             throw new NotImplementedException();
         }
 
-        public async Task<AddSongFormModel> AddSongAsync(AddSongFormModel songModel, int artistId)
+        public async Task<AddSongFormModel> AddSongAsync(AddSongFormModel songModel, int artistId, string albumName)
         {
-            Album album = new Album()
+            if (albumName == null)
             {
-                Name = songModel.AlbumName,
-            };
-            Song song = new Song()
+                Song song = new Song()
+                {
+                    Title = songModel.Title,
+                    Lyrics = songModel.Lyrics,
+                    ImageUrl = songModel.ImageUrl,
+                    FilePath = songModel.FilePath,
+                    GenreId = songModel.GenreId,
+                    ArtistId = artistId,
+                    AlbumId = songModel.AlbumId,
+                };
+                this.dbContext.Add(song);
+                this.dbContext.SaveChanges();
+            }
+            if (albumName != null)
             {
-                Title = songModel.Title,
-                Lyrics = songModel.Lyrics,
-                ImageUrl = songModel.ImageUrl,
-                FilePath = "",
-                AlbumId = album.Id,
-            };
+                Album album = new Album()
+                {
+                    Name = songModel.AlbumName,
+                    Description = songModel.AlbumDescription,
+                    ArtistId = artistId,
+                    GenreId = songModel.GenreId,
+                };
+                this.dbContext.Add(album);
+                this.dbContext.SaveChanges();
+                Song song = new Song()
+                {
+                    Title = songModel.Title,
+                    Lyrics = songModel.Lyrics,
+                    ImageUrl = songModel.ImageUrl,
+                    FilePath = songModel.FilePath,
+                    GenreId = songModel.GenreId,
+                    ArtistId = artistId,
+                    AlbumId = album.Id,
+                };
+            }
+
+
             throw new NotImplementedException();
         }
 
@@ -71,34 +99,32 @@ namespace RedeyeMusic.Services.Data
                 .ToArrayAsync();
             return allGenres;
         }
-        //public async Task CreateFirstSongAsync(string userId, AddSongFormModel songModel)
-        //{
-        //    //Make everything in different methods so we can call them in order.
-        //    int artistId =
-        //    Album album = new Album()
-        //    {
-        //        Name = songModel.AlbumName,
-        //        Description = songModel.AlbumDescription,
-        //        ArtistId = artist.Id,
-        //        GenreId = songModel.GenreId,
+        public async Task AddFirstSongAsync(AddFirstSongFormModel songModel, int artistId)
+        {
+            Album album = new Album()
+            {
+                Name = songModel.AlbumName,
+                Description = songModel.AlbumDescription,
+                ArtistId = artistId,
+                GenreId = songModel.GenreId,
+            };
 
+            await this.dbContext.Albums.AddAsync(album);
+            await this.dbContext.SaveChangesAsync();
 
-        //    };
-        //    await this.dbContext.Albums.AddAsync(album);
-        //    await this.dbContext.SaveChangesAsync();
-        //    Song song = new Song()
-        //    {
-        //        Title = songModel.Title,
-        //        Lyrics = songModel.Lyrics,
-        //        ImageUrl = songModel.ImageUrl,
-        //        FilePath = songModel.FilePath,
-        //        GenreId = songModel.GenreId,
-        //        ArtistId = artist.Id,
-        //        AlbumId = album.Id,
-        //    };
+            Song song = new Song()
+            {
+                Title = songModel.Title,
+                Lyrics = songModel.Lyrics,
+                ImageUrl = songModel.ImageUrl,
+                FilePath = songModel.FilePath,
+                GenreId = songModel.GenreId,
+                ArtistId = artistId,
+                AlbumId = album.Id,
+            };
 
-        //    await this.dbContext.Songs.AddAsync(song);
-        //    await this.dbContext.SaveChangesAsync();
-        //}
+            await this.dbContext.Songs.AddAsync(song);
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

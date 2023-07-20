@@ -11,6 +11,7 @@ namespace RedeyeMusic.Data.Models
         }
         [Key]
         public int Id { get; set; }
+
         [StringLength(NameMaxLength)]
         public string Name { get; set; } = null!;
 

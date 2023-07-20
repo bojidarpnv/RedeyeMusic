@@ -2,7 +2,6 @@
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.Infrastrucutre.Extensions;
 using RedeyeMusic.Web.ViewModels.Artist;
-using RedeyeMusic.Web.ViewModels.Song;
 using static RedeyeMusic.Common.NotificationMessagesConstants;
 
 namespace RedeyeMusic.Web.Controllers
@@ -23,27 +22,23 @@ namespace RedeyeMusic.Web.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> Become()
+        public async Task<IActionResult> Become(BecomeArtistFormModel artistModel)
         {
             string? userId = this.User.GetId();
             bool isAgent = await this.artistService.ArtistExistsByUserIdAsync(userId);
             if (isAgent)
             {
                 TempData[ErrorMessage] = "You are already an artist";
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Add", "Song");
             }
-            AddSongFormModel viewModel = new AddSongFormModel()
-            {
-                Genres = await this.genreService.SelectGenresAsync()
-            };
-            return View(viewModel);
+
+            return View(artistModel);
 
         }
         [HttpPost]
         public async Task<IActionResult> Become(BecomeArtistFormModel artistModel, string artistName)
         {
             string userId = User.GetId();
-            string userName = Environment.UserName;
             bool isAgent = await this.artistService.ArtistExistsByUserIdAsync(userId);
             if (isAgent)
             {
@@ -61,23 +56,7 @@ namespace RedeyeMusic.Web.Controllers
 
             await this.artistService.CreateAsync(userId, artistModel);
 
-
-
-            //if (ModelState.IsValid)
-            //{
-            //    if (songModel.Mp3File != null)
-            //    {
-            //        string folder = "songs/Mp3s/";
-            //        folder += Guid.NewGuid().ToString() + songModel.Mp3File.FileName;
-            //        songModel.FilePath = folder;
-            //        string serverFolder = Path.Combine(env.WebRootPath, folder);
-
-            //        await songModel.Mp3File.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
-            //    }
-            //    await this.artistService.CreateFirstSongAsync(userId, userName, songModel);
-
-            //}
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("AddFirstSong", "Song");
         }
 
 

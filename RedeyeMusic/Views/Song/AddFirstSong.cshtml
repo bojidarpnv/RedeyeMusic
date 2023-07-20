@@ -1,23 +1,20 @@
-﻿@model AddSongFormModel
-
+﻿@model AddFirstSongFormModel
 @{
-    ViewBag.Title = "AddSong";
+    ViewBag.Title = "Add your first Song";
 }
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
-
 @if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
 {
     <div class="alert alert-danger" role="alert">
         @ViewData.ModelState["Error"].Errors.First().ErrorMessage
     </div>
 }
-
-
-
+<h3 class="text-center"></h3>
+<br />
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form method="post" enctype="multipart/form-data" asp-action="Add" asp-controller="Song">
+        <form method="post" enctype="multipart/form-data" asp-action="AddFirstSong" asp-controller="Song">
             <div class="form-group">
                 <label asp-for="Title"></label>
                 <input asp-for="Title" class="form-control"
@@ -30,18 +27,23 @@
                        placeholder="Lyrics/Description">
                 <span asp-validation-for="Lyrics" class="small textdanger"></span>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="@Model.AlbumId" class="form-label-add-edit">Album of Song</label>
-                <select asp-for="@Model.AlbumId" class="form-control" aria-required="true" id="album2">
-                    @foreach (var album in Model.Albums)
-                    {
-                        <option value="@album.Id">@album.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="@Model.AlbumId" class="text-danger"></span>
-
-
+            <div class="form-group">
+                <label asp-for="AlbumName"></label>
+                <input asp-for="AlbumName" class="form-control"
+                       placeholder="Name of Album">
+                <span asp-validation-for="AlbumName" class="small textdanger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AlbumDescription"></label>
+                <input asp-for="AlbumDescription" class="form-control"
+                       placeholder="Description of Album">
+                <span asp-validation-for="AlbumDescription" class="large textdanger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl"></label>
+                <input asp-for="ImageUrl" class="form-control"
+                       placeholder="Url For Song Cover">
+                <span asp-validation-for="ImageUrl" class="small textdanger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.GenreId" class="form-label-add-edit">Genre of Song</label>
@@ -63,7 +65,7 @@
             </div>
 
             <div class="text-center">
-                <input class="btn btn-primary mt-3 " type="submit" value="Save" />
+                <input class="btn btn-primary mt-3 " type="submit" value="Add Song" />
             </div>
         </form>
     </div>
