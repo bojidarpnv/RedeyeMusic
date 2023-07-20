@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Services.Data.Interfaces;
-using RedeyeMusic.Web.ViewModels.Artist;
+using RedeyeMusic.Web.ViewModels.Song;
 
 namespace RedeyeMusic.Web.Controllers
 {

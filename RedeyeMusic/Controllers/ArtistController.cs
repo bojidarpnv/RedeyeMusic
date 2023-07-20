@@ -2,6 +2,7 @@
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.Infrastrucutre.Extensions;
 using RedeyeMusic.Web.ViewModels.Artist;
+using RedeyeMusic.Web.ViewModels.Song;
 using static RedeyeMusic.Common.NotificationMessagesConstants;
 
 namespace RedeyeMusic.Web.Controllers
@@ -13,7 +14,7 @@ namespace RedeyeMusic.Web.Controllers
         private readonly ILogger<ArtistController> logger;
         private readonly IWebHostEnvironment env;
 
-        public ArtistController(IArtistService artistService,IGenreService genreService, ILogger<ArtistController> logger, IWebHostEnvironment env)
+        public ArtistController(IArtistService artistService, IGenreService genreService, ILogger<ArtistController> logger, IWebHostEnvironment env)
         {
             this.artistService = artistService;
             this.genreService = genreService;
@@ -49,7 +50,7 @@ namespace RedeyeMusic.Web.Controllers
                 TempData[ErrorMessage] = "You are already an artist";
                 return this.RedirectToAction("Index", "Home");
             }
-            if(await this.artistService.ArtistNameExistsAsync(artistName))
+            if (await this.artistService.ArtistNameExistsAsync(artistName))
             {
                 ModelState.AddModelError(nameof(artistModel.ArtistName), "Artist name already exists. Enter another one.");
             }
@@ -59,9 +60,9 @@ namespace RedeyeMusic.Web.Controllers
             }
 
             await this.artistService.CreateAsync(userId, artistModel);
-            
-            
-            
+
+
+
             //if (ModelState.IsValid)
             //{
             //    if (songModel.Mp3File != null)

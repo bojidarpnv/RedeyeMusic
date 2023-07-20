@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RedeyeMusic.Common;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.ViewModels.Artist;
-using RedeyeMusic.Web.ViewModels.Genre;
+using RedeyeMusic.Web.ViewModels.Song;
 
 namespace RedeyeMusic.Services.Data
 {
@@ -35,7 +34,7 @@ namespace RedeyeMusic.Services.Data
 
         public async Task<bool> ArtistNameExistsAsync(string artistName)
         {
-            return await this.dbContext.Artists.AnyAsync(a=>a.Name == artistName);
+            return await this.dbContext.Artists.AnyAsync(a => a.Name == artistName);
         }
 
         public Task CreateFirstSongAsync(string userId, string userName, AddSongFormModel song)
@@ -48,12 +47,12 @@ namespace RedeyeMusic.Services.Data
             Artist? artist = await this.dbContext
                 .Artists
                 .FirstOrDefaultAsync(a => a.ApplicationUserId.ToString() == userId);
-            if(artist == null)
+            if (artist == null)
             {
                 return null;
             }
             return artist.Id;
         }
-        
+
     }
 }

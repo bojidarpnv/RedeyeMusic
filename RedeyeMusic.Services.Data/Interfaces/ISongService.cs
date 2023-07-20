@@ -1,6 +1,6 @@
-﻿using RedeyeMusic.Web.ViewModels.Artist;
-using RedeyeMusic.Web.ViewModels.Genre;
+﻿using RedeyeMusic.Web.ViewModels.Genre;
 using RedeyeMusic.Web.ViewModels.Home;
+using RedeyeMusic.Web.ViewModels.Song;
 
 namespace RedeyeMusic.Services.Data.Interfaces
 {

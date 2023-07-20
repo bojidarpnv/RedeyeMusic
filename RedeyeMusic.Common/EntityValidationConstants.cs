@@ -15,8 +15,8 @@
             public const int DurationMinLengthInSeconds = 90;
             public const int DurationMaxLengthInSeconds = 600;
 
-            public const int DescriptionMinLength = 0;
-            public const int DescriptionMaxLength = 1000;
+            public const int LyricsMinLength = 0;
+            public const int LyricsMaxLength = 1000;
         }
         public static class Playlist
         {
