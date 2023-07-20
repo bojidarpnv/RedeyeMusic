@@ -26,48 +26,21 @@ namespace RedeyeMusic.Services.Data
             throw new NotImplementedException();
         }
 
-        public async Task<AddSongFormModel> AddSongAsync(AddSongFormModel songModel, int artistId, string albumName)
+        public async Task AddSongAsync(AddSongFormModel songModel, int artistId)
         {
-            if (albumName == null)
-            {
-                Song song = new Song()
-                {
-                    Title = songModel.Title,
-                    Lyrics = songModel.Lyrics,
-                    ImageUrl = songModel.ImageUrl,
-                    FilePath = songModel.FilePath,
-                    GenreId = songModel.GenreId,
-                    ArtistId = artistId,
-                    AlbumId = songModel.AlbumId,
-                };
-                this.dbContext.Add(song);
-                this.dbContext.SaveChanges();
-            }
-            if (albumName != null)
-            {
-                Album album = new Album()
-                {
-                    Name = songModel.AlbumName,
-                    Description = songModel.AlbumDescription,
-                    ArtistId = artistId,
-                    GenreId = songModel.GenreId,
-                };
-                this.dbContext.Add(album);
-                this.dbContext.SaveChanges();
-                Song song = new Song()
-                {
-                    Title = songModel.Title,
-                    Lyrics = songModel.Lyrics,
-                    ImageUrl = songModel.ImageUrl,
-                    FilePath = songModel.FilePath,
-                    GenreId = songModel.GenreId,
-                    ArtistId = artistId,
-                    AlbumId = album.Id,
-                };
-            }
 
-
-            throw new NotImplementedException();
+            Song song = new Song()
+            {
+                Title = songModel.Title,
+                Lyrics = songModel.Lyrics,
+                ImageUrl = songModel.ImageUrl,
+                FilePath = songModel.FilePath,
+                GenreId = songModel.GenreId,
+                ArtistId = artistId,
+                AlbumId = songModel.AlbumId,
+            };
+            this.dbContext.Add(song);
+            this.dbContext.SaveChanges();
         }
 
         public async Task<IEnumerable<IndexViewModel>> GetAll()

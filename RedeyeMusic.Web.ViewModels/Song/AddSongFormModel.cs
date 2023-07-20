@@ -20,9 +20,9 @@ namespace RedeyeMusic.Web.ViewModels.Song
         [Required]
         [StringLength(LyricsMaxLength, MinimumLength = LyricsMinLength)]
         public string Lyrics { get; set; } = null!;
-        [Required]
-        [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
-        public string AlbumName { get; set; } = null!;
+
+        public int AlbumId { get; set; }
+        public ICollection<AlbumSelectViewModel>? Albums { get; set; }
         [Required]
         [StringLength(DescriptionMinLength, MinimumLength = DescriptionMinLength)]
         public string AlbumDescription { get; set; } = null!;
@@ -33,9 +33,6 @@ namespace RedeyeMusic.Web.ViewModels.Song
         [Display(Name = "Genre")]
         public int GenreId { get; set; }
         public ICollection<GenreSelectViewModel>? Genres { get; set; }
-        [Display(Name = "Album")]
-        public int AlbumId { get; set; }
-        public ICollection<AlbumSelectViewModel>? Albums { get; set; }
 
 
         [Required]

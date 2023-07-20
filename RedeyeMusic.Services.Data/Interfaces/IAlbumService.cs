@@ -6,5 +6,6 @@ namespace RedeyeMusic.Services.Data.Interfaces
     {
         public Task<ICollection<AlbumSelectViewModel>> SelectAlbumsByArtistIdAsync(int artistId);
         public Task AddAlbum(AlbumSelectViewModel albumSelectViewModel);
+
     }
 }

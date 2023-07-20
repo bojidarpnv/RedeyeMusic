@@ -31,19 +31,22 @@
                 <span asp-validation-for="Lyrics" class="small textdanger"></span>
             </div>
 
+            
+            
+            
             <div class="mb-3">
                 <label asp-for="@Model.AlbumId" class="form-label-add-edit">Album of Song</label>
-                <select asp-for="@Model.AlbumId" class="form-control" aria-required="true" id="album2">
+                <select asp-for="@Model.AlbumId" class="form-control" aria-required="true">
                     @foreach (var album in Model.Albums)
                     {
                         <option value="@album.Id">@album.Name</option>
                     }
-                </select>
-                <span asp-validation-for="@Model.AlbumId" class="text-danger"></span>
-
-
+                 </select>
+                <button onClick="window.location.href='/Album/Create';">Add new Album</button>
+              <span asp-validation-for="@Model.AlbumId" class="text-danger"></span>
+                
             </div>
-            <div class="mb-3">
+            <div class="mb-3" >
                 <label asp-for="@Model.GenreId" class="form-label-add-edit">Genre of Song</label>
                 <select asp-for="@Model.GenreId" class="form-control" aria-required="true">
                     @foreach (var genre in Model.Genres)
@@ -52,6 +55,18 @@
                     }
                 </select>
                 <span asp-validation-for="@Model.GenreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AlbumDescription"></label>
+                <input asp-for="AlbumDescription" class="form-control"
+                       placeholder="Description of Album">
+                <span asp-validation-for="AlbumDescription" class="large textdanger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl"></label>
+                <input asp-for="ImageUrl" class="form-control"
+                       placeholder="Url For Song Cover">
+                <span asp-validation-for="ImageUrl" class="small textdanger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Mp3File"></label>

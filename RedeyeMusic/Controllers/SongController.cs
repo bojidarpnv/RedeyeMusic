@@ -51,6 +51,33 @@ namespace RedeyeMusic.Web.Controllers
             };
             return View(viewModel);
         }
+        [HttpPost]
+        public async Task<IActionResult> Add(AddSongFormModel songModel)
+        {
+            string userId = this.User.GetId();
+            int? artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
+
+
+            if (ModelState.IsValid)
+            {
+                if (songModel.Mp3File != null)
+                {
+                    string folder = "songs/Mp3s/";
+                    folder += Guid.NewGuid().ToString() + songModel.Mp3File.FileName;
+                    songModel.FilePath = folder;
+                    string serverFolder = Path.Combine(env.WebRootPath, folder);
+
+                    await songModel.Mp3File.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                }
+                await this.songService.AddSongAsync(songModel, (int)artistId);
+                TempData[SuccessMessage] = "Successfully added your first song!";
+            }
+            else
+            {
+                return View(songModel);
+            }
+            return RedirectToAction("Mine", "Song");
+        }
 
 
         [HttpGet]
@@ -66,6 +93,7 @@ namespace RedeyeMusic.Web.Controllers
             {
                 Genres = await this.genreService.SelectGenresAsync()
             };
+
             return View(viewModel);
         }
         [HttpPost]
@@ -98,6 +126,10 @@ namespace RedeyeMusic.Web.Controllers
                 }
                 await this.songService.AddFirstSongAsync(songModel, (int)artistId);
                 TempData[SuccessMessage] = "Successfully added your first song!";
+            }
+            else
+            {
+                return View(songModel);
             }
             return RedirectToAction("Mine", "Song");
         }

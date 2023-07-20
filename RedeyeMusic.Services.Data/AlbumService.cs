@@ -24,6 +24,8 @@ namespace RedeyeMusic.Services.Data
             await this.dbContext.SaveChangesAsync();
         }
 
+
+
         public async Task<ICollection<AlbumSelectViewModel>> SelectAlbumsByArtistIdAsync(int artistId)
         {
             ICollection<AlbumSelectViewModel> albums = await this.dbContext

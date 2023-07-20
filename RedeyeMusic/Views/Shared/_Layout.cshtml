@@ -21,10 +21,22 @@
     
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    
+    <script>
+        $('select[name=album]').change(function () {
+            if ($(this).val() == '') {
+                var newThing = prompt('Enter a name for the new thing:');
+                var newValue = $('option', this).length;
+                $('<option>')
+                    .text(newThing)
+                    .attr('value', newValue)
+                    .insertBefore($('option[value=]', this));
+                $(this).val(newValue);
+            }
+        });
+    </script>
  
 </head>
- <body style="min-width: 350px">
+<body style="min-width: 350px">
     <header class="pb-0">
         <nav class="mainnav navbar-expand-lg navbar navbar-toggleable-lg navbar-dark bg-dark border-bottom-dark box-shadow" mb-3data-bs-theme="dark">
             <div class="container-fluid">
