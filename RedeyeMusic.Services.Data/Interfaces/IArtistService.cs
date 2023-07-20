@@ -1,5 +1,4 @@
 ﻿using RedeyeMusic.Web.ViewModels.Artist;
-using RedeyeMusic.Web.ViewModels.Genre;
 
 namespace RedeyeMusic.Services.Data.Interfaces
 {
@@ -7,7 +6,9 @@ namespace RedeyeMusic.Services.Data.Interfaces
     {
         Task<bool> ArtistExistsByUserIdAsync(string userId);
 
-        public Task<ICollection<GenreSelectViewModel>> SelectGenresAsync();
         Task CreateFirstSongAsync(string userId, string userName, AddSongFormModel song);
+        Task CreateAsync(string userId, BecomeArtistFormModel formModel);
+        Task<bool> ArtistNameExistsAsync(string artistName);
+        Task<int?> GetArtistIdByUserIdAsync(string userId);
     }
 }

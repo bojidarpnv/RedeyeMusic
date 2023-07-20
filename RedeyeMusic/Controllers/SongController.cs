@@ -8,9 +8,11 @@ namespace RedeyeMusic.Web.Controllers
     public class SongController : BaseController
     {
         private readonly ISongService songService;
-        public SongController(ISongService songService)
+        private readonly IGenreService genreService;
+        public SongController(ISongService songService, IGenreService genreService)
         {
             this.songService = songService;
+            this.genreService = genreService;
         }
 
         [AllowAnonymous]
@@ -23,7 +25,7 @@ namespace RedeyeMusic.Web.Controllers
         {
             AddSongFormModel viewModel = new AddSongFormModel()
             {
-                Genres = await this.songService.SelectGenresAsync()
+                Genres = await this.genreService.SelectGenresAsync()
             };
             return View(viewModel);
         }

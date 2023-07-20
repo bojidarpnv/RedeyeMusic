@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RedeyeMusic.Data.Models
 {
@@ -13,7 +14,7 @@ namespace RedeyeMusic.Data.Models
         public bool IsSubscribed { get; set; }
 
         public bool IsDeleted { get; set; }
-
+        
         public virtual ICollection<Playlist> Playlists { get; set; }
     }
 }

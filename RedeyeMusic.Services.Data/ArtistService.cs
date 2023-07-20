@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RedeyeMusic.Common;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
@@ -21,57 +22,38 @@ namespace RedeyeMusic.Services.Data
                 .AnyAsync(a => a.ApplicationUserId.ToString() == userId);
             return result;
         }
-        public async Task<ICollection<GenreSelectViewModel>> SelectGenresAsync()
+        public async Task CreateAsync(string userId, BecomeArtistFormModel formModel)
         {
-            ICollection<GenreSelectViewModel> allGenres = await this.dbContext
-                .Genres
-                .Select(g => new GenreSelectViewModel()
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                })
-                .ToArrayAsync();
-            return allGenres;
-        }
-        public async Task CreateFirstSongAsync(string userId, string userName, AddSongFormModel songModel)
-        {
-
             Artist artist = new Artist()
             {
-                Name = userName,
                 ApplicationUserId = Guid.Parse(userId),
-
+                Name = formModel.ArtistName,
             };
             await this.dbContext.Artists.AddAsync(artist);
             await this.dbContext.SaveChangesAsync();
-            Album album = new Album()
-            {
-                Name = songModel.AlbumName,
-                Description = songModel.AlbumDescription,
-                ArtistId = artist.Id,
-                GenreId = songModel.GenreId,
-
-
-            };
-
-            Song song = new Song()
-            {
-                Title = songModel.Title,
-                Lyrics = songModel.Lyrics,
-                ImageUrl = songModel.ImageUrl,
-                FilePath = songModel.FilePath,
-                GenreId = songModel.GenreId,
-                ArtistId = artist.Id,
-                AlbumId = album.Id,
-            };
-
-            album.GenreId = song.GenreId;
-
-
-            await this.dbContext.Albums.AddAsync(album);
-            await this.dbContext.Songs.AddAsync(song);
-            await this.dbContext.SaveChangesAsync();
         }
 
+        public async Task<bool> ArtistNameExistsAsync(string artistName)
+        {
+            return await this.dbContext.Artists.AnyAsync(a=>a.Name == artistName);
+        }
+
+        public Task CreateFirstSongAsync(string userId, string userName, AddSongFormModel song)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int?> GetArtistIdByUserIdAsync(string userId)
+        {
+            Artist? artist = await this.dbContext
+                .Artists
+                .FirstOrDefaultAsync(a => a.ApplicationUserId.ToString() == userId);
+            if(artist == null)
+            {
+                return null;
+            }
+            return artist.Id;
+        }
+        
     }
 }

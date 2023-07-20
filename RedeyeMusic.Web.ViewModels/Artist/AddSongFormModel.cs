@@ -7,6 +7,10 @@ namespace RedeyeMusic.Web.ViewModels.Artist
 {
     public class AddSongFormModel
     {
+        public AddSongFormModel()
+        {
+            this.Genres = new HashSet<GenreSelectViewModel>();
+        }
         [Required]
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength, ErrorMessage = "Title Length must be between {2} and {1} characters")]
         public string Title { get; set; } = null!;

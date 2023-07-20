@@ -8,7 +8,7 @@ namespace RedeyeMusic.Services.Data.Interfaces
     {
         Task<IEnumerable<IndexViewModel>> GetAll();
         public Task<ICollection<GenreSelectViewModel>> SelectGenresAsync();
-        public Task<AddSongFormModel> AddSongAsync(AddSongFormModel songModel);
+        public Task<AddSongFormModel> AddSongAsync(AddSongFormModel songModel, int artistId);
         public Task AddMp3File(AddSongFormModel songModel);
     }
 }
