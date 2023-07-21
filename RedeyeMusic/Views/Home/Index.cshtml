@@ -38,8 +38,7 @@
             @for (int i = 0; i < popularSongs.Count(); i++)
             {
                 var song = popularSongs[i];
-                <a class="white song m-2 ms-4 col-md-6 row align-items-center" href="@Url.Action("Details", "Song", new {id = song.Id})">
-                    
+                <a class="white song m-2 ms-4 col-md-6 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
                     <div class="col d-flex">
                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                         <div class="white ms-1">
@@ -49,16 +48,14 @@
                     </div>
                     <div class="col-2 text-decoration-none">03:00<btn class="btn-play btn-submit"><i class="bi bi-play ml-2"></i></btn></div>
                     <small class="white col-2"><i class="bi bi-ear"></i> @song.ListenCount</small>
-                    
-
                 </a>
             }
-           </div>
+        </div>
         <div class="tab-pane fade" id="pills-disvoer" role="tabpanel" aria-labelledby="pills-discover-tab" tabindex="0">
-            @for(int i = 0; i< songs.Count(); i++)
+            @for (int i = 0; i < songs.Count(); i++)
             {
                 var song = songs[i];
-                <a class="white song m-2 ms-4 col-md-6 row align-items-center" href="@Url.Action("Details", "Song", new {id = song.Id})">
+                <a class="white song m-2 ms-4 col-md-6 row align-items-center" data-src="@Url.Content(song.Mp3FilePath)" href="@Url.Action("Details", "Song", new { id = song.Id })">
                     <div class="white col-1 h3">@i</div>
                     <div class="col d-flex">
                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
@@ -68,14 +65,15 @@
                         </div>
                     </div>
                     <div class="col-2">03:00<btn class="btn-play btn-submit"><i class="bi bi-play ml-2"></i></btn></div>
-
                 </a>
             }
-        
         </div>
     </div>
 </div>
-
+@section Scripts {
+    <script src="~/js/site.js"></script></>
+    
+}
 
 
 

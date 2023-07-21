@@ -8,8 +8,9 @@
     <title>@ViewData["Title"] - RedeyeMusic</title>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -17,7 +18,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+    <script src="~/js/site.js"></script>
     
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
@@ -28,7 +29,7 @@
     <header class="pb-0">
         <nav class="mainnav navbar-expand-lg navbar navbar-toggleable-lg navbar-dark bg-dark border-bottom-dark box-shadow" mb-3data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index"><img src="/images/red-eye.svg" alt="Redeye Logo" width="60" height="60"> RedeyeMusic</a>
+                <a class="navbar-brand text-light"  asp-area="" asp-controller="Home" asp-action="Index"><img src="/images/red-eye.svg" alt="Redeye Logo" width="60" height="60"> RedeyeMusic</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -41,13 +42,13 @@
                         @if(this.User.Identity?.IsAuthenticated ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Playlist" asp-action="All">Popular Playlists</a>
+                                <a class="nav-link text-light"  asp-area="" asp-controller="Playlist" asp-action="All">Popular Playlists</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Playlist" asp-action="Mine">My Playlists</a>
+                                <a class="nav-link text-light"  asp-area="" asp-controller="Playlist" asp-action="Mine">My Playlists</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Song" asp-action="Add">Add Song</a>
+                                <a class="nav-link text-light"  asp-area="" asp-controller="Song" asp-action="Add">Add Song</a>
                             </li>
                             
                         }
@@ -68,6 +69,12 @@
         <main role="main" class="pt-0">
             @RenderBody()
         </main>
+        <div class="fixed-bottom bg-dark p-2">
+            <audio controls id="musicPlayer" style="width: 100%;">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        
     </div>
     <partial name="_NotificationsPartial" />
     <footer class="border-top footer text-muted bg-dark">

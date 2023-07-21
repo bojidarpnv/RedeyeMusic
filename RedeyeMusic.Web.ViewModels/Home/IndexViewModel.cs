@@ -11,5 +11,6 @@
         public string ArtistName = null!;
 
         public string GenreName = null!;
+        public string Mp3FilePath = null!;
     }
 }

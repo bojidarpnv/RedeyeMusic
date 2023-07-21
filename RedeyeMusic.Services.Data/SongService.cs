@@ -56,6 +56,7 @@ namespace RedeyeMusic.Services.Data
                     Duration = s.Duration,
                     ImageUrl = s.ImageUrl,
                     ListenCount = s.ListenCount,
+                    Mp3FilePath = s.FilePath
                 })
                 .ToArrayAsync();
             return songs;
