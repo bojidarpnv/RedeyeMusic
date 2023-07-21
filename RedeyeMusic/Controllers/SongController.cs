@@ -56,7 +56,27 @@ namespace RedeyeMusic.Web.Controllers
         {
             string userId = this.User.GetId();
             int? artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
+            songModel.Genres = await this.genreService.SelectGenresAsync();
+            songModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync((int)artistId);
+            if (songModel.AlbumId == 0)
+            {
+                songModel.AlbumId = await this.albumService.GetAlbumId(songModel);
+            }
+            if (songModel.AlbumName == null && songModel.AlbumDescription == null)
+            {
+                songModel = await this.albumService.GetAlbumDescriptionAndNameById(songModel.AlbumId, songModel);
+            }
+            if (artistId == null)
+            {
+                throw new InvalidOperationException();
+            }
+            //songModel = await this.albumService.GetAlbumDescriptionAndNameById(songModel.AlbumId, songModel);
 
+            bool isAgent = await this.artistService.ArtistExistsByUserIdAsync(userId);
+            if (!isAgent)
+            {
+                TempData[ErrorMessage] = "You must become an artist in order to add Songs";
+            }
 
             if (ModelState.IsValid)
             {
@@ -70,7 +90,7 @@ namespace RedeyeMusic.Web.Controllers
                     await songModel.Mp3File.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
                 }
                 await this.songService.AddSongAsync(songModel, (int)artistId);
-                TempData[SuccessMessage] = "Successfully added your first song!";
+                TempData[SuccessMessage] = "Successfully added a song!";
             }
             else
             {

@@ -20,7 +20,7 @@ namespace RedeyeMusic.Data.Configurations
                 Id = 1,
                 Name = "FirstAlbum",
                 ArtistId = 1,
-                GenreId = 1,
+                //GenreId = 1,
                 Description = "Mauris suscipit, nunc sit amet sollicitudin varius, nisl eros consectetur diam, nec.",
             };
             albums.Add(album);
@@ -29,7 +29,7 @@ namespace RedeyeMusic.Data.Configurations
                 Id = 2,
                 Name = "SecondAlbum",
                 ArtistId = 1,
-                GenreId = 2,
+                //GenreId = 2,
                 Description = "Nunc vitae imperdiet felis. Integer ac finibus turpis. Praesent ipsum arcu, placerat.",
             };
             albums.Add(album);

@@ -22,7 +22,7 @@ namespace RedeyeMusic.Web.ViewModels.Song
         [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string AlbumName { get; set; } = null!;
         [Required]
-        [StringLength(DescriptionMinLength, MinimumLength = DescriptionMinLength)]
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string AlbumDescription { get; set; } = null!;
         [Required]
         [Display(Name = "Image URL")]

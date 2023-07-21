@@ -22,16 +22,15 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <script>
-        $('select[name=album]').change(function () {
-            if ($(this).val() == '') {
-                var newThing = prompt('Enter a name for the new thing:');
-                var newValue = $('option', this).length;
-                $('<option>')
-                    .text(newThing)
-                    .attr('value', newValue)
-                    .insertBefore($('option[value=]', this));
-                $(this).val(newValue);
-            }
+        $(document).ready(function () {
+            $('#purpose').on('change', function () {
+                if (this.value == 'NewAlbum') {
+                    $("#addnew").show();
+                }
+                else {
+                    $("#addnew").hide();
+                }
+            });
         });
     </script>
  

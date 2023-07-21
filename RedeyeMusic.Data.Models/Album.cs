@@ -25,9 +25,9 @@ namespace RedeyeMusic.Data.Models
         public int ArtistId { get; set; }
         public virtual Artist Artist { get; set; } = null!;
 
-        [ForeignKey(nameof(Genre))]
-        public int GenreId { get; set; }
-        public virtual Genre Genre { get; set; } = null!;
+        //[ForeignKey(nameof(Genre))]
+        //public int GenreId { get; set; }
+        //public virtual Genre Genre { get; set; } = null!;
 
         public virtual ICollection<Song> Songs { get; set; }
     }

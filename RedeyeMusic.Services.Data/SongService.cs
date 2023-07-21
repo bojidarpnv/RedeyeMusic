@@ -79,7 +79,7 @@ namespace RedeyeMusic.Services.Data
                 Name = songModel.AlbumName,
                 Description = songModel.AlbumDescription,
                 ArtistId = artistId,
-                GenreId = songModel.GenreId,
+                //GenreId = songModel.GenreId,
             };
 
             await this.dbContext.Albums.AddAsync(album);

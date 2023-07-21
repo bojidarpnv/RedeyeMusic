@@ -3,70 +3,63 @@
 @{
     ViewBag.Title = "AddSong";
 }
+
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
-
-@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewData.ModelState["Error"].Errors.First().ErrorMessage
-    </div>
-}
-
-
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form method="post" enctype="multipart/form-data" asp-action="Add" asp-controller="Song">
             <div class="form-group">
                 <label asp-for="Title"></label>
-                <input asp-for="Title" class="form-control"
-                       placeholder="Song Title">
-                <span asp-validation-for="Title" class="small textdanger"></span>
+                <input asp-for="Title" class="form-control" placeholder="Song Title">
+                <span asp-validation-for="Title" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Lyrics"></label>
-                <input asp-for="Lyrics" class="form-control"
-                       placeholder="Lyrics/Description">
-                <span asp-validation-for="Lyrics" class="small textdanger"></span>
+                <input asp-for="Lyrics" class="form-control" placeholder="Lyrics/Description">
+                <span asp-validation-for="Lyrics" class="small text-danger"></span>
             </div>
 
-            
-            
-            
             <div class="mb-3">
-                <label asp-for="@Model.AlbumId" class="form-label-add-edit">Album of Song</label>
-                <select asp-for="@Model.AlbumId" class="form-control" aria-required="true">
+                <label asp-for="AlbumId" class="form-label-add-edit">Album of Song</label>
+                <select asp-for="AlbumId" class="form-control" aria-required="true" id="albumSelect">
                     @foreach (var album in Model.Albums)
                     {
                         <option value="@album.Id">@album.Name</option>
                     }
-                 </select>
-                <button onClick="window.location.href='/Album/Create';">Add new Album</button>
-              <span asp-validation-for="@Model.AlbumId" class="text-danger"></span>
-                
+                    <option value="-1">New Album</option>
+                </select>
             </div>
-            <div class="mb-3" >
-                <label asp-for="@Model.GenreId" class="form-label-add-edit">Genre of Song</label>
-                <select asp-for="@Model.GenreId" class="form-control" aria-required="true">
+
+            <div id="addnew" style="display: none;">
+                <div class="form-group">
+                    <label asp-for="AlbumName"></label>
+                    <input asp-for="AlbumName" id="albumNameInput" class="form-control" name="AlbumName" placeholder="New Album Name">
+                    <span asp-validation-for="AlbumName" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AlbumDescription"></label>
+                    <input asp-for="AlbumDescription" id="albumDescriptionInput" class="form-control" name="AlbumDescription" placeholder="New Album Description" required>
+                    <span asp-validation-for="AlbumDescription" class="small text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="GenreId" class="form-label-add-edit">Genre of Song</label>
+                <select asp-for="GenreId" class="form-control" aria-required="true">
                     @foreach (var genre in Model.Genres)
                     {
                         <option value="@genre.Id">@genre.Name</option>
                     }
                 </select>
-                <span asp-validation-for="@Model.GenreId" class="text-danger"></span>
+                <span asp-validation-for="GenreId" class="small text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="AlbumDescription"></label>
-                <input asp-for="AlbumDescription" class="form-control"
-                       placeholder="Description of Album">
-                <span asp-validation-for="AlbumDescription" class="large textdanger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="ImageUrl"></label>
-                <input asp-for="ImageUrl" class="form-control"
-                       placeholder="Url For Song Cover">
-                <span asp-validation-for="ImageUrl" class="small textdanger"></span>
+                <input asp-for="ImageUrl" class="form-control" placeholder="Url For Song Cover">
+                <span asp-validation-for="ImageUrl" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Mp3File"></label>
@@ -74,15 +67,87 @@
                     <input asp-for="Mp3File" class="custom-file-input" id="customFile">
                     <label class="custom-file-label" for="customFile"></label>
                 </div>
-                <span asp-validation-for="Mp3File" class="small textdanger"></span>
+                <span asp-validation-for="Mp3File" class="small text-danger"></span>
             </div>
 
             <div class="text-center">
-                <input class="btn btn-primary mt-3 " type="submit" value="Save" />
+                <input class="btn btn-primary mt-3" type="submit" value="Save" id="addSongButton" />
             </div>
         </form>
     </div>
 </div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $("#albumSelect").change(function () {
+                var selectedAlbumId = $(this).val();
+
+                if (selectedAlbumId === "-1") {
+                    $("#addnew").show();
+                } else {
+                    $("#addnew").hide();
+
+                    // Check if the selected album is not the option for creating a new album
+                    if (selectedAlbumId !== "-2") {
+                        // Get the selected album's name and description from the selected option
+                        var selectedAlbumName = $(this).find(":selected").text();
+                        var selectedAlbumDescription = $(this).find(":selected").data("description");
+
+                        // Set the values in the hidden input fields for album name and description
+                        $("#AlbumName").val(selectedAlbumName);
+                        $("#AlbumDescription").val(selectedAlbumDescription);
+
+                        // Update the AlbumId in the form with the selected album's ID
+                        $("#AlbumId").val(selectedAlbumId);
+                    }
+                }
+            });
+
+            $("#addSongButton").click(function (e) {
+                e.preventDefault();
+                var selectedAlbumId = $("#albumSelect").val();
+                var albumName = $("#albumNameInput").val();
+                var albumDescription = $("#albumDescriptionInput").val();
+
+                if (selectedAlbumId === "-1") {
+                    // Perform an AJAX request to create the new album
+                    $.ajax({
+                        url: "/Album/Create", // Replace with the correct URL for your controller action to create a new album
+                        method: "POST",
+                        data: { Name: albumName, Description: albumDescription },
+                        success: function (response) {
+                            // Use the newly created album's ID as the selected option value
+                            $("#albumSelect").append($("<option></option>").val(response.albumId).text(albumName).attr("selected", "selected"));
+
+                            // Update the hidden input fields for album name, description, and AlbumId
+                            $("#AlbumName").val(albumName);
+                            $("#AlbumDescription").val(albumDescription);
+                            $("#AlbumId").val(response.albumId); // Assuming "AlbumId" is the name of the hidden input field for AlbumId in your form
+
+                            // Submit the entire form to add the song with the newly created album
+                            $("form").submit();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error creating new album:", error);
+                            // Show an error message or handle the error response as needed
+                        }
+                    });
+                } else if (selectedAlbumId !== "-2") {
+                    // Update the hidden input fields for album name, description, and AlbumId
+                    var selectedAlbumName = $("#albumSelect :selected").text();
+                    var selectedAlbumDescription = $("#albumSelect :selected").data("description");
+                    $("#AlbumName").val(selectedAlbumName);
+                    $("#AlbumDescription").val(selectedAlbumDescription);
+                    $("#AlbumId").val(selectedAlbumId);
+
+                    // Submit the entire form to add the song with the existing album
+                    $("form").submit();
+                }
+            });
+        });
+    </script>
 }
+
