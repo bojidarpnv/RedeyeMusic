@@ -5,7 +5,7 @@ using RedeyeMusic.Web.ViewModels.Album;
 
 namespace RedeyeMusic.Web.Controllers
 {
-    public class AlbumController : Controller
+    public class AlbumController : BaseController
     {
         private readonly IAlbumService albumService;
         private readonly IArtistService artistService;

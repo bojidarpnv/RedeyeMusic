@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.Infrastrucutre.Extensions;
 using RedeyeMusic.Web.ViewModels.Song;
 using static RedeyeMusic.Common.NotificationMessagesConstants;
+
 
 namespace RedeyeMusic.Web.Controllers
 {
@@ -54,23 +56,30 @@ namespace RedeyeMusic.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddSongFormModel songModel)
         {
+
             string userId = this.User.GetId();
             int? artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
             songModel.Genres = await this.genreService.SelectGenresAsync();
             songModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync((int)artistId);
+            //if albumId is 0 it is because of being an already existing album, getting the id here from the Name and Description, cannot properly pass Id with JS;
             if (songModel.AlbumId == 0)
             {
                 songModel.AlbumId = await this.albumService.GetAlbumId(songModel);
             }
+            //if albumName and albumDescription are null it is because of it being a new Album so we need to get them from the new album.
             if (songModel.AlbumName == null && songModel.AlbumDescription == null)
             {
                 songModel = await this.albumService.GetAlbumDescriptionAndNameById(songModel.AlbumId, songModel);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(songModel);
             }
             if (artistId == null)
             {
                 throw new InvalidOperationException();
             }
-            //songModel = await this.albumService.GetAlbumDescriptionAndNameById(songModel.AlbumId, songModel);
 
             bool isAgent = await this.artistService.ArtistExistsByUserIdAsync(userId);
             if (!isAgent)
@@ -89,13 +98,18 @@ namespace RedeyeMusic.Web.Controllers
 
                     await songModel.Mp3File.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
                 }
-                await this.songService.AddSongAsync(songModel, (int)artistId);
-                TempData[SuccessMessage] = "Successfully added a song!";
+                try
+                {
+                    await this.songService.AddSongAsync(songModel, (int)artistId);
+                    TempData[SuccessMessage] = "Successfully added a song!";
+                }
+                catch (Exception _)
+                {
+                    this.ModelState.AddModelError(string.Empty, "Unexpected error occurrer while trying to add your new Song! Please try again later!");
+                    return View(songModel);
+                }
             }
-            else
-            {
-                return View(songModel);
-            }
+
             return RedirectToAction("Mine", "Song");
         }
 

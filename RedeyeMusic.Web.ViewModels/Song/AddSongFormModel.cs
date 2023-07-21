@@ -19,7 +19,8 @@ namespace RedeyeMusic.Web.ViewModels.Song
         [Required]
         [StringLength(LyricsMaxLength, MinimumLength = LyricsMinLength)]
         public string Lyrics { get; set; } = null!;
-
+        //[Required]
+        //[StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string? AlbumName { get; set; }
         public int AlbumId { get; set; }
         public ICollection<AlbumSelectViewModel>? Albums { get; set; }
