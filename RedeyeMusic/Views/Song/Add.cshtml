@@ -90,17 +90,17 @@
             } else {
                 $("#addnew").hide();
 
-                // Check if the selected album is not the option for creating a new album
+                
                 if (selectedAlbumId !== "-2") {
-                    // Get the selected album's name and description from the selected option
+                    
                     var selectedAlbumName = $(this).find(":selected").text();
                     var selectedAlbumDescription = $(this).find(":selected").data("description");
 
-                    // Set the values in the hidden input fields for album name and description
+                    
                     $("#AlbumName").val(selectedAlbumName);
                     $("#AlbumDescription").val(selectedAlbumDescription);
 
-                    // Update the AlbumId in the form with the selected album's ID
+                    
                     $("#AlbumId").val(selectedAlbumId);
                 }
             }
@@ -112,7 +112,7 @@
             var albumName = $("#albumNameInput").val();
             var albumDescription = $("#albumDescriptionInput").val();
             if (!albumName || !albumDescription || albumDescription.length < 10) {
-                // Show an error message to the user
+                
                 toastr.error("Album Name and Album Description are required.");
                 return;
             }
@@ -123,37 +123,37 @@
             }
             
             if (selectedAlbumId === "-1") {
-                // Perform an AJAX request to create the new album
+                // Perform an ajax request to create the new album
                 $.ajax({
-                    url: "/Album/Create", // Replace with the correct URL for your controller action to create a new album
+                    url: "/Album/Create", 
                     method: "POST",
                     data: { Name: albumName, Description: albumDescription },
                     success: function (response) {
-                        // Use the newly created album's ID as the selected option value
+                        
                         $("#albumSelect").append($("<option></option>").val(response.albumId).text(albumName).attr("selected", "selected"));
 
-                        // Update the hidden input fields for album name, description, and AlbumId
+                        
                         $("#AlbumName").val(albumName);
                         $("#AlbumDescription").val(albumDescription);
-                        $("#AlbumId").val(response.albumId); // Assuming "AlbumId" is the name of the hidden input field for AlbumId in your form
+                        $("#AlbumId").val(response.albumId); 
 
-                        // Submit the entire form to add the song with the newly created album
+                        // Submit entire form to add the song with the newly created album
                         $("form").submit();
                     },
                     error: function (xhr, status, error) {
                         console.error("Error creating new album:", error);
-                        // Show an error message or handle the error response as needed
+                        
                     }
                 });
             } else if (selectedAlbumId !== "-2") {
-                // Update the hidden input fields for album name, description, and AlbumId
+                
                 var selectedAlbumName = $("#albumSelect :selected").text();
                 var selectedAlbumDescription = $("#albumSelect :selected").data("description");
                 $("#AlbumName").val(selectedAlbumName);
                 $("#AlbumDescription").val(selectedAlbumDescription);
                 $("#AlbumId").val(selectedAlbumId);
 
-                // Submit the entire form to add the song with the existing album
+                /m
                 $("form").submit();
 
             }
