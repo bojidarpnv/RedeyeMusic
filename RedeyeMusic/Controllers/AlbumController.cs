@@ -23,19 +23,18 @@ namespace RedeyeMusic.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Return 400 Bad Request with validation errors if the model state is not valid
+                return BadRequest(ModelState);
             }
 
             try
             {
                 await this.albumService.AddAlbum(viewModel, (int)artistId);
 
-                return Ok(new { albumId = viewModel.Id }); // Return 200 OK with the newly created album's ID in the response
+                return Ok(new { albumId = viewModel.Id });
             }
             catch (Exception ex)
             {
-                // Log the exception if needed
-                return StatusCode(500, "An error occurred while creating the album."); // Return 500 Internal Server Error if an exception occurs during album creation
+                return StatusCode(500, "An error occurred while creating the album.");
             }
         }
     }

@@ -1,0 +1,184 @@
+﻿@model AllSongsSearchedModel
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+
+@if (Model.SongsByTitle.Any() || Model.SongsByGenre.Any() || Model.SongsByArtist.Any() || Model.SongsByLyrics.Any())
+{
+    <div class="homeview text-white pt-2">
+        <ul class="homeview-nav nav m-4 nav-pills mb-3" id="pills-tab" role="tablist">
+            @if (Model.SongsByTitle.Any())
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="text-white nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">By Title</button>
+                </li>
+            }
+
+            @if (Model.SongsByGenre.Any())
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="text-white nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">By Genre</button>
+                </li>
+            }
+
+            @if (Model.SongsByArtist.Any())
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="text-white nav-link" id="pills-artist-tab" data-bs-toggle="pill" data-bs-target="#pills-artist" type="button" role="tab" aria-controls="pills-artist" aria-selected="false">By Artist</button>
+                </li>
+            }
+
+            @if (Model.SongsByLyrics.Any())
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="text-white nav-link" id="pills-lyrics-tab" data-bs-toggle="pill" data-bs-target="#pills-lyrics" type="button" role="tab" aria-controls="pills-lyrics" aria-selected="false">By Lyrics</button>
+                </li>
+            }
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+            @if (Model.SongsByTitle.Any())
+            {
+                int i = 1;
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                    @foreach (var song in Model.SongsByTitle)
+                    {
+                        <a class="white song m-2 ms-4 col-md-6 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
+                            <div class="white col-1 h3">@i</div>
+                            <div class="col d-flex">
+                                <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
+                                <div class="white ms-1">
+                                    <div class="white">@song.Title</div>
+                                    <small class="white">Song Description</small>
+                                </div>
+                            </div>
+                        </a>
+                        i++;
+                    }
+                </div>
+            }
+
+            @if (Model.SongsByGenre.Any())
+            {
+                int i = 1;
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+                    @foreach (var song in Model.SongsByGenre)
+                    {
+                        <a class="white song m-2 ms-4 col-md-6 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
+                            <div class="white col-1 h3">@i</div>
+                            <div class="col d-flex">
+                                <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
+                                <div class="white ms-1">
+                                    <div class="white">@song.Title</div>
+                                    <small class="white">Song Description</small>
+                                </div>
+                            </div>
+                        </a>
+                        i++;
+                    }
+                </div>
+            }
+
+            @if (Model.SongsByArtist.Any())
+            {
+                int i = 1;
+                <div class="tab-pane fade" id="pills-artist" role="tabpanel" aria-labelledby="pills-artist-tab" tabindex="0">
+                    @foreach (var song in Model.SongsByArtist)
+                    {
+                        <a class="white song m-2 ms-4 col-md-6 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
+                            <div class="white col-1 h3">@i</div>
+                            <div class="col d-flex">
+                                <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
+                                <div class="white ms-1">
+                                    <div class="white">@song.Title</div>
+                                    <small class="white">Song Description</small>
+                                </div>
+                            </div>
+                        </a>
+                        i++;
+                    }
+                </div>
+            }
+
+            @if (Model.SongsByLyrics.Any())
+            {
+                int i = 1;
+                <div class="tab-pane fade" id="pills-lyrics" role="tabpanel" aria-labelledby="pills-lyrics-tab" tabindex="0">
+                    @foreach (var song in Model.SongsByLyrics)
+                    {
+                        <a class="white song m-2 ms-4 col-md-6 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
+                            <div class="white col-1 h3">@i</div>
+                            <div class="col d-flex">
+                                <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
+                                <div class="white ms-1">
+                                    <div class="white">@song.Title</div>
+                                    <small class="white">Song Description</small>
+                                </div>
+                            </div>
+                        </a>
+                        i++;
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+
+else
+{
+    <div class="mt-4 p-5 bg-light">
+        <h1 class="display-4">No Results Found</h1>
+        <p class="lead">
+            There are no songs matching your search query.
+        </p>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+    <script>
+        $(document).ready(function () {
+            var activated = false;
+
+            function activateTab(tabId) {
+                if (!activated) {
+                    $(tabId).tab('show');
+                    activated = true;
+                }
+            }
+
+        @if (Model.SongsByTitle.Any())
+        {
+            <text>activateTab('#pills-home-tab'); </text>
+        }
+
+        @if (Model.SongsByGenre.Any())
+        {
+            <text>activateTab('#pills-profile-tab'); </text>
+        }
+
+        @if (Model.SongsByArtist.Any())
+        {
+            <text>activateTab('#pills-artist-tab'); </text>
+        }
+
+        @if (Model.SongsByLyrics.Any())
+        {
+            <text>activateTab('#pills-lyrics-tab'); </text>
+        }
+                });
+    </script>
+}
+
+
+
+
+
+
+
+
+}

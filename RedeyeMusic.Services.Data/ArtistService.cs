@@ -50,5 +50,9 @@ namespace RedeyeMusic.Services.Data
             return artist.Id;
         }
 
+        public async Task<bool> ArtistNameAlreadyExists(string artistName)
+        {
+            return await this.dbContext.Artists.AnyAsync(a => a.Name == artistName);
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace RedeyeMusic.Services.Data.Interfaces
         Task CreateAsync(string userId, BecomeArtistFormModel formModel);
         Task<bool> ArtistNameExistsAsync(string artistName);
         Task<int?> GetArtistIdByUserIdAsync(string userId);
+        Task<bool> ArtistNameAlreadyExists(string artistName);
     }
 }

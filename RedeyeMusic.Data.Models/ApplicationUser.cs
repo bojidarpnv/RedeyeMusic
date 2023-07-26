@@ -14,7 +14,7 @@ namespace RedeyeMusic.Data.Models
 
         public bool IsDeleted { get; set; }
 
-
+        //public string ImageUrl { get; set; }
         public virtual ICollection<Playlist> Playlists { get; set; }
     }
 }

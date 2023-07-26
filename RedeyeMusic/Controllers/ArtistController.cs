@@ -32,6 +32,7 @@ namespace RedeyeMusic.Web.Controllers
                 return this.RedirectToAction("Add", "Song");
             }
 
+
             return View(artistModel);
 
         }
@@ -48,13 +49,21 @@ namespace RedeyeMusic.Web.Controllers
             if (await this.artistService.ArtistNameExistsAsync(artistName))
             {
                 ModelState.AddModelError(nameof(artistModel.ArtistName), "Artist name already exists. Enter another one.");
+                TempData[ErrorMessage] = "Artist name already exists. Please choose another one.";
             }
             if (!ModelState.IsValid)
             {
                 return View(artistModel);
             }
+            try
+            {
+                await this.artistService.CreateAsync(userId, artistModel);
+            }
 
-            await this.artistService.CreateAsync(userId, artistModel);
+            catch (Exception _)
+            {
+                this.ModelState.AddModelError(string.Empty, "Unexpected error occurrer while trying to add your new Song! Please try again later!");
+            }
 
             return RedirectToAction("AddFirstSong", "Song");
         }

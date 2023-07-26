@@ -54,8 +54,8 @@
                         }
                     </ul>
                     <ul ul class="navbar-nav flex-grow-1 mr-auto">
-                        <form class="d-flex mr-auto" role="search" id="searchBy ">
-                            <input class="form-control mc-2" type="search" placeholder="Search by Song, Artist, Genre..." aria-label="Search" style="width:400px;">
+                        <form class="d-flex" role="search" id="searchForm" action="/Song/Search" method="get">
+                            <input class="form-control mc-2" type="search" name="SearchString" placeholder="Search by Title, Artist, Genre Or Lyrics..." aria-label="Search" style="width:400px;">
                             <button class="btn btn-secondary" type="submit" color="red">Search</button>
                         </form>
                     </ul>
