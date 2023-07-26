@@ -57,3 +57,9 @@ body a{
 .toast-container .toast-error {
     background-color: #BD362F;
 }
+.smallText {
+   max-width:50ch;
+    overflow: hidden;
+    white-space: nowrap;
+    
+}

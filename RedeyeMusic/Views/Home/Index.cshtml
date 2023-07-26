@@ -43,11 +43,12 @@
                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                         <div class="white ms-1">
                             <div class="white">@song.Title</div>
-                            <small class="white">Song Description</small>
+                            <div class="smallText"><small class="white" >@song.Lyrics</small></div>
                         </div>
                     </div>
-                    <div class="col-2 text-decoration-none">03:00<btn class="btn-play btn-submit"><i class="bi bi-play ml-2"></i></btn></div>
+                    <div class="col-2 text-decoration-none">@song.Duration<i class="bi bi-play ml-2"></i></div>
                     <small class="white col-2"><i class="bi bi-ear"></i> @song.ListenCount</small>
+                   
                 </a>
             }
         </div>

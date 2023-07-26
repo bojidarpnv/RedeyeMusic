@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="TagLibSharp" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RedeyeMusic.Common\RedeyeMusic.Common.csproj" />
     <ProjectReference Include="..\RedeyeMusic.Data.Models\RedeyeMusic.Data.Models.csproj" />
     <ProjectReference Include="..\RedeyeMusic.Data\RedeyeMusic.Data.csproj" />

@@ -19,7 +19,6 @@ namespace RedeyeMusic.Services.Data
         {
             this.dbContext = dbContext;
 
-
         }
 
         public Task AddMp3File(AddSongFormModel songModel)
@@ -27,7 +26,7 @@ namespace RedeyeMusic.Services.Data
             throw new NotImplementedException();
         }
 
-        public async Task AddSongAsync(AddSongFormModel songModel, int artistId)
+        public async Task AddSongAsync(AddSongFormModel songModel, int artistId, string fullFilePath)
         {
 
             Song song = new Song()
@@ -40,8 +39,14 @@ namespace RedeyeMusic.Services.Data
                 ArtistId = artistId,
                 AlbumId = songModel.AlbumId,
             };
-            this.dbContext.Add(song);
-            this.dbContext.SaveChanges();
+
+
+            await this.dbContext.Songs.AddAsync(song);
+            await this.dbContext.SaveChangesAsync();
+            await Task.Delay(1000);
+            int duration = GetSongDuration(fullFilePath);
+            song.Duration = duration;
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<IndexViewModel>> GetAll()
@@ -54,8 +59,10 @@ namespace RedeyeMusic.Services.Data
                 {
                     Id = s.Id,
                     Title = s.Title,
+                    Lyrics = s.Lyrics,
                     Duration = s.Duration,
                     ImageUrl = s.ImageUrl,
+                    ArtistName = s.Artist.Name,
                     ListenCount = s.ListenCount,
                     Mp3FilePath = s.FilePath
                 })
@@ -100,6 +107,34 @@ namespace RedeyeMusic.Services.Data
 
             await this.dbContext.Songs.AddAsync(song);
             await this.dbContext.SaveChangesAsync();
+            await Task.Delay(1000);
+            int duration = GetSongDuration(song.FilePath);
+            song.Duration = duration;
+            await this.dbContext.SaveChangesAsync();
+
+
+        }
+        public int GetSongDuration(string mp3FilePath)
+        {
+            try
+            {
+
+                // Load the MP3 file
+                var file = TagLib.File.Create(mp3FilePath);
+
+                // Get the duration in seconds
+                int durationInSeconds = (int)file.Properties.Duration.TotalSeconds;
+
+                return durationInSeconds;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here (e.g., file not found, invalid format, etc.)
+                // You may want to log the error or return a default duration.
+                // For example:
+                // return -1; // Indicating an error or unknown duration
+                throw; // Re-throw the exception or handle it according to your requirements
+            }
         }
 
         public async Task<AllSongsSearchedModel> SearchSongsAsync(AllSongsQueryModel queryModel)
@@ -125,6 +160,7 @@ namespace RedeyeMusic.Services.Data
                         Title = s.Title,
                         Duration = s.Duration,
                         ImageUrl = s.ImageUrl,
+                        ArtistName = s.Artist.Name,
                         ListenCount = s.ListenCount,
                         Mp3FilePath = s.FilePath
 
@@ -138,6 +174,7 @@ namespace RedeyeMusic.Services.Data
                         Title = s.Title,
                         Duration = s.Duration,
                         ImageUrl = s.ImageUrl,
+                        ArtistName = s.Artist.Name,
                         ListenCount = s.ListenCount,
                         Mp3FilePath = s.FilePath
 
@@ -151,6 +188,7 @@ namespace RedeyeMusic.Services.Data
                         Title = s.Title,
                         Duration = s.Duration,
                         ImageUrl = s.ImageUrl,
+                        ArtistName = s.Artist.Name,
                         ListenCount = s.ListenCount,
                         Mp3FilePath = s.FilePath
 
@@ -161,8 +199,10 @@ namespace RedeyeMusic.Services.Data
                     {
                         Id = s.Id,
                         Title = s.Title,
+                        Lyrics = s.Lyrics,
                         Duration = s.Duration,
                         ImageUrl = s.ImageUrl,
+                        ArtistName = s.Artist.Name,
                         ListenCount = s.ListenCount,
                         Mp3FilePath = s.FilePath
 
