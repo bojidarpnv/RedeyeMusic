@@ -43,7 +43,7 @@ namespace RedeyeMusic.Services.Data
 
             await this.dbContext.Songs.AddAsync(song);
             await this.dbContext.SaveChangesAsync();
-            await Task.Delay(1000);
+
             int duration = GetSongDuration(fullFilePath);
             song.Duration = duration;
             await this.dbContext.SaveChangesAsync();
@@ -81,7 +81,7 @@ namespace RedeyeMusic.Services.Data
                 .ToArrayAsync();
             return allGenres;
         }
-        public async Task AddFirstSongAsync(AddFirstSongFormModel songModel, int artistId)
+        public async Task AddFirstSongAsync(AddFirstSongFormModel songModel, int artistId, string fullFilePath)
         {
             Album album = new Album()
             {
@@ -107,7 +107,7 @@ namespace RedeyeMusic.Services.Data
 
             await this.dbContext.Songs.AddAsync(song);
             await this.dbContext.SaveChangesAsync();
-            await Task.Delay(1000);
+
             int duration = GetSongDuration(song.FilePath);
             song.Duration = duration;
             await this.dbContext.SaveChangesAsync();

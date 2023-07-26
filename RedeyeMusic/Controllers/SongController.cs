@@ -57,7 +57,7 @@ namespace RedeyeMusic.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddSongFormModel songModel)
         {
-            string fullFilePath = null;
+
             string userId = this.User.GetId();
             int? artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
             songModel.Genres = await this.genreService.SelectGenresAsync();
@@ -90,6 +90,7 @@ namespace RedeyeMusic.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                string fullFilePath = null;
                 if (songModel.Mp3File != null)
                 {
                     string folder = "songs/Mp3s/";
@@ -141,6 +142,7 @@ namespace RedeyeMusic.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFirstSong(AddFirstSongFormModel songModel)
         {
+
             string userId = this.User.GetId();
             int? artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
             songModel.Genres = await this.genreService.SelectGenresAsync();
@@ -157,17 +159,31 @@ namespace RedeyeMusic.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                string fullFilePath = null!;
                 if (songModel.Mp3File != null)
                 {
                     string folder = "songs/Mp3s/";
                     folder += Guid.NewGuid().ToString() + songModel.Mp3File.FileName;
                     songModel.FilePath = folder;
                     string serverFolder = Path.Combine(env.WebRootPath, folder);
+                    fullFilePath = serverFolder;
+                    using (FileStream stream = new FileStream(serverFolder, FileMode.Create))
+                    {
+                        await songModel.Mp3File.CopyToAsync(stream);
+                    }
 
-                    await songModel.Mp3File.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
                 }
-                await this.songService.AddFirstSongAsync(songModel, (int)artistId);
-                TempData[SuccessMessage] = "Successfully added your first song!";
+                try
+                {
+
+                    await this.songService.AddFirstSongAsync(songModel, (int)artistId, fullFilePath);
+                    TempData[SuccessMessage] = "Successfully added your first song!";
+                }
+                catch (Exception _)
+                {
+                    this.ModelState.AddModelError(string.Empty, "Unexpected error occurrer while trying to add your new Song! Please try again later!");
+                    return View(songModel);
+                }
             }
             else
             {
