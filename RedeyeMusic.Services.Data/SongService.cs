@@ -213,6 +213,25 @@ namespace RedeyeMusic.Services.Data
             return searchResult;
         }
 
+        public async Task<IEnumerable<IndexViewModel>> AllByArtistIdAsync(int artistId)
+        {
+            IEnumerable<IndexViewModel> allArtistSongs = await this.dbContext
+                .Songs
+                .Where(s => s.ArtistId == artistId)
+                .Select(s => new IndexViewModel()
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Lyrics = s.Lyrics,
+                    Duration = s.Duration,
+                    ImageUrl = s.ImageUrl,
+                    ArtistName = s.Artist.Name,
+                    ListenCount = s.ListenCount,
+                    Mp3FilePath = s.FilePath
+                })
+                .ToArrayAsync();
 
+            return allArtistSongs;
+        }
     }
 }

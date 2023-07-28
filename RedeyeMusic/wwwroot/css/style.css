@@ -28,6 +28,15 @@ body a{
     background-color:red;
     border-color:red;
 }
+.btn-details
+{
+    background-color: green;
+    border-color:green;
+}
+.btn-edit {
+    background-color: lightgoldenrodyellow;
+    border-color: lightgoldenrodyellow;
+}
 .song:hover{
     border:solid thin grey;
     cursor: pointer;

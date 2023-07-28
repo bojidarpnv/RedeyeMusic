@@ -38,14 +38,14 @@ namespace RedeyeMusic.Services.Data
 
 
 
-        public async Task<int?> GetArtistIdByUserIdAsync(string userId)
+        public async Task<int> GetArtistIdByUserIdAsync(string userId)
         {
             Artist? artist = await this.dbContext
                 .Artists
                 .FirstOrDefaultAsync(a => a.ApplicationUserId.ToString() == userId);
             if (artist == null)
             {
-                return null;
+                return 0;
             }
             return artist.Id;
         }

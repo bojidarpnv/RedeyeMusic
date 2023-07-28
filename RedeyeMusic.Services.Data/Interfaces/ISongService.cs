@@ -14,5 +14,7 @@ namespace RedeyeMusic.Services.Data.Interfaces
         public Task AddMp3File(AddSongFormModel songModel);
         public Task<AllSongsSearchedModel> SearchSongsAsync(AllSongsQueryModel queryModel);
         public int GetSongDuration(string mp3FilePath);
+        public Task<IEnumerable<IndexViewModel>> AllByArtistIdAsync(int artistId);
+
     }
 }

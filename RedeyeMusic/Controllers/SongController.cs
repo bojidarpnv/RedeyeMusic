@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Services.Data.Models.Song;
 using RedeyeMusic.Web.Infrastrucutre.Extensions;
+using RedeyeMusic.Web.ViewModels.Home;
 using RedeyeMusic.Web.ViewModels.Song;
 using static RedeyeMusic.Common.NotificationMessagesConstants;
 
@@ -201,6 +202,23 @@ namespace RedeyeMusic.Web.Controllers
                 searchResult = await this.songService.SearchSongsAsync(queryModel);
             }
             return View(searchResult);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Mine()
+        {
+            List<IndexViewModel> mySongs =
+                new List<IndexViewModel>();
+            string userId = this.User.GetId();
+            bool isUserArtist = await this.artistService
+                .ArtistExistsByUserIdAsync(userId);
+            if (isUserArtist)
+            {
+                int artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
+
+                mySongs.AddRange(await this.songService.AllByArtistIdAsync(artistId));
+            }
+
+            return this.View(mySongs);
         }
     }
 
