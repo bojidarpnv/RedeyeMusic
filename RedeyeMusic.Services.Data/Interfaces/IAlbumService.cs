@@ -9,6 +9,6 @@ namespace RedeyeMusic.Services.Data.Interfaces
         public Task AddAlbum(AlbumFormModel albumViewModel, int artistId);
 
         public Task<int> GetAlbumId(AddSongFormModel songModel);
-        public Task<AddSongFormModel> GetAlbumDescriptionAndNameById(int albumId, AddSongFormModel songModel);
+        public Task<AddSongFormModel> GetAlbumDescriptionAndNameAndUrlById(int albumId, AddSongFormModel songModel);
     }
 }

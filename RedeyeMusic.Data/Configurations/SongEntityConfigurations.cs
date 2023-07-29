@@ -18,6 +18,9 @@ namespace RedeyeMusic.Data.Configurations
                 .WithMany(s => s.Songs)
                 .HasForeignKey(g => g.GenreId)
                 .OnDelete(DeleteBehavior.Restrict);
+            builder
+                .Property(i => i.IsDeleted)
+                .HasDefaultValue(false);
 
             builder.HasData(this.GenerateSongs());
         }

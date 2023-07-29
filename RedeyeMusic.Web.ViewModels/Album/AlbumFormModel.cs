@@ -13,5 +13,7 @@ namespace RedeyeMusic.Web.ViewModels.Album
         [Required]
         [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; } = null!;
+        [Required]
+        public string ImageUrl { get; set; } = null!;
     }
 }

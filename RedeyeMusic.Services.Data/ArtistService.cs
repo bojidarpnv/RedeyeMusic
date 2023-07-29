@@ -54,5 +54,9 @@ namespace RedeyeMusic.Services.Data
         {
             return await this.dbContext.Artists.AnyAsync(a => a.Name == artistName);
         }
+        public async Task<bool> DoesArtistHaveAnySongsAsync(int artistId)
+        {
+            return await this.dbContext.Songs.AnyAsync(a => a.Id == artistId);
+        }
     }
 }

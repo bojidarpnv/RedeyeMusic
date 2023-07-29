@@ -40,6 +40,12 @@
                 <span asp-validation-for="AlbumDescription" class="large textdanger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="AlbumImageUrl"></label>
+                <input asp-for="AlbumImageUrl" class="form-control"
+                       placeholder="Image Url of Album">
+                <span asp-validation-for="AlbumImageUrl" class="large textdanger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ImageUrl"></label>
                 <input asp-for="ImageUrl" class="form-control"
                        placeholder="Url For Song Cover">

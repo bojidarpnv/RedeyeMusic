@@ -45,6 +45,11 @@
                     <input asp-for="AlbumDescription" id="albumDescriptionInput" class="form-control" name="AlbumDescription" placeholder="New Album Description" required>
                     <span asp-validation-for="AlbumDescription" class="small text-danger"></span>
                 </div>
+                <div class="form-group">
+                    <label asp-for="AlbumImageUrl"></label>
+                    <input asp-for="AlbumImageUrl" id="albumImageUrlInput" class="form-control" name="AlbumImageUrl" placeholder="New Album Image Url" required>
+                    <span asp-validation-for="AlbumImageUrl" class="small text-danger"></span>
+                </div>
             </div>
 
             <div class="mb-3">
@@ -90,17 +95,15 @@
             } else {
                 $("#addnew").hide();
 
-                
                 if (selectedAlbumId !== "-2") {
-                    
                     var selectedAlbumName = $(this).find(":selected").text();
                     var selectedAlbumDescription = $(this).find(":selected").data("description");
+                    var selectedAlbumImageUrl = $(this).find(":selected").data("imageurl");
 
-                    
                     $("#AlbumName").val(selectedAlbumName);
                     $("#AlbumDescription").val(selectedAlbumDescription);
+                    $("#AlbumImageUrl").val(selectedAlbumImageUrl);
 
-                    
                     $("#AlbumId").val(selectedAlbumId);
                 }
             }
@@ -109,55 +112,47 @@
         $("#addSongButton").click(function (e) {
             e.preventDefault();
             var selectedAlbumId = $("#albumSelect").val();
-            var albumName = $("#albumNameInput").val();
-            var albumDescription = $("#albumDescriptionInput").val();
-            if (!albumName || !albumDescription || albumDescription.length < 10) {
-                
-                toastr.error("Album Name and Album Description are required.");
-                return;
-            }
-            if(albumDescription.length<10)
-            {
-                toastr.error("Album Description must be at least 10 symbols.");
-                return;
-            }
-            
+
             if (selectedAlbumId === "-1") {
+                var albumName = $("#albumNameInput").val();
+                var albumDescription = $("#albumDescriptionInput").val();
+                var albumImageUrl = $("#albumImageUrlInput").val();
+
+                if (!albumName || !albumDescription || albumDescription.length < 10) {
+                    toastr.error("Album Name, Album Description, and Album URL are required.");
+                    return;
+                }
+                if (albumDescription.length < 10) {
+                    toastr.error("Album Description must be at least 10 characters.");
+                    return;
+                }
+
                 // Perform an ajax request to create the new album
                 $.ajax({
-                    url: "/Album/Create", 
+                    url: "/Album/Create",
                     method: "POST",
-                    data: { Name: albumName, Description: albumDescription },
+                    data: { Name: albumName, Description: albumDescription, ImageUrl: albumImageUrl },
                     success: function (response) {
-                        
                         $("#albumSelect").append($("<option></option>").val(response.albumId).text(albumName).attr("selected", "selected"));
 
-                        
                         $("#AlbumName").val(albumName);
                         $("#AlbumDescription").val(albumDescription);
-                        $("#AlbumId").val(response.albumId); 
+                        $("#AlbumImageUrl").val(albumImageUrl);
+
+                        $("#AlbumId").val(response.albumId);
 
                         // Submit entire form to add the song with the newly created album
                         $("form").submit();
                     },
                     error: function (xhr, status, error) {
                         console.error("Error creating new album:", error);
-                        
                     }
                 });
             } else if (selectedAlbumId !== "-2") {
-                
-                var selectedAlbumName = $("#albumSelect :selected").text();
-                var selectedAlbumDescription = $("#albumSelect :selected").data("description");
-                $("#AlbumName").val(selectedAlbumName);
-                $("#AlbumDescription").val(selectedAlbumDescription);
-                $("#AlbumId").val(selectedAlbumId);
-
-                /m
                 $("form").submit();
-
             }
         });
     });
+
 </script>
 

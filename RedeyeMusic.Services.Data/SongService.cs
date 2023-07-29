@@ -3,6 +3,8 @@ using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Services.Data.Models.Song;
+using RedeyeMusic.Web.ViewModels.Album;
+using RedeyeMusic.Web.ViewModels.Artist;
 using RedeyeMusic.Web.ViewModels.Genre;
 using RedeyeMusic.Web.ViewModels.Home;
 using RedeyeMusic.Web.ViewModels.Song;
@@ -38,6 +40,7 @@ namespace RedeyeMusic.Services.Data
                 GenreId = songModel.GenreId,
                 ArtistId = artistId,
                 AlbumId = songModel.AlbumId,
+
             };
 
 
@@ -53,6 +56,7 @@ namespace RedeyeMusic.Services.Data
         {
             IEnumerable<IndexViewModel> songs = await this.dbContext
                 .Songs
+                .Where(s => s.IsDeleted == false)
                 .OrderByDescending(s => s.ListenCount)
                 .Take(100)
                 .Select(s => new IndexViewModel
@@ -88,7 +92,7 @@ namespace RedeyeMusic.Services.Data
                 Name = songModel.AlbumName,
                 Description = songModel.AlbumDescription,
                 ArtistId = artistId,
-                //GenreId = songModel.GenreId,
+                ImageUrl = songModel.AlbumImageUrl
             };
 
             await this.dbContext.Albums.AddAsync(album);
@@ -153,6 +157,7 @@ namespace RedeyeMusic.Services.Data
             {
                 string wildCard = $"%{queryModel.SearchString.ToLower()}%";
                 searchResult.SongsByTitle = await songsQuery
+                    .Where(s => s.IsDeleted == false)
                     .Where(s => EF.Functions.Like(s.Title, wildCard))
                     .Select(s => new IndexViewModel()
                     {
@@ -167,6 +172,7 @@ namespace RedeyeMusic.Services.Data
                     })
                     .ToListAsync();
                 searchResult.SongsByArtist = await songsQuery
+                    .Where(s => s.IsDeleted == false)
                     .Where(s => EF.Functions.Like(s.Artist.Name, wildCard))
                     .Select(s => new IndexViewModel()
                     {
@@ -181,6 +187,7 @@ namespace RedeyeMusic.Services.Data
                     })
                     .ToListAsync();
                 searchResult.SongsByGenre = await songsQuery
+                    .Where(s => s.IsDeleted == false)
                     .Where(s => EF.Functions.Like(s.Genre.Name, wildCard))
                     .Select(s => new IndexViewModel()
                     {
@@ -194,6 +201,7 @@ namespace RedeyeMusic.Services.Data
 
                     }).ToListAsync();
                 searchResult.SongsByLyrics = await songsQuery
+                    .Where(s => s.IsDeleted == false)
                     .Where(s => EF.Functions.Like(s.Lyrics, wildCard))
                     .Select(s => new IndexViewModel()
                     {
@@ -217,6 +225,7 @@ namespace RedeyeMusic.Services.Data
         {
             IEnumerable<IndexViewModel> allArtistSongs = await this.dbContext
                 .Songs
+                .Where(s => s.IsDeleted == false)
                 .Where(s => s.ArtistId == artistId)
                 .Select(s => new IndexViewModel()
                 {
@@ -232,6 +241,46 @@ namespace RedeyeMusic.Services.Data
                 .ToArrayAsync();
 
             return allArtistSongs;
+        }
+
+        public async Task<SongDetailsViewModel?> GetDetailsByIdAsync(int songId)
+        {
+            Song? song = await this.dbContext
+                .Songs
+                .Where(s => s.IsDeleted == false)
+                .Include(s => s.Artist)
+                .ThenInclude(a => a.ApplicationUser)
+                .FirstOrDefaultAsync(s => s.Id == songId);
+            if (song == null)
+            {
+                return null;
+            }
+            return new SongDetailsViewModel()
+            {
+
+                Id = song.Id,
+                Title = song.Title,
+                Lyrics = song.Lyrics,
+                Duration = song.Duration,
+                ImageUrl = song.ImageUrl,
+                ArtistName = song.Artist.Name,
+                ListenCount = song.ListenCount,
+                Mp3FilePath = song.FilePath,
+                Artist = new ArtistInfoOnSongViewModel()
+                {
+                    Id = song.Artist.Id,
+                    Name = song.Artist.Name,
+                    Albums = await this.dbContext.Albums
+                    .Where(a => a.Artist.Id == song.Artist.Id)
+                    .Select(al => new AlbumSelectViewModel()
+                    {
+                        Id = al.Id,
+                        Name = al.Name,
+                        Description = al.Description,
+                    })
+                    .ToListAsync()
+                }
+            };
         }
     }
 }

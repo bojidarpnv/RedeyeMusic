@@ -8,6 +8,10 @@ namespace RedeyeMusic.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Album> builder)
         {
+            builder
+               .Property(i => i.IsDeleted)
+               .HasDefaultValue(false);
+
             builder.HasData(this.GenerateAlbums());
         }
         private Album[] GenerateAlbums()

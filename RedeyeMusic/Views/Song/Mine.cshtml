@@ -17,7 +17,15 @@
             @if (User.Identity?.IsAuthenticated ?? false)
             {
                 <a asp-controller="Song" asp-action="Add" class="btn btn-primary btn-lg"
-                   role="button">Add Song</a>
+                role="button">Add Song</a>
+            }
+            else
+            {
+            <p class="lead">
+                You need to become an artist in order to add Songs!
+                <a asp-controller="Artist" asp-action="Become" class="btn btn-primary btn-lg"
+                   role="button">Become an Artist</a>
+            </p>
             }
         </p>
     </div>
@@ -54,13 +62,13 @@
                     <div class="col-md-3">
                         <div class="row justify-content-center pt-3 mb-2">
                             <div class="col-auto">
-                                <a asp-action="Details" asp-controller="Song" class="btn btn-details">Details</a>
+                                <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-details">Details</a>
                             </div>
                             <div class="col-auto">
-                                <a asp-action="Edit" asp-controller="Song" class="btn btn-edit">Edit</a>
+                                <a asp-action="Edit" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-edit">Edit</a>
                             </div>
                             <div class="col-auto">
-                                <a asp-action="Delete" asp-controller="Song" class="btn btn-danger">Delete</a>
+                                <a asp-action="Delete" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Delete</a>
                             </div>
                         </div>
                     </div>

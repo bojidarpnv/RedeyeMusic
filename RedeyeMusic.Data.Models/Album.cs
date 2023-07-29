@@ -21,6 +21,9 @@ namespace RedeyeMusic.Data.Models
         [StringLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
 
+        //Shouldnt be nullable but is for now for testing purposes!
+        public string? ImageUrl { get; set; }
+
         [ForeignKey(nameof(Artist))]
         public int ArtistId { get; set; }
         public virtual Artist Artist { get; set; } = null!;
@@ -30,5 +33,6 @@ namespace RedeyeMusic.Data.Models
         //public virtual Genre Genre { get; set; } = null!;
 
         public virtual ICollection<Song> Songs { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

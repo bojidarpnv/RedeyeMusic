@@ -60,9 +60,14 @@ namespace RedeyeMusic.Web.Controllers
         {
 
             string userId = this.User.GetId();
-            int? artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
+            bool doesArtistHaveAnySongs = await this.artistService.DoesArtistHaveAnySongsAsync(artistId);
+            if (!doesArtistHaveAnySongs)
+            {
+                RedirectToAction("AddFirstSong", "Song");
+            }
             songModel.Genres = await this.genreService.SelectGenresAsync();
-            songModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync((int)artistId);
+            songModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync(artistId);
             //if albumId is 0 it is because of being an already existing album, getting the id here from the Name and Description, cannot properly pass Id with JS;
             if (songModel.AlbumId == 0)
             {
@@ -71,17 +76,14 @@ namespace RedeyeMusic.Web.Controllers
             //if albumName and albumDescription are null it is because of it being a new Album so we need to get them from the new album.
             if (songModel.AlbumName == null && songModel.AlbumDescription == null)
             {
-                songModel = await this.albumService.GetAlbumDescriptionAndNameById(songModel.AlbumId, songModel);
+                songModel = await this.albumService.GetAlbumDescriptionAndNameAndUrlById(songModel.AlbumId, songModel);
             }
 
             if (!ModelState.IsValid)
             {
                 return View(songModel);
             }
-            if (artistId == null)
-            {
-                throw new InvalidOperationException();
-            }
+
 
             bool isAgent = await this.artistService.ArtistExistsByUserIdAsync(userId);
             if (!isAgent)
@@ -219,6 +221,19 @@ namespace RedeyeMusic.Web.Controllers
             }
 
             return this.View(mySongs);
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int id)
+        {
+            SongDetailsViewModel? viewModel = await this.songService
+                .GetDetailsByIdAsync(id);
+            if (viewModel == null)
+            {
+                this.TempData[ErrorMessage] = "Song with provided id does not exist!";
+                return RedirectToAction("All, Song");
+            }
+            return View(viewModel);
         }
     }
 

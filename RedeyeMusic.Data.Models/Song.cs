@@ -43,5 +43,7 @@ namespace RedeyeMusic.Data.Models
         public int AlbumId { get; set; }
         public virtual Album Album { get; set; } = null!;
 
+        public bool IsDeleted { get; set; }
+
     }
 }
