@@ -1,0 +1,136 @@
+﻿@model EditSongFormModel
+
+@{
+    ViewBag.Title = "Edit Song";
+    //var songId = ViewContext.RouteData.Values["id"]?.ToString();
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form method="post" enctype="multipart/form-data" asp-action="Edit" asp-controller="Song">
+            @* Assume you have a hidden field for the song's ID to send along with the form *@
+            @*<input type="hidden" asp-for="@int.Parse(songId)" />*@
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" placeholder="Song Title">
+                <span asp-validation-for="Title" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lyrics"></label>
+                <input asp-for="Lyrics" class="form-control" placeholder="Lyrics/Description">
+                <span asp-validation-for="Lyrics" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AlbumId" class="form-label-add-edit">Your Albums</label>
+                <select asp-for="AlbumId" class="form-control" aria-required="true" id="albumSelect">
+                    <option>---Select Your Album---</option>
+                    @foreach (var album in Model.Albums)
+                    {
+                        <option value="@album.Id">@album.Name</option>
+                    }
+                </select>
+            </div>
+
+            
+
+            <div class="mb-3">
+                <label asp-for="GenreId" class="form-label-add-edit">Genre of Song</label>
+                <select asp-for="GenreId" class="form-control" aria-required="true">
+                    @foreach (var genre in Model.Genres)
+                    {
+                        <option value="@genre.Id">@genre.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="GenreId" class="small text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageUrl"></label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="Url For Song Cover">
+                <span asp-validation-for="ImageUrl" class="small text-danger"></span>
+            </div>
+            
+            <div class="text-center">
+                <input class="btn btn-primary mt-3" type="submit" value="Save Changes" id="editSongButton" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@*<script>
+    $(document).ready(function () {
+        $("#albumSelect").change(function () {
+            var selectedAlbumId = $(this).val();
+
+            if (selectedAlbumId === "-1") {
+                $("#addnew").show();
+            } else {
+                $("#addnew").hide();
+
+                if (selectedAlbumId !== "-2") {
+                    var selectedAlbumName = $(this).find(":selected").text();
+                    var selectedAlbumDescription = $(this).find(":selected").data("description");
+                    var selectedAlbumImageUrl = $(this).find(":selected").data("imageurl");
+
+                    $("#AlbumName").val(selectedAlbumName);
+                    $("#AlbumDescription").val(selectedAlbumDescription);
+                    $("#AlbumImageUrl").val(selectedAlbumImageUrl);
+
+                    $("#AlbumId").val(selectedAlbumId);
+                }
+            }
+        });
+
+        $("#addSongButton").click(function (e) {
+            e.preventDefault();
+            var selectedAlbumId = $("#albumSelect").val();
+
+            if (selectedAlbumId === "-1") {
+                var albumName = $("#albumNameInput").val();
+                var albumDescription = $("#albumDescriptionInput").val();
+                var albumImageUrl = $("#albumImageUrlInput").val();
+
+                if (!albumName || !albumDescription || albumDescription.length < 10) {
+                    toastr.error("Album Name, Album Description, and Album URL are required.");
+                    return;
+                }
+                if (albumDescription.length < 10) {
+                    toastr.error("Album Description must be at least 10 characters.");
+                    return;
+                }
+
+                // Perform an ajax request to create the new album
+                $.ajax({
+                    url: "/Album/Create",
+                    method: "POST",
+                    data: { Name: albumName, Description: albumDescription, ImageUrl: albumImageUrl },
+                    success: function (response) {
+                        $("#albumSelect").append($("<option></option>").val(response.albumId).text(albumName).attr("selected", "selected"));
+
+                        $("#AlbumName").val(albumName);
+                        $("#AlbumDescription").val(albumDescription);
+                        $("#AlbumImageUrl").val(albumImageUrl);
+
+                        $("#AlbumId").val(response.albumId);
+
+                        // Submit entire form to add the song with the newly created album
+                        $("form").submit();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error creating new album:", error);
+                    }
+                });
+            } else if (selectedAlbumId !== "-2") {
+                $("form").submit();
+            }
+        });
+    });
+
+</script>*@
+@section Scripts {
+    <script src="~/js/site.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}

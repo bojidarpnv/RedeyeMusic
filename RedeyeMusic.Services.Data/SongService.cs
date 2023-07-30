@@ -28,7 +28,7 @@ namespace RedeyeMusic.Services.Data
             throw new NotImplementedException();
         }
 
-        public async Task AddSongAsync(AddSongFormModel songModel, int artistId, string fullFilePath)
+        public async Task<int> AddSongAsync(AddSongFormModel songModel, int artistId, string fullFilePath)
         {
 
             Song song = new Song()
@@ -50,6 +50,7 @@ namespace RedeyeMusic.Services.Data
             int duration = GetSongDuration(fullFilePath);
             song.Duration = duration;
             await this.dbContext.SaveChangesAsync();
+            return song.Id;
         }
 
         public async Task<IEnumerable<IndexViewModel>> GetAll()
@@ -85,7 +86,7 @@ namespace RedeyeMusic.Services.Data
                 .ToArrayAsync();
             return allGenres;
         }
-        public async Task AddFirstSongAsync(AddFirstSongFormModel songModel, int artistId, string fullFilePath)
+        public async Task<int> AddFirstSongAsync(AddFirstSongFormModel songModel, int artistId, string fullFilePath)
         {
             Album album = new Album()
             {
@@ -115,7 +116,7 @@ namespace RedeyeMusic.Services.Data
             int duration = GetSongDuration(song.FilePath);
             song.Duration = duration;
             await this.dbContext.SaveChangesAsync();
-
+            return song.Id;
 
         }
         public int GetSongDuration(string mp3FilePath)
@@ -249,6 +250,7 @@ namespace RedeyeMusic.Services.Data
                 .Songs
                 .Where(s => s.IsDeleted == false)
                 .Include(s => s.Genre)
+                .Include(s => s.Album)
                 .Include(s => s.Artist)
                 .ThenInclude(a => a.ApplicationUser)
                 .FirstAsync(s => s.Id == songId);
@@ -263,6 +265,7 @@ namespace RedeyeMusic.Services.Data
                 GenreName = song.Genre.Name,
                 ImageUrl = song.ImageUrl,
                 ArtistName = song.Artist.Name,
+                AlbumName = song.Album.Name,
                 ListenCount = song.ListenCount,
                 Mp3FilePath = song.FilePath,
                 Artist = new ArtistInfoOnSongViewModel()
@@ -291,21 +294,39 @@ namespace RedeyeMusic.Services.Data
             return result;
         }
 
-        public async Task<AddSongFormModel> GetSongForEditByIdAsync(int songId)
+        public async Task<EditSongFormModel> GetSongForEditByIdAsync(int songId)
         {
             Song song = await this.dbContext
                 .Songs
                 .Where(s => s.IsDeleted == false)
                 .Include(s => s.Genre)
                 .FirstAsync(s => s.Id == songId);
-            return new AddSongFormModel()
+
+            return new EditSongFormModel()
             {
                 Title = song.Title,
                 Lyrics = song.Lyrics,
                 GenreId = song.GenreId,
                 AlbumId = song.AlbumId,
                 ImageUrl = song.ImageUrl,
+
             };
+        }
+
+        public async Task EditSongByIdAndModel(int songId, EditSongFormModel model)
+        {
+
+            Song song = await this.dbContext
+                 .Songs
+                 .Where(s => s.IsDeleted == false)
+                 .FirstAsync(s => s.Id == songId);
+            song.Title = model.Title;
+            song.Lyrics = model.Lyrics;
+            song.ImageUrl = model.ImageUrl;
+            song.AlbumId = model.AlbumId;
+            song.GenreId = model.GenreId;
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }

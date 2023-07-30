@@ -106,13 +106,11 @@ namespace RedeyeMusic.Web.Controllers
                         await songModel.Mp3File.CopyToAsync(stream);
                     }
                 }
-
-
-
                 try
                 {
-                    await this.songService.AddSongAsync(songModel, (int)artistId, fullFilePath!);
+                    int songId = await this.songService.AddSongAsync(songModel, (int)artistId, fullFilePath!);
                     TempData[SuccessMessage] = "Successfully added a song!";
+                    return RedirectToAction("Details", "Song", new { id = songId });
                 }
                 catch (Exception _)
                 {
@@ -121,8 +119,11 @@ namespace RedeyeMusic.Web.Controllers
                 }
 
             }
+            else
+            {
+                return View(songModel);
+            }
 
-            return RedirectToAction("Mine", "Song");
         }
 
 
@@ -151,7 +152,7 @@ namespace RedeyeMusic.Web.Controllers
             songModel.Genres = await this.genreService.SelectGenresAsync();
             if (artistId == null)
             {
-                throw new InvalidOperationException();
+                GeneralError();
             }
 
             bool isAgent = await this.artistService.ArtistExistsByUserIdAsync(userId);
@@ -179,8 +180,9 @@ namespace RedeyeMusic.Web.Controllers
                 try
                 {
 
-                    await this.songService.AddFirstSongAsync(songModel, (int)artistId, fullFilePath);
+                    int songId = await this.songService.AddFirstSongAsync(songModel, (int)artistId, fullFilePath);
                     TempData[SuccessMessage] = "Successfully added your first song!";
+                    return RedirectToAction("Details", "Song", new { id = songId });
                 }
                 catch (Exception _)
                 {
@@ -192,7 +194,7 @@ namespace RedeyeMusic.Web.Controllers
             {
                 return View(songModel);
             }
-            return RedirectToAction("Mine", "Song");
+
         }
         [AllowAnonymous]
         [HttpGet]
@@ -201,7 +203,15 @@ namespace RedeyeMusic.Web.Controllers
             AllSongsSearchedModel searchResult = new AllSongsSearchedModel();
             if (!string.IsNullOrEmpty(queryModel.SearchString))
             {
-                searchResult = await this.songService.SearchSongsAsync(queryModel);
+                try
+                {
+
+                    searchResult = await this.songService.SearchSongsAsync(queryModel);
+                }
+                catch
+                {
+                    GeneralError();
+                }
             }
             return View(searchResult);
         }
@@ -213,32 +223,130 @@ namespace RedeyeMusic.Web.Controllers
             string userId = this.User.GetId();
             bool isUserArtist = await this.artistService
                 .ArtistExistsByUserIdAsync(userId);
-            if (isUserArtist)
+            try
             {
-                int artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
+                if (isUserArtist)
+                {
+                    int artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
 
-                mySongs.AddRange(await this.songService.AllByArtistIdAsync(artistId));
+                    mySongs.AddRange(await this.songService.AllByArtistIdAsync(artistId));
+                }
+
+                return this.View(mySongs);
+            }
+            catch
+            {
+                return GeneralError();
             }
 
-            return this.View(mySongs);
+
         }
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
-            SongDetailsViewModel? viewModel = await this.songService
-                .GetDetailsByIdAsync(id);
-            if (viewModel == null)
+            bool songExists = await this.songService.ExistsById(id);
+
+            if (!songExists)
             {
                 this.TempData[ErrorMessage] = "Song with provided id does not exist!";
                 return RedirectToAction("All, Song");
             }
-            return View(viewModel);
+            try
+            {
+                SongDetailsViewModel viewModel = await this.songService
+                .GetDetailsByIdAsync(id);
+                return View(viewModel);
+            }
+            catch (Exception)
+            {
+                return GeneralError();
+            }
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
+            bool songExists = await this.songService.ExistsById(id);
 
+            if (!songExists)
+            {
+                this.TempData[ErrorMessage] = "Song with provided id does not exist!";
+                return RedirectToAction("All, Song");
+            }
+            bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserArtist)
+            {
+                this.TempData[ErrorMessage] = "You must become an agent in order to edit song info!";
+                return RedirectToAction("Become", "Artist");
+            }
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(artistId, id);
+            if (!isArtistOwner)
+            {
+                this.TempData[ErrorMessage] = "You are not the artist of this song!";
+                return RedirectToAction("Mine", "Song");
+            }
+            try
+            {
+                EditSongFormModel songFormModel = await this.songService
+                .GetSongForEditByIdAsync(id);
+                songFormModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync(artistId);
+                songFormModel.Genres = await this.genreService.SelectGenresAsync();
+                return View(songFormModel);
+            }
+            catch (Exception)
+            {
+                return GeneralError();
+            }
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditSongFormModel songModel)
+        {
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            if (!ModelState.IsValid)
+            {
+                songModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync(artistId);
+                songModel.Genres = await this.genreService.SelectGenresAsync();
+                return this.View(songModel);
+            }
+            bool songExists = await this.songService.ExistsById(id);
+
+            if (!songExists)
+            {
+                this.TempData[ErrorMessage] = "Song with provided id does not exist!";
+                return RedirectToAction("All, Song");
+            }
+            bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserArtist)
+            {
+                this.TempData[ErrorMessage] = "You must become an agent in order to edit song info!";
+                return RedirectToAction("Become", "Artist");
+            }
+
+            bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(artistId, id);
+            if (!isArtistOwner)
+            {
+                this.TempData[ErrorMessage] = "You are not the artist of this song!";
+                return RedirectToAction("Mine", "Song");
+            }
+            try
+            {
+                await this.songService.EditSongByIdAndModel(id, songModel);
+            }
+            catch (Exception)
+            {
+                GeneralError();
+                songModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync(artistId);
+                songModel.Genres = await this.genreService.SelectGenresAsync();
+                return View(songModel);
+            }
+            return RedirectToAction("Details", "Song", new { id });
+        }
+        private IActionResult GeneralError()
+        {
+            this.TempData[ErrorMessage] = "Unexpected error ocurred! Please try again later";
+            return RedirectToAction("Index", "Home");
         }
     }
 

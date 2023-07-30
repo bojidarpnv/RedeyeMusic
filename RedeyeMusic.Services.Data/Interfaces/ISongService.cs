@@ -9,8 +9,8 @@ namespace RedeyeMusic.Services.Data.Interfaces
     {
         Task<IEnumerable<IndexViewModel>> GetAll();
         Task<ICollection<GenreSelectViewModel>> SelectGenresAsync();
-        Task AddFirstSongAsync(AddFirstSongFormModel songModel, int artistId, string fullFilePath);
-        Task AddSongAsync(AddSongFormModel songModel, int artistId, string fullFilePath);
+        Task<int> AddFirstSongAsync(AddFirstSongFormModel songModel, int artistId, string fullFilePath);
+        Task<int> AddSongAsync(AddSongFormModel songModel, int artistId, string fullFilePath);
         Task AddMp3File(AddSongFormModel songModel);
         Task<AllSongsSearchedModel> SearchSongsAsync(AllSongsQueryModel queryModel);
         int GetSongDuration(string mp3FilePath);
@@ -18,7 +18,8 @@ namespace RedeyeMusic.Services.Data.Interfaces
 
         Task<SongDetailsViewModel> GetDetailsByIdAsync(int songId);
         Task<bool> ExistsById(int songId);
-        Task<AddSongFormModel> GetSongForEditByIdAsync(int songId);
+        Task<EditSongFormModel> GetSongForEditByIdAsync(int songId);
+        Task EditSongByIdAndModel(int songId, EditSongFormModel model);
 
     }
 }

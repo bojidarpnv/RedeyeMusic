@@ -12,6 +12,6 @@ namespace RedeyeMusic.Services.Data.Interfaces
         Task<int> GetArtistIdByUserIdAsync(string userId);
         Task<bool> ArtistNameAlreadyExists(string artistName);
         public Task<bool> DoesArtistHaveAnySongsAsync(int artistId);
-
+        Task<bool> IsArtistWithIdOwnerOfSongWithIdAsync(int artistId, int songId);
     }
 }
