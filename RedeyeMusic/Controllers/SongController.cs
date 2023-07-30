@@ -235,6 +235,11 @@ namespace RedeyeMusic.Web.Controllers
             }
             return View(viewModel);
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+
+        }
     }
 
 }

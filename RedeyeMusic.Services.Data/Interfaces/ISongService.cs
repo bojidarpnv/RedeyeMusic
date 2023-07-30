@@ -16,7 +16,9 @@ namespace RedeyeMusic.Services.Data.Interfaces
         int GetSongDuration(string mp3FilePath);
         Task<IEnumerable<IndexViewModel>> AllByArtistIdAsync(int artistId);
 
-        Task<SongDetailsViewModel?> GetDetailsByIdAsync(int songId);
+        Task<SongDetailsViewModel> GetDetailsByIdAsync(int songId);
+        Task<bool> ExistsById(int songId);
+        Task<AddSongFormModel> GetSongForEditByIdAsync(int songId);
 
     }
 }

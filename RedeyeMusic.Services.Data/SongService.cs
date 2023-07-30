@@ -243,18 +243,16 @@ namespace RedeyeMusic.Services.Data
             return allArtistSongs;
         }
 
-        public async Task<SongDetailsViewModel?> GetDetailsByIdAsync(int songId)
+        public async Task<SongDetailsViewModel> GetDetailsByIdAsync(int songId)
         {
-            Song? song = await this.dbContext
+            Song song = await this.dbContext
                 .Songs
                 .Where(s => s.IsDeleted == false)
+                .Include(s => s.Genre)
                 .Include(s => s.Artist)
                 .ThenInclude(a => a.ApplicationUser)
-                .FirstOrDefaultAsync(s => s.Id == songId);
-            if (song == null)
-            {
-                return null;
-            }
+                .FirstAsync(s => s.Id == songId);
+
             return new SongDetailsViewModel()
             {
 
@@ -262,6 +260,7 @@ namespace RedeyeMusic.Services.Data
                 Title = song.Title,
                 Lyrics = song.Lyrics,
                 Duration = song.Duration,
+                GenreName = song.Genre.Name,
                 ImageUrl = song.ImageUrl,
                 ArtistName = song.Artist.Name,
                 ListenCount = song.ListenCount,
@@ -280,6 +279,32 @@ namespace RedeyeMusic.Services.Data
                     })
                     .ToListAsync()
                 }
+            };
+        }
+
+        public async Task<bool> ExistsById(int songId)
+        {
+            bool result = await this.dbContext
+                .Songs
+                .Where(s => s.IsDeleted == false)
+                .AnyAsync(s => s.Id == songId);
+            return result;
+        }
+
+        public async Task<AddSongFormModel> GetSongForEditByIdAsync(int songId)
+        {
+            Song song = await this.dbContext
+                .Songs
+                .Where(s => s.IsDeleted == false)
+                .Include(s => s.Genre)
+                .FirstAsync(s => s.Id == songId);
+            return new AddSongFormModel()
+            {
+                Title = song.Title,
+                Lyrics = song.Lyrics,
+                GenreId = song.GenreId,
+                AlbumId = song.AlbumId,
+                ImageUrl = song.ImageUrl,
             };
         }
     }

@@ -22,7 +22,7 @@
             <div>
                 <a asp-action="Edit" asp-controller="Song" class="btn btn-primary">Edit</a>
                 <a asp-action="Delete" asp-controller="Song" class="btn btn-danger">Delete</a>
-                <a asp-action="Index" asp-controller="Song" class="btn btn-secondary">Back to List</a>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back to List</a>
             </div>
         </div>
     </div>
@@ -44,15 +44,20 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6">
                 <h3>Albums</h3>
-                <ul>
+                <div class="row">
                     @foreach (var album in Model.Artist.Albums)
                     {
-                        <li>@album.Name - @album.Description</li>
+                        <div class="col-md-4 mb-3">
+                            <a href="@Url.Action("Details", "Album", new { id = album.Id })" class="btn btn-light">
+                                <img src="@album.ImageUrl" class="img-fluid rounded" alt="@album.Name">
+                                <div class="mt-2">@album.Name</div>
+                            </a>
+                        </div>
                     }
-                </ul>
+                </div>
             </div>
         </div>
     }
