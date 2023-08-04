@@ -22,9 +22,10 @@
             <p>AlbumName: @Model.AlbumName</p>
             <div>
                 <a asp-action="Edit" asp-controller="Song" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                <a asp-action="Delete" asp-controller="Song" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-song-id="@Model.Id">Delete</a>
                 <a asp-action="Index" asp-controller="Home" asp-route-id="@Model.Id" class="btn btn-secondary">Back to List</a>
             </div>
+            
         </div>
     </div>
     
@@ -58,9 +59,86 @@
         </div>
     }
 </div>
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Please enter your password to confirm the deletion.</p>
+                <input type="hidden" id="songIdInput" />
+                <input type="password" class="form-control" id="passwordInput" placeholder="Enter your password">
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script src="~/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            // ... Your other event handlers ...
+
+            // Add event handler for delete button click
+            $(".delete-button").click(function () {
+                // Show the password confirmation modal
+                $("#confirmDeleteModal").modal("show");
+
+                // Get the song ID from the data-song-id attribute of the delete button
+                var songId = $(this).data("song-id");
+
+                // Set the song ID in the hidden input field inside the modal
+                $("#songIdInput").val(songId);
+            });
+
+            // Add event handler for confirm delete button click in the modal
+            $("#confirmDeleteButton").click(function () {
+                // Get the password from the input field in the modal
+                var password = $("#passwordInput").val();
+
+                // Get the song ID from the hidden input field inside the modal
+                var songId = $("#songIdInput").val();
+
+                // Perform the actual delete action by submitting the form
+                var formData = new FormData();
+                formData.append("id", songId);
+                formData.append("password", password);
+
+                $.ajax({
+                    url: "/Song/Delete",
+                    method: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // No need to handle success here, the redirect will be done in the controller
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error during deletion, if needed
+                        console.error("Error during deletion:", error);
+                    }
+                });
+
+                // Hide the password confirmation modal
+                $("#confirmDeleteModal").modal("hide");
+            });
+
+            // Prevent the form from being submitted when the modal is closed
+            $("#confirmDeleteModal").on("hide.bs.modal", function (e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+
 }
+
 

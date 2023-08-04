@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-
 using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Services.Data.Models.Song;
@@ -17,14 +16,16 @@ namespace RedeyeMusic.Web.Controllers
         private readonly IGenreService genreService;
         private readonly IArtistService artistService;
         private readonly IAlbumService albumService;
+        private readonly IApplicationUserService applicationUserService;
         private readonly ILogger<ArtistController> logger;
         private readonly IWebHostEnvironment env;
-        public SongController(ISongService songService, IGenreService genreService, IArtistService artistService, IAlbumService albumService, ILogger<ArtistController> logger, IWebHostEnvironment env)
+        public SongController(ISongService songService, IGenreService genreService, IArtistService artistService, IApplicationUserService applicationUserService, IAlbumService albumService, ILogger<ArtistController> logger, IWebHostEnvironment env)
         {
             this.songService = songService;
             this.genreService = genreService;
             this.artistService = artistService;
             this.albumService = albumService;
+            this.applicationUserService = applicationUserService;
             this.logger = logger;
             this.env = env;
         }
@@ -78,13 +79,6 @@ namespace RedeyeMusic.Web.Controllers
             {
                 songModel = await this.albumService.GetAlbumDescriptionAndNameAndUrlById(songModel.AlbumId, songModel);
             }
-
-            if (!ModelState.IsValid)
-            {
-                return View(songModel);
-            }
-
-
             bool isAgent = await this.artistService.ArtistExistsByUserIdAsync(userId);
             if (!isAgent)
             {
@@ -333,6 +327,7 @@ namespace RedeyeMusic.Web.Controllers
             try
             {
                 await this.songService.EditSongByIdAndModel(id, songModel);
+                this.TempData[SuccessMessage] = $"Successfully edited song {songModel.Title}";
             }
             catch (Exception)
             {
@@ -342,6 +337,46 @@ namespace RedeyeMusic.Web.Controllers
                 return View(songModel);
             }
             return RedirectToAction("Details", "Song", new { id });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, string password)
+        {
+            bool songExists = await this.songService.ExistsById(id);
+
+            if (!songExists)
+            {
+                this.TempData[ErrorMessage] = "Song with provided id does not exist!";
+                return RedirectToAction("All, Song");
+            }
+            bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserArtist)
+            {
+                this.TempData[ErrorMessage] = "You must become an agent in order to edit song info!";
+                return RedirectToAction("Become", "Artist");
+            }
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(artistId, id);
+            if (!isArtistOwner)
+            {
+                this.TempData[ErrorMessage] = "You are not the artist of this song!";
+                return RedirectToAction("Mine", "Song");
+            }
+            var isPasswordValid = await this.applicationUserService.ValidatePasswordAsync(this.User.GetId(), password);
+
+            if (isPasswordValid)
+            {
+                await this.songService.DeleteSongByIdAsync(id);
+                this.TempData[SuccessMessage] = $"Successfully deleted song";
+
+                return RedirectToAction("Mine", "Song");
+            }
+            else
+            {
+                // Password is incorrect, show error message or redirect to a different page
+                this.TempData[ErrorMessage] = "Incorrect password";
+                return RedirectToAction("Details", "Song", new { id = id });
+            }
+
         }
         private IActionResult GeneralError()
         {

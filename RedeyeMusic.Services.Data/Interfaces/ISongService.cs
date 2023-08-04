@@ -20,6 +20,7 @@ namespace RedeyeMusic.Services.Data.Interfaces
         Task<bool> ExistsById(int songId);
         Task<EditSongFormModel> GetSongForEditByIdAsync(int songId);
         Task EditSongByIdAndModel(int songId, EditSongFormModel model);
+        Task DeleteSongByIdAsync(int songId);
 
     }
 }

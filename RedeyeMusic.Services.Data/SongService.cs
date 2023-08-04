@@ -328,5 +328,15 @@ namespace RedeyeMusic.Services.Data
 
             await this.dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteSongByIdAsync(int songId)
+        {
+            Song song = await this.dbContext
+                .Songs
+                .Where(s => s.IsDeleted == false)
+                .FirstAsync(s => s.Id == songId);
+            song.IsDeleted = true;
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }
