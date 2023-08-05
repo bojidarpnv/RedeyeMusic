@@ -22,56 +22,83 @@
 </div>
 
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <!-- Modal content for delete confirmation goes here -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+
+            </div>
+            <div class="modal-body">
+                <p>Please enter your password to confirm the deletion.</p>
+                <input type="hidden" id="albumIdInput" />
+                <input type="password" class="form-control" id="passwordInput" placeholder="Enter your password" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelButton" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <script src="~/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // JavaScript code for handling the delete button click and displaying Toastr messages
         $(document).ready(function () {
-            // Delete button click event
+
             $(".delete-button").click(function () {
-                // Show the confirmation modal
+
                 $("#confirmDeleteModal").modal("show");
 
-                // Get the album ID from the data attribute of the button
+
                 var albumId = $(this).data("album-id");
 
-                // Set the album ID in the hidden input field of the modal
+
                 $("#albumIdInput").val(albumId);
             });
 
-            // Handle click on the card to navigate to album details page
-            $(".album-card").click(function () {
-                // Get the URL from the <a> tag inside the card
-                var albumDetailsUrl = $(this).find("a").attr("href");
 
-                // Navigate to the album details page
-                window.location.href = albumDetailsUrl;
-            });
-
-            // Delete confirmation button click event
             $("#confirmDeleteButton").click(function () {
-                // Get the album ID from the hidden input field
+
+                var password = $("#passwordInput").val();
+
+
                 var albumId = $("#albumIdInput").val();
 
-                // Perform AJAX request to delete the album
+
+                var formData = new FormData();
+                formData.append("id", albumId);
+                formData.append("password", password);
+
                 $.ajax({
                     url: "/Album/Delete",
                     method: "POST",
-                    data: { id: albumId },
+                    data: formData,
+                    processData: false,
+                    contentType: false
                 }).done(function () {
-                    // Success: Hide the modal and show Toastr success message
-                    $("#confirmDeleteModal").modal("hide");
+
+                    window.location.href = "/Album/Mine";
                     toastr.success("Album deleted successfully!");
-                    // Reload the page to reflect the changes (optional)
-                    window.location.reload();
+
                 }).fail(function (xhr) {
-                    // Failure: Show Toastr error message
-                    toastr.error("Failed to delete album.");
+
+                    toastr.error(xhr.responseText);
+                }).always(function () {
+                    $("#confirmDeleteModal").modal("hide");
+                    $("#passwordInput").val("");
+                    $("#confirmDeleteButton").prop("disabled", false);
                 });
+            });
+
+
+            $("#confirmDeleteModal").on("hide.bs.modal", function () {
+                $("#passwordInput").val("");
+            });
+            $("#cancelButton").click(function () {
+                $("#passwordInput").val("");
+                location.reload();
             });
         });
     </script>

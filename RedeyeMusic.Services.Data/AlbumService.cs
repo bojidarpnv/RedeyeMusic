@@ -159,7 +159,7 @@ namespace RedeyeMusic.Services.Data
                 Name = album.Name,
                 Description = album.Description,
                 ImageUrl = album.ImageUrl,
-                SelectedSongIds = selectedSongIds, // Set the default selected song ID here
+                SelectedSongIds = selectedSongIds,
                 Songs = songItems
             };
         }
@@ -173,18 +173,18 @@ namespace RedeyeMusic.Services.Data
 
             if (album == null)
             {
-                // Handle the case when the album is not found
+
                 throw new ArgumentException("Album not found.");
             }
 
-            // Update the album properties
+
             album.Name = viewModel.Name;
             album.Description = viewModel.Description;
 
-            // Get the selected song IDs from the form (if any)
+
             var selectedSongIds = viewModel.SelectedSongIds ?? new List<int>();
 
-            // Get the existing selected songs (if any) to be removed from their old albums
+            // Get the existing selected songs to remove from album
             var existingSelectedSongs = album.Songs
                 .Where(s => s.IsDeleted == false)
                 .ToList();
@@ -193,26 +193,35 @@ namespace RedeyeMusic.Services.Data
             {
                 if (!selectedSongIds.Contains(existingSelectedSong.Id))
                 {
-                    // The song is no longer selected for this album, remove it from the album
+
                     album.Songs.Remove(existingSelectedSong);
                 }
             }
 
-            // Get the new selected songs to add to the album
+
             var newSelectedSongs = await this.dbContext.Songs
                 .Where(s => selectedSongIds.Contains(s.Id))
                 .ToListAsync();
 
-            // Add the selected songs to the album
+
             foreach (var newSelectedSong in newSelectedSongs)
             {
                 if (!album.Songs.Contains(newSelectedSong))
                 {
-                    // Avoid adding duplicate songs
+
                     album.Songs.Add(newSelectedSong);
                 }
             }
 
+            await this.dbContext.SaveChangesAsync();
+        }
+        public async Task DeleteAlbumByIdAsync(int albumId)
+        {
+            Album album = await this.dbContext
+                .Albums
+                .Where(a => a.IsDeleted == false)
+                .FirstAsync(a => a.Id == albumId);
+            album.IsDeleted = true;
             await this.dbContext.SaveChangesAsync();
         }
 

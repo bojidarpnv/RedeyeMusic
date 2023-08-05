@@ -67,5 +67,13 @@ namespace RedeyeMusic.Services.Data
                 .FirstAsync(s => s.Id == songId);
             return song.ArtistId == artistId;
         }
+        public async Task<bool> IsArtistWithIdOwnerOfAlbumWithIdAsync(int artistId, int albumId)
+        {
+            Album album = await this.dbContext
+                .Albums
+                .Where(a => a.IsDeleted == false)
+                .FirstAsync(a => a.Id == albumId);
+            return album.ArtistId == artistId;
+        }
     }
 }

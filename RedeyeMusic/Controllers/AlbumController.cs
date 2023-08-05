@@ -15,12 +15,13 @@ namespace RedeyeMusic.Web.Controllers
         private readonly IAlbumService albumService;
         private readonly IArtistService artistService;
         private readonly ISongService songService;
-        public AlbumController(IAlbumService albumService, IArtistService artistService, ISongService songService)
+        private readonly IApplicationUserService applicationService;
+        public AlbumController(IAlbumService albumService, IArtistService artistService, ISongService songService, IApplicationUserService applicationService)
         {
             this.albumService = albumService;
             this.artistService = artistService;
             this.songService = songService;
-
+            this.applicationService = applicationService;
         }
 
         [HttpPost]
@@ -112,7 +113,7 @@ namespace RedeyeMusic.Web.Controllers
             int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
             if (!ModelState.IsValid)
             {
-                // Populate the songs dropdown again in case of model validation error
+
                 viewModel.Songs = await this.songService.GetSongsDropdownItemsAsync(artistId);
                 return View(viewModel);
             }
@@ -122,7 +123,51 @@ namespace RedeyeMusic.Web.Controllers
             return RedirectToAction("Details", new { id = viewModel.Id });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, string password)
+        {
+            if (password == null)
+            {
+                GeneralError();
+            }
+            bool albumExists = await this.albumService.ExistsById(id);
 
+            if (!albumExists)
+            {
+                this.TempData[ErrorMessage] = "Album with provided id does not exist!";
+                return RedirectToAction("Index", "Home");
+            }
+            bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
+            if (!isUserArtist)
+            {
+                this.TempData[ErrorMessage] = "You must become an artist in order to edit album info!";
+                return RedirectToAction("Become", "Artist");
+            }
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfAlbumWithIdAsync(artistId, id);
+            if (!isArtistOwner)
+            {
+                this.TempData[ErrorMessage] = "You are not the artist of this album!";
+                return RedirectToAction("Mine", "Album");
+            }
+            var isPasswordValid = await this.applicationService.ValidatePasswordAsync(this.User.GetId(), password);
+
+            if (isPasswordValid)
+            {
+                await this.albumService.DeleteAlbumByIdAsync(id);
+                this.TempData[SuccessMessage] = $"Successfully deleted album!!!";
+                //return Ok(this.TempData);
+                return RedirectToAction("Mine", "Album");
+            }
+            else
+            {
+                // Password is incorrect, show error message or redirect to a different page
+                this.TempData[ErrorMessage] = "Incorrect password";
+                return BadRequest("Incorrect password");
+
+            }
+
+        }
 
 
     }

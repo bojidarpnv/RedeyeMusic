@@ -274,6 +274,7 @@ namespace RedeyeMusic.Services.Data
                     Id = song.Artist.Id,
                     Name = song.Artist.Name,
                     Albums = await this.dbContext.Albums
+                    .Where(a => a.IsDeleted == false)
                     .Where(a => a.Artist.Id == song.Artist.Id)
                     .Select(al => new AlbumSelectViewModel()
                     {
@@ -281,6 +282,7 @@ namespace RedeyeMusic.Services.Data
                         Name = al.Name,
                         Description = al.Description,
                     })
+
                     .ToListAsync()
                 }
             };
