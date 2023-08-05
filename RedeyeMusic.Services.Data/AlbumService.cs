@@ -66,5 +66,23 @@ namespace RedeyeMusic.Services.Data
                 .ToArrayAsync();
             return albums;
         }
+        public async Task<IEnumerable<AlbumSelectViewModel>> AllByArtistIdAsync(int artistId)
+        {
+            IEnumerable<AlbumSelectViewModel> allArtistAlbums = await this.dbContext
+                .Albums
+                .Where(a => a.IsDeleted == false)
+                .Where(a => a.ArtistId == artistId)
+                .Select(a => new AlbumSelectViewModel()
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    ArtistId = a.ArtistId,
+                    Description = a.Description,
+                    ImageUrl = a.ImageUrl
+                })
+                .ToArrayAsync();
+
+            return allArtistAlbums;
+        }
     }
 }

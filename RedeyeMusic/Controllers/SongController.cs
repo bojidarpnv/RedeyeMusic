@@ -244,7 +244,7 @@ namespace RedeyeMusic.Web.Controllers
             if (!songExists)
             {
                 this.TempData[ErrorMessage] = "Song with provided id does not exist!";
-                return RedirectToAction("All, Song");
+                return RedirectToAction("Index", "Home");
             }
             try
             {
@@ -346,7 +346,7 @@ namespace RedeyeMusic.Web.Controllers
             if (!songExists)
             {
                 this.TempData[ErrorMessage] = "Song with provided id does not exist!";
-                return RedirectToAction("All, Song");
+                return RedirectToAction("Index", "Home");
             }
             bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
             if (!isUserArtist)
@@ -366,15 +366,16 @@ namespace RedeyeMusic.Web.Controllers
             if (isPasswordValid)
             {
                 await this.songService.DeleteSongByIdAsync(id);
-                this.TempData[SuccessMessage] = $"Successfully deleted song";
-
+                this.TempData[SuccessMessage] = $"Successfully deleted song!!!";
+                //return Ok(this.TempData);
                 return RedirectToAction("Mine", "Song");
             }
             else
             {
                 // Password is incorrect, show error message or redirect to a different page
                 this.TempData[ErrorMessage] = "Incorrect password";
-                return RedirectToAction("Details", "Song", new { id = id });
+                return BadRequest("Incorrect password");
+                //return RedirectToAction("Details", "Song", new { id = id });
             }
 
         }

@@ -72,3 +72,43 @@ body a{
     white-space: nowrap;
     
 }
+.button-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.button-link img {
+        vertical-align: middle;
+    }
+.album-card {
+    width: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+    .album-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .album-card .card-body {
+        padding: 12px;
+        background-color: red;
+        color: white;
+        text-align: center;
+    }
+
+    .album-card .card-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .album-card .card-text {
+        font-size: 14px;
+    }
