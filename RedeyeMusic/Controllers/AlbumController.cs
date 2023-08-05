@@ -118,6 +118,7 @@ namespace RedeyeMusic.Web.Controllers
             }
 
             await this.albumService.UpdateAlbumAsync(viewModel);
+            this.TempData[SuccessMessage] = "Successfully edited Album";
             return RedirectToAction("Details", new { id = viewModel.Id });
         }
 

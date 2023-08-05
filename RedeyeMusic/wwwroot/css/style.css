@@ -112,3 +112,39 @@ body a{
     .album-card .card-text {
         font-size: 14px;
     }
+input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.custom-checkbox {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+
+    .custom-checkbox::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 12px;
+        height: 12px;
+        background-color: red; 
+        border-radius: 2px;
+        opacity: 0; 
+        transition: opacity 0.3s ease-in-out;
+    }
+
+
+input[type="checkbox"]:checked + .custom-checkbox::before {
+    opacity: 1;
+}

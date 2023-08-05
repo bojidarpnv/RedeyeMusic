@@ -158,6 +158,7 @@ namespace RedeyeMusic.Services.Data
                 Id = album.Id,
                 Name = album.Name,
                 Description = album.Description,
+                ImageUrl = album.ImageUrl,
                 SelectedSongIds = selectedSongIds, // Set the default selected song ID here
                 Songs = songItems
             };

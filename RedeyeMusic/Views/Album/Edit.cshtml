@@ -25,19 +25,21 @@
                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label>Songs:</label>
-                <div>
+                <label asp-for="SelectedSongIds">Songs in Album:</label>
+                <div class="song-checkboxes">
                     @foreach (var songItem in Model.Songs)
                     {
-                        <div>
-                            <input type="checkbox" name="SelectedSongIds" value="@songItem.Value" id="song-@songItem.Value"
-                            @(Model.SelectedSongIds != null && Model.SelectedSongIds.Contains(int.Parse(songItem.Value)) ? "checked" : "")>
-                            <label for="song-@songItem.Value">@songItem.Text</label>
-                        </div>
+                        <label class="custom-checkbox-label">
+                            <input type="checkbox" name="SelectedSongIds" value="@songItem.Value" @(Model.SelectedSongIds.Contains(int.Parse(songItem.Value)) ? "checked" : "")>
+                            <span class="custom-checkbox"></span>
+                            @songItem.Text
+                        </label>
+                        <br />
                     }
                 </div>
                 <span asp-validation-for="SelectedSongIds" class="text-danger"></span>
             </div>
+
 
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
