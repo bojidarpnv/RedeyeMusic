@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
@@ -337,6 +338,21 @@ namespace RedeyeMusic.Services.Data
                 .FirstAsync(s => s.Id == songId);
             song.IsDeleted = true;
             await this.dbContext.SaveChangesAsync();
+        }
+        public async Task<List<SelectListItem>> GetSongsDropdownItemsAsync(int artistId)
+        {
+            IEnumerable<Song> songs = await dbContext.Songs
+                .Where(s => s.IsDeleted == false)
+                .Where(s => s.ArtistId == artistId)
+                .ToArrayAsync();
+
+            return songs
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Title
+                })
+                .ToList();
         }
     }
 }

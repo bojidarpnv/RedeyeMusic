@@ -1,4 +1,5 @@
-﻿using RedeyeMusic.Services.Data.Models.Song;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using RedeyeMusic.Services.Data.Models.Song;
 using RedeyeMusic.Web.ViewModels.Genre;
 using RedeyeMusic.Web.ViewModels.Home;
 using RedeyeMusic.Web.ViewModels.Song;
@@ -21,6 +22,7 @@ namespace RedeyeMusic.Services.Data.Interfaces
         Task<EditSongFormModel> GetSongForEditByIdAsync(int songId);
         Task EditSongByIdAndModel(int songId, EditSongFormModel model);
         Task DeleteSongByIdAsync(int songId);
+        Task<List<SelectListItem>> GetSongsDropdownItemsAsync(int artistId);
 
     }
 }

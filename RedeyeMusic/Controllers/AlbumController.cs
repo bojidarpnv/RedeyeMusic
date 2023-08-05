@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.Infrastrucutre.Extensions;
 using RedeyeMusic.Web.ViewModels.Album;
+
+
 using static RedeyeMusic.Common.NotificationMessagesConstants;
+
 
 namespace RedeyeMusic.Web.Controllers
 {
@@ -10,10 +14,13 @@ namespace RedeyeMusic.Web.Controllers
     {
         private readonly IAlbumService albumService;
         private readonly IArtistService artistService;
-        public AlbumController(IAlbumService albumService, IArtistService artistService)
+        private readonly ISongService songService;
+        public AlbumController(IAlbumService albumService, IArtistService artistService, ISongService songService)
         {
             this.albumService = albumService;
             this.artistService = artistService;
+            this.songService = songService;
+
         }
 
         [HttpPost]
@@ -62,10 +69,60 @@ namespace RedeyeMusic.Web.Controllers
                 return GeneralError();
             }
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int id)
+        {
+            bool albumExists = await this.albumService.ExistsById(id);
+
+            if (!albumExists)
+            {
+                this.TempData[ErrorMessage] = "Song with provided id does not exist!";
+                return RedirectToAction("Index", "Home");
+            }
+            try
+            {
+                AlbumDetailsViewModel viewModel = await this.albumService
+                .GetDetailsByIdAsync(id);
+                return View(viewModel);
+            }
+            catch (Exception)
+            {
+                return GeneralError();
+            }
+        }
         private IActionResult GeneralError()
         {
             this.TempData[ErrorMessage] = "Unexpected error ocurred! Please try again later";
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            EditAlbumFormModel albumViewModel = await this.albumService.GetAlbumForEditAsync(id);
+            return View(albumViewModel);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditAlbumFormModel viewModel)
+        {
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            if (!ModelState.IsValid)
+            {
+                // Populate the songs dropdown again in case of model validation error
+                viewModel.Songs = await this.songService.GetSongsDropdownItemsAsync(artistId);
+                return View(viewModel);
+            }
+
+            await this.albumService.UpdateAlbumAsync(viewModel);
+            return RedirectToAction("Details", new { id = viewModel.Id });
+        }
+
+
+
+
     }
 }

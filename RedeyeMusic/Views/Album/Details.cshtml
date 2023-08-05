@@ -1,0 +1,78 @@
+﻿@model AlbumDetailsViewModel
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="@Model.ImageUrl" class="img-fluid rounded" alt="@Model.Name">
+        </div>
+        <div class="col-md-6">
+            <h1>@Model.Id</h1>
+            <h2 class="mb-3">@Model.Name</h2>
+            <p class="">@Model.ArtistName</p>
+            <p>@Model.Description</p>
+             <p>Total Songs: @Model.Songs.Count()</p>
+            <p>Songs Total Listen Count: @Model.Songs.Sum(s=>s.ListenCount)</p>
+            <div>
+                <a asp-action="Edit" asp-controller="Album" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-album-id="@Model.Id">Delete</a>
+                <a asp-action="Mine" asp-controller="Album" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <!-- Modal content for delete confirmation goes here -->
+</div>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // JavaScript code for handling the delete button click and displaying Toastr messages
+        $(document).ready(function () {
+            // Delete button click event
+            $(".delete-button").click(function () {
+                // Show the confirmation modal
+                $("#confirmDeleteModal").modal("show");
+
+                // Get the album ID from the data attribute of the button
+                var albumId = $(this).data("album-id");
+
+                // Set the album ID in the hidden input field of the modal
+                $("#albumIdInput").val(albumId);
+            });
+
+            // Handle click on the card to navigate to album details page
+            $(".album-card").click(function () {
+                // Get the URL from the <a> tag inside the card
+                var albumDetailsUrl = $(this).find("a").attr("href");
+
+                // Navigate to the album details page
+                window.location.href = albumDetailsUrl;
+            });
+
+            // Delete confirmation button click event
+            $("#confirmDeleteButton").click(function () {
+                // Get the album ID from the hidden input field
+                var albumId = $("#albumIdInput").val();
+
+                // Perform AJAX request to delete the album
+                $.ajax({
+                    url: "/Album/Delete",
+                    method: "POST",
+                    data: { id: albumId },
+                }).done(function () {
+                    // Success: Hide the modal and show Toastr success message
+                    $("#confirmDeleteModal").modal("hide");
+                    toastr.success("Album deleted successfully!");
+                    // Reload the page to reflect the changes (optional)
+                    window.location.reload();
+                }).fail(function (xhr) {
+                    // Failure: Show Toastr error message
+                    toastr.error("Failed to delete album.");
+                });
+            });
+        });
+    </script>
+}
