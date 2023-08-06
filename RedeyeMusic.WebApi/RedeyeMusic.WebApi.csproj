@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>790fe108-f311-4b33-9ae0-c74fa4f6c997</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RedeyeMusic.Common\RedeyeMusic.Common.csproj" />
+    <ProjectReference Include="..\RedeyeMusic.Services.Data.Models\RedeyeMusic.Services.Data.Models.csproj" />
+    <ProjectReference Include="..\RedeyeMusic.Services.Data\RedeyeMusic.Services.Data.csproj" />
+    <ProjectReference Include="..\RedeyeMusic.Web.Infrastructure\RedeyeMusic.Web.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

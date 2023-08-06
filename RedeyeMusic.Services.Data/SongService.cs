@@ -356,5 +356,19 @@ namespace RedeyeMusic.Services.Data
                 })
                 .ToList();
         }
+
+        public async Task<ListenCountServiceModel> GetListenCountAsync(int songId)
+        {
+            var song = await this.dbContext
+                .Songs
+                .Where(s => s.IsDeleted == false)
+                .FirstAsync(s => s.Id == songId);
+
+
+            return new ListenCountServiceModel()
+            {
+                ListenCount = song.ListenCount,
+            };
+        }
     }
 }

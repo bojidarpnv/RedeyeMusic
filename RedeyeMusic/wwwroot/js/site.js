@@ -62,3 +62,43 @@
         playAudio(lastPlayedSongUrl, lastPlaybackTime);
     }
 });
+
+function getListenCount() {
+    async function fetchListenCount(songId) {
+        
+        const apiUrl = `https://localhost:7004/api/listen-count?songId=${songId}`;
+        console.log('API URL:', apiUrl);
+        const response = await fetch(`https://localhost:7004/api/listen-count?songId=${songId}`);
+        if (response.ok) {
+            const data = await response.json();
+            return data.listenCount;
+        } else {
+            return -1; // or any other value to indicate error
+        }
+    }
+
+    // Function to update listen count for each song in the view
+    async function updateListenCounts() {
+        const songElements = document.querySelectorAll('.song-item');
+        for (const songElement of songElements) {
+            const songId = songElement.dataset.songId; // Assuming you have set data-song-id attribute for each song element
+            console.log('SongId:', songId)
+            const listenCountPlaceholder = songElement.querySelector('.listen-count-placeholder');
+            if (songId) {
+                const listenCount = await fetchListenCount(songId);
+                if (listenCount >= 0) {
+                    listenCountPlaceholder.textContent = listenCount;
+                } else {
+                    listenCountPlaceholder.textContent = 'Error fetching listen count';
+                }
+            } else {
+                listenCountPlaceholder.textContent = 'N/A'; // or any other value for songs without songId
+            }
+        }
+    }
+
+    // Call the updateListenCounts function when the page is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        updateListenCounts();
+    });
+}

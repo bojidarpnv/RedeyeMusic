@@ -23,6 +23,7 @@ namespace RedeyeMusic.Services.Data.Interfaces
         Task EditSongByIdAndModel(int songId, EditSongFormModel model);
         Task DeleteSongByIdAsync(int songId);
         Task<List<SelectListItem>> GetSongsDropdownItemsAsync(int artistId);
+        Task<ListenCountServiceModel> GetListenCountAsync(int songId);
 
     }
 }
