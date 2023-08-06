@@ -50,7 +50,7 @@
                         string songDuration = minutes + "+" + seconds;
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="white song m-2 ms-4 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
+                                <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
                                     <div class="col d-flex">
                                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                         <div class="white ms-1">
@@ -59,7 +59,10 @@
                                         </div>
                                     </div>
                                     <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
-                                    <small class="white col-2"><i class="bi bi-ear"></i> @song.ListenCount</small>
+                                    <small class="white col-2">
+                                        <i class="bi bi-ear"></i>
+                                        <span class="listen-count-placeholder"></span>
+                                    </small>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -89,7 +92,7 @@
                         string songDuration = minutes + "+" + seconds;
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="white song m-2 ms-4 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
+                                <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
                                     <div class="col d-flex">
                                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                         <div class="white ms-1">
@@ -98,7 +101,10 @@
                                         </div>
                                     </div>
                                     <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
-                                    <small class="white col-2"><i class="bi bi-ear"></i> @song.ListenCount</small>
+                                    <small class="white col-2">
+                                        <i class="bi bi-ear"></i>
+                                        <span class="listen-count-placeholder"></span>
+                                    </small>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -126,7 +132,7 @@
                         string songDuration = minutes + "+" + seconds;
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="white song m-2 ms-4 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
+                                <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
                                     <div class="col d-flex">
                                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                         <div class="white ms-1">
@@ -135,7 +141,10 @@
                                         </div>
                                     </div>
                                     <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
-                                    <small class="white col-2"><i class="bi bi-ear"></i> @song.ListenCount</small>
+                                    <small class="white col-2">
+                                        <i class="bi bi-ear"></i>
+                                        <span class="listen-count-placeholder"></span>
+                                    </small>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -163,7 +172,7 @@
                         string songDuration = minutes + "+" + seconds;
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="white song m-2 ms-4 row align-items-center song-item" data-src="@Url.Content(song.Mp3FilePath)">
+                                <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
                                     <div class="col d-flex">
                                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                         <div class="white ms-1">
@@ -172,7 +181,10 @@
                                         </div>
                                     </div>
                                     <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
-                                    <small class="white col-2"><i class="bi bi-ear"></i> @song.ListenCount</small>
+                                    <small class="white col-2">
+                                        <i class="bi bi-ear"></i>
+                                        <span class="listen-count-placeholder"></span>
+                                    </small>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -205,6 +217,7 @@ else
 @section Scripts {
     <script src="~/js/site.js"></script>
     <partial name="_ValidationScriptsPartial" />
+    <script>getListenCount();</script>
     <script>
         $(document).ready(function () {
             var activated = false;
