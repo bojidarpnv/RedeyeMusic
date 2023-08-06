@@ -46,15 +46,16 @@
                 <div class="row">
                     @foreach (var album in Model.Artist.Albums)
                     {
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                <img src="@album.ImageUrl" class="card-img-top" alt="@album.Name">
-                                <div class="card-body">
-                                    <h5 class="card-title">@album.Name</h5>
-                                    <p class="card-text">@album.Description</p>
-                                    <a href="@Url.Action("Details", "Album", new { id = album.Id })" class="btn btn-primary">Details</a>
+                        <div class="col-md-2 mb-2">
+                            <a href="@Url.Action("Details", "Album", new { id = album.Id })">
+                                <div class="card album-card">
+                                    <img src="@album.ImageUrl" class="card-img-top" alt="@album.Name">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@album.Name</h5>
+                                        <p class="card-text">@album.Description</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     }
                 </div>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.ViewModels.Home;
-using System.Diagnostics;
 
 namespace RedeyeMusic.Controllers
 {
@@ -22,9 +21,13 @@ namespace RedeyeMusic.Controllers
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int statusCode)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (statusCode == 404 || statusCode == 400)
+            {
+                return this.View("Error404");
+            }
+            return View();
         }
     }
 }

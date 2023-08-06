@@ -68,7 +68,7 @@
                                 <a asp-action="Edit" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-edit">Edit</a>
                             </div>
                             <div class="col-auto">
-                                <a asp-action="Delete" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Delete</a>
+                                <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-song-id="@song.Id">Delete</a>
                             </div>
 
                         </div>
@@ -77,6 +77,25 @@
 
                 </div>
         }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+
+            </div>
+            <div class="modal-body">
+                <p>Please enter your password to confirm the deletion.</p>
+                <input type="hidden" id="songIdInput" />
+                <input type="password" class="form-control" id="passwordInput" placeholder="Enter your password" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelButton" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+            </div>
         </div>
     </div>
 </div>
@@ -92,6 +111,64 @@
                 toastr.success(successMessage);
             }
 
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $(".delete-button").click(function () {
+
+                $("#confirmDeleteModal").modal("show");
+
+
+                var songId = $(this).data("song-id");
+
+
+                $("#songIdInput").val(songId);
+            });
+
+
+            $("#confirmDeleteButton").click(function () {
+
+                var password = $("#passwordInput").val();
+
+
+                var songId = $("#songIdInput").val();
+
+
+                var formData = new FormData();
+                formData.append("id", songId);
+                formData.append("password", password);
+
+                $.ajax({
+                    url: "/Song/Delete",
+                    method: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false
+                }).done(function () {
+
+                    window.location.href = "/Song/Mine";
+                    toastr.success("Song deleted successfully!");
+
+                }).fail(function (xhr) {
+
+                    toastr.error(xhr.responseText);
+                }).always(function () {
+                    $("#confirmDeleteModal").modal("hide");
+                    $("#passwordInput").val("");
+                    $("#confirmDeleteButton").prop("disabled", false);
+                });
+            });
+
+
+            $("#confirmDeleteModal").on("hide.bs.modal", function () {
+                $("#passwordInput").val("");
+            });
+            $("#cancelButton").click(function () {
+                $("#passwordInput").val("");
+                location.reload();
+            });
         });
     </script>
 }
