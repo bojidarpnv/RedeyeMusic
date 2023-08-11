@@ -45,7 +45,12 @@
                 string songDuration = minutes + "+" + seconds;
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
+                        <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)"
+                             data-trackid="@song.Id"
+                             data-src="@song.Mp3FilePath"
+                             data-title="@song.Title"
+                             data-artist="@song.ArtistName"
+                             data-cover="@song.ImageUrl">
                             <div class="col d-flex">
                                 <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                 <div class="white ms-1">
@@ -100,9 +105,13 @@
             }
         </div>
     </div>
+
+    
+
 </div>
 @section Scripts {
     <script src="~/js/site.js"></script></>
+    
     <script>getListenCount();</script>
 }
 

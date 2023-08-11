@@ -1,4 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
+    const defaultVolume = 0.2;
     // Function to play audio
     function playAudio(songUrl, startTime = 0) {
         const audioPlayer = document.getElementById('musicPlayer');
@@ -7,7 +8,7 @@
 
         audioPlayer.src = fullUrl;
         audioPlayer.currentTime = startTime; // Set the current playback time
-
+        audioPlayer.volume = defaultVolume;
         // Check if the browser supports the `play` method and play the audio
         if (audioPlayer.play) {
             const playPromise = audioPlayer.play();
@@ -62,27 +63,25 @@
         playAudio(lastPlayedSongUrl, lastPlaybackTime);
     }
 });
-
 function getListenCount() {
     async function fetchListenCount(songId) {
         
-        const apiUrl = `https://localhost:7004/api/listen-count?songId=${songId}`;
-        console.log('API URL:', apiUrl);
+        
         const response = await fetch(`https://localhost:7004/api/listen-count?songId=${songId}`);
         if (response.ok) {
             const data = await response.json();
             return data.listenCount;
         } else {
-            return -1; // or any other value to indicate error
+            return -1; 
         }
     }
 
-    // Function to update listen count for each song in the view
+    
     async function updateListenCounts() {
         const songElements = document.querySelectorAll('.song-item');
         for (const songElement of songElements) {
-            const songId = songElement.dataset.songId; // Assuming you have set data-song-id attribute for each song element
-            console.log('SongId:', songId)
+            const songId = songElement.dataset.songId; 
+            
             const listenCountPlaceholder = songElement.querySelector('.listen-count-placeholder');
             if (songId) {
                 const listenCount = await fetchListenCount(songId);
@@ -92,12 +91,12 @@ function getListenCount() {
                     listenCountPlaceholder.textContent = 'Error fetching listen count';
                 }
             } else {
-                listenCountPlaceholder.textContent = 'N/A'; // or any other value for songs without songId
+                listenCountPlaceholder.textContent = 'N/A'; 
             }
         }
     }
 
-    // Call the updateListenCounts function when the page is loaded
+    
     document.addEventListener('DOMContentLoaded', () => {
         updateListenCounts();
     });

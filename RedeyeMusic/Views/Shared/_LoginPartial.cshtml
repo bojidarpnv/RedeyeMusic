@@ -1,15 +1,23 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using RedeyeMusic.Data.Models;
+@using RedeyeMusic.Services.Data.Interfaces;
+@using RedeyeMusic.Web.Infrastrucutre.Extensions;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@inject IArtistService ArtistService
+@{
+    bool isArtist = await this.ArtistService.ArtistExistsByUserIdAsync(this.User.GetId());
+}
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+         if(!isArtist)
+        {
         <li class="nav-item mt-1">
             <a class="nav-link text-light" asp-area="" asp-controller="Artist" asp-action="Become">Become an Artist</a>
         </li>
+         }
         <img class="rounded-circle" src="~/images/Icon.png" style="width:50px; height=50px">
         <li class="nav-item dropdown mt-1">
                 <a class="nav-link dropdown-toggle"  id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

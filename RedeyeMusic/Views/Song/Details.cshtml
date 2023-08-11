@@ -1,11 +1,17 @@
 ﻿@model SongDetailsViewModel
+@using RedeyeMusic.Services.Data.Interfaces;
 @using RedeyeMusic.Web.Infrastructure.Extensions;
+@using RedeyeMusic.Web.Infrastrucutre.Extensions;
+@inject IArtistService ArtistService;
 @{
     ViewData["Title"] = "Song Details";
     int seconds = Model.Duration % 60;
     int minutes = Model.Duration / 60;
     var span = new TimeSpan(0, 0, seconds);
     var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
+    int artistId = await this.ArtistService.GetArtistIdByUserIdAsync(this.User.GetId());
+    bool isUserArtist = await this.ArtistService.ArtistExistsByUserIdAsync(this.User.GetId());
+    bool isArtistOwnerOfSong = await this.ArtistService.IsArtistWithIdOwnerOfSongWithIdAsync(artistId, Model.Id);
 }
 
 <div class="container mt-4">
@@ -21,8 +27,14 @@
             <p>Listen Count: @Model.ListenCount</p>
             <p>AlbumName: @Model.AlbumName</p>
             <div>
-                <a asp-action="Edit" asp-controller="Song" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-song-id="@Model.Id">Delete</a>
+            @if(this.User.Identity?.IsAuthenticated ?? false)
+            {
+                @if (isUserArtist && isArtistOwnerOfSong)
+                {
+                   <a asp-action="Edit" asp-controller="Song" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                   <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-song-id="@Model.Id">Delete</a>
+                }
+            }
                 <a asp-action="Index" asp-controller="Home" asp-route-id="@Model.Id" class="btn btn-secondary">Back to List</a>
             </div>
         </div>
@@ -85,7 +97,7 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/site.js"></script>
+    
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(document).ready(function () {

@@ -5,10 +5,32 @@ footer {
     position: fixed;
     left: 0px;
     bottom: 0px;
-    height: 30px;
+    height: 80px;
     width: 100%;
     
 }
+footer {
+    background-color: #f1f1f1;
+    padding: 0px 20px;
+}
+
+.audio-player {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    
+}
+
+audio {
+    width: 100%;
+    max-width: 1000px;
+    background-color: red; /* White background for the audio player */
+    border: 2px solid #e94f4f; /* Red border color */
+    border-radius: 230px; /* Rounded corners */
+    padding: 5px;
+}
+
 .container{
     min-height: 500px;
     background-position: 20% 30%;
@@ -148,3 +170,7 @@ input[type="checkbox"] {
 input[type="checkbox"]:checked + .custom-checkbox::before {
     opacity: 1;
 }
+
+
+
+

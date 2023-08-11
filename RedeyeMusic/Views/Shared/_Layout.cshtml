@@ -1,5 +1,11 @@
 ﻿@using static RedeyeMusic.Common.GeneralApplicationConstants;
 @using RedeyeMusic.Data.Models;
+@using RedeyeMusic.Services.Data.Interfaces;
+@using RedeyeMusic.Web.Infrastrucutre.Extensions;
+@inject IArtistService ArtistService
+@{
+    bool isArtist = await this.ArtistService.ArtistExistsByUserIdAsync(this.User.GetId());
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +26,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="~/js/site.js"></script>
     
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     
@@ -45,18 +52,30 @@
                         
                         @if(this.User.Identity?.IsAuthenticated ?? false)
                         {
-                            <li class="nav-item active">
-                                <a class="nav-link  text-light" asp-area="" asp-controller="Song" asp-action="Mine">MySongs</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light"  asp-area="" asp-controller="Playlist" asp-action="All">Popular Playlists</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light"  asp-area="" asp-controller="Playlist" asp-action="Mine">My Playlists</a>
-                            </li>
+                            if(isArtist)
+                            {
+                                <li class="nav-item active">
+                                    <a class="nav-link  text-light" asp-area="" asp-controller="Song" asp-action="Mine">My Songs</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Album" asp-action="Mine">My Albums</a>
+                                </li>
+                            }
+                            if(!isArtist)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Playlist" asp-action="All">Popular Playlists</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Playlist" asp-action="Mine">My Playlists</a>
+                                </li>
+                            }
+                           if(isArtist)
+                            {
                             <li class="nav-item">
                                 <a class="nav-link text-light"  asp-area="" asp-controller="Song" asp-action="Add">Add Song</a>
                             </li>
+                            }
                             
                         }
                     </ul>
@@ -76,16 +95,17 @@
         <main role="main" class="pt-0">
             @RenderBody()
         </main>
-        <div class="fixed-bottom bg-dark p-2">
-            <audio controls id="musicPlayer" style="width: 100%;">
-                Your browser does not support the audio element.
-            </audio>
-        </div>
+        
         
     </div>
     <partial name="_NotificationsPartial" />
     <footer class="border-top footer text-muted bg-dark">
         <div class="container">
+            <div class="">
+                <audio controls id="musicPlayer" style="width: 100%;">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
             &copy; RedeyeMusic @ReleaseYear
             @if(DateTime.UtcNow.Year != ReleaseYear)
             {
@@ -97,9 +117,11 @@
    @await RenderSectionAsync("Scripts", required: false)
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
-
+       
     }
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    
+    
 </body>
 </html>
