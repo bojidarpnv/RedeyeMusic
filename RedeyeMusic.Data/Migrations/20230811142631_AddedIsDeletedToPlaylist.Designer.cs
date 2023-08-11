@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedeyeMusic.Data;
 
@@ -11,9 +12,10 @@ using RedeyeMusic.Data;
 namespace RedeyeMusic.Data.Migrations
 {
     [DbContext(typeof(RedeyeMusicDbContext))]
-    partial class RedeyeMusicDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230811142631_AddedIsDeletedToPlaylist")]
+    partial class AddedIsDeletedToPlaylist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -378,7 +380,7 @@ namespace RedeyeMusic.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid>("ApplicationUserId")
+                    b.Property<Guid?>("ApplicationUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -396,21 +398,6 @@ namespace RedeyeMusic.Data.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Playlists");
-                });
-
-            modelBuilder.Entity("RedeyeMusic.Data.Models.PlaylistsSongs", b =>
-                {
-                    b.Property<int>("PlaylistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SongId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlaylistId", "SongId");
-
-                    b.HasIndex("SongId");
-
-                    b.ToTable("PlaylistsSongs");
                 });
 
             modelBuilder.Entity("RedeyeMusic.Data.Models.Song", b =>
@@ -454,6 +441,9 @@ namespace RedeyeMusic.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<int?>("PlaylistId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -466,6 +456,8 @@ namespace RedeyeMusic.Data.Migrations
                     b.HasIndex("ArtistId");
 
                     b.HasIndex("GenreId");
+
+                    b.HasIndex("PlaylistId");
 
                     b.ToTable("Songs");
 
@@ -584,32 +576,9 @@ namespace RedeyeMusic.Data.Migrations
 
             modelBuilder.Entity("RedeyeMusic.Data.Models.Playlist", b =>
                 {
-                    b.HasOne("RedeyeMusic.Data.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("RedeyeMusic.Data.Models.ApplicationUser", null)
                         .WithMany("Playlists")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("RedeyeMusic.Data.Models.PlaylistsSongs", b =>
-                {
-                    b.HasOne("RedeyeMusic.Data.Models.Playlist", "Playlist")
-                        .WithMany("PlaylistsSongs")
-                        .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RedeyeMusic.Data.Models.Song", "Song")
-                        .WithMany("PlaylistsSongs")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Playlist");
-
-                    b.Navigation("Song");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("RedeyeMusic.Data.Models.Song", b =>
@@ -631,6 +600,10 @@ namespace RedeyeMusic.Data.Migrations
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("RedeyeMusic.Data.Models.Playlist", null)
+                        .WithMany("Songs")
+                        .HasForeignKey("PlaylistId");
 
                     b.Navigation("Album");
 
@@ -663,12 +636,7 @@ namespace RedeyeMusic.Data.Migrations
 
             modelBuilder.Entity("RedeyeMusic.Data.Models.Playlist", b =>
                 {
-                    b.Navigation("PlaylistsSongs");
-                });
-
-            modelBuilder.Entity("RedeyeMusic.Data.Models.Song", b =>
-                {
-                    b.Navigation("PlaylistsSongs");
+                    b.Navigation("Songs");
                 });
 #pragma warning restore 612, 618
         }

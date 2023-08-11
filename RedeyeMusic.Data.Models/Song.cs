@@ -6,6 +6,10 @@ namespace RedeyeMusic.Data.Models
 {
     public class Song
     {
+        public Song()
+        {
+            this.PlaylistsSongs = new HashSet<PlaylistsSongs>();
+        }
         [Key]
         public int Id { get; set; }
 
@@ -42,6 +46,7 @@ namespace RedeyeMusic.Data.Models
         [ForeignKey(nameof(Album))]
         public int AlbumId { get; set; }
         public virtual Album Album { get; set; } = null!;
+        public virtual ICollection<PlaylistsSongs> PlaylistsSongs { get; set; } = null!;
 
         public bool IsDeleted { get; set; }
 

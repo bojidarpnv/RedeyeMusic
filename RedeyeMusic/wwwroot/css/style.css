@@ -171,6 +171,13 @@ input[type="checkbox"]:checked + .custom-checkbox::before {
     opacity: 1;
 }
 
+.modal-content {
+    color: #333; /* Use a dark color code here */
+}
 
+    /* Change the text color for labels inside the modal */
+    .modal-content label {
+        color: #333; /* Use the same or different color code as above */
+    }
 
 

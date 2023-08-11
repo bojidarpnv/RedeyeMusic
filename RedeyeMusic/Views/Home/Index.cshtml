@@ -1,9 +1,15 @@
-﻿@model IEnumerable<IndexViewModel>
+﻿@using RedeyeMusic.Services.Data.Interfaces;
+@using RedeyeMusic.Web.Infrastrucutre.Extensions;
+@using RedeyeMusic.Web.ViewModels.Playlist;
+@model IEnumerable<IndexViewModel>
+@inject IArtistService ArtistService;
+@inject IPlaylistService PlaylistSerivce;
 @{
+    var addToPlaylistViewModel = new AddToPlaylistViewModel();
     ViewData["Title"] = "Home Page";
     var songs = Model.ToList();
     var popularSongs = Model.OrderByDescending(s => s.ListenCount).ToList();
-
+    bool isArtist = await this.ArtistService.ArtistExistsByUserIdAsync(this.User.GetId());
 }
 @if (!songs.Any())
 {
@@ -69,15 +75,24 @@
                         <div class="row justify-content-center pt-3 mb-2">
                             <div class="col me-lg-5">
                                 <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
+                                @if(!isArtist)
+                                {
+                                    <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
+                                }
                             </div>
                           </div>
                     </div>
-
-
+                    </div>
+                <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
+                    @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
+                {
+                SongModel = song,
+                Playlists = await this.PlaylistSerivce.GetAllPlaylistsAsync()
+                })
                 </div>
-
             }
         </div>
+
         <div class="tab-pane fade" id="pills-disvoer" role="tabpanel" aria-labelledby="pills-discover-tab" tabindex="0">
             @for (int i = 0; i < songs.Count(); i++)
             {
@@ -111,7 +126,10 @@
 </div>
 @section Scripts {
     <script src="~/js/site.js"></script></>
-    
+    <script>
+        var createPlaylistUrl = '@Url.Action("Create", "Playlist")'; // Generate the URL here
+    </script>
+    <script src="~/js/addToPlaylist.js"></script>
     <script>getListenCount();</script>
 }
 
