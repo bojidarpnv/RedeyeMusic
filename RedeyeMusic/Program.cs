@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
@@ -33,7 +34,12 @@ namespace RedeyeMusic
             })
                 .AddEntityFrameworkStores<RedeyeMusicDbContext>();
             builder.Services.AddApplicationService(typeof(ISongService));
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddMvcOptions(options =>
+                {
+                    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                });
+
 
             WebApplication app = builder.Build();
 

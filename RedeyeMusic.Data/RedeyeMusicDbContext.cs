@@ -26,12 +26,7 @@ namespace RedeyeMusic.Data
             builder.ApplyConfigurationsFromAssembly(configAssembly);
 
             //Remove these when in production
-            builder.Entity<ApplicationUser>()
-                .Property(p => p.IsSubscribed)
-                .HasDefaultValue(true);
-            builder.Entity<ApplicationUser>()
-                .Property(p => p.IsDeleted)
-                .HasDefaultValue(false);
+
 
             base.OnModelCreating(builder);
         }

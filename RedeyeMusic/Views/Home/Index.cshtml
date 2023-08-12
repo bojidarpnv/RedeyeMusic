@@ -51,12 +51,7 @@
                 string songDuration = minutes + "+" + seconds;
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)"
-                             data-trackid="@song.Id"
-                             data-src="@song.Mp3FilePath"
-                             data-title="@song.Title"
-                             data-artist="@song.ArtistName"
-                             data-cover="@song.ImageUrl">
+                        <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
                             <div class="col d-flex">
                                 <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                 <div class="white ms-1">
@@ -75,9 +70,12 @@
                         <div class="row justify-content-center pt-3 mb-2">
                             <div class="col me-lg-5">
                                 <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
-                                @if(!isArtist)
+                                @if (User.Identity?.IsAuthenticated ?? false)
                                 {
+                                    if (!isArtist)
+                                    {
                                     <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
+                                    }
                                 }
                             </div>
                           </div>
@@ -96,27 +94,51 @@
         <div class="tab-pane fade" id="pills-disvoer" role="tabpanel" aria-labelledby="pills-discover-tab" tabindex="0">
             @for (int i = 0; i < songs.Count(); i++)
             {
-                var song = popularSongs[i];
+                var song = songs[i];
                 int seconds = song.Duration % 60;
                 int minutes = song.Duration / 60;
                 var span = new TimeSpan(0, 0, seconds);
                 var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
                 string songDuration = minutes + "+" + seconds;
-                <a class="white song m-2 ms-4 col-md-6 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
-                    <div class="col d-flex">
-                        <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
-                        <div class="white ms-1">
-                            <div class="white">@song.Title</div>
-                            <div class="smallText"><small class="white">@song.Lyrics</small></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
+                            <div class="col d-flex">
+                                <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
+                                <div class="white ms-1">
+                                    <div class="white">@song.Title</div>
+                                    <div class="smallText"><small class="white">@song.Lyrics</small></div>
+                                </div>
+                            </div>
+                            <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
+                            <small class="white col-2">
+                                <i class="bi bi-ear"></i>
+                                <span class="listen-count-placeholder"></span>
+                            </small>
                         </div>
                     </div>
-                    <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
-                    <small class="white col-2">
-                        <i class="bi bi-ear"></i>
-                        <span class="listen-count-placeholder"></span>
-                    </small>
-
-                </a>
+                    <div class="col-md-3">
+                        <div class="row justify-content-center pt-3 mb-2">
+                            <div class="col me-lg-5">
+                                <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
+                                @if (User.Identity?.IsAuthenticated ?? false)
+                                {
+                                    if (!isArtist)
+                                    {
+                                        <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
+                    @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
+                {
+                SongModel = song,
+                Playlists = await this.PlaylistSerivce.GetAllPlaylistsAsync()
+                })
+                </div>
             }
         </div>
     </div>
