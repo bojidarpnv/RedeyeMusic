@@ -9,10 +9,12 @@ namespace RedeyeMusic.Web.Controllers
     {
         private readonly ISongService songService;
         private readonly IPlaylistService playlistService;
-        public PlaylistController(ISongService songService, IPlaylistService playlistService)
+        private readonly IArtistService artistService;
+        public PlaylistController(ISongService songService, IPlaylistService playlistService, IArtistService artistService)
         {
             this.songService = songService;
             this.playlistService = playlistService;
+            this.artistService = artistService;
 
         }
         [HttpGet]
@@ -29,24 +31,40 @@ namespace RedeyeMusic.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int songId, string playlistName, List<int> selectedPlaylistIds)
         {
-            int playlistId = await this.playlistService.CreatePlaylistAsync(playlistName, songId, this.User.GetId());
-            //await this.playlistService.AddSongToPlaylistAsync(songId, playlistId);
+            bool isArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId());
+            if (!isArtist || this.User.IsAdmin())
+            {
+                int playlistId = await this.playlistService.CreatePlaylistAsync(playlistName, songId, this.User.GetId());
+                //await this.playlistService.AddSongToPlaylistAsync(songId, playlistId);
 
-            selectedPlaylistIds.Add(playlistId);
-            await Update(songId, selectedPlaylistIds);
+                selectedPlaylistIds.Add(playlistId);
+                await Update(songId, selectedPlaylistIds);
+            }
+            else
+            {
+                return BadRequest();
+            }
             return Json(new { success = true });
         }
         [HttpPost]
         public async Task<IActionResult> Update(int songId, List<int> selectedPlaylistIds)
         {
-            try
+            bool isArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId());
+            if (!isArtist || this.User.IsAdmin())
             {
-                await this.playlistService.UpdatePlaylists(songId, selectedPlaylistIds);
-                return Json(new { success = true });
+                try
+                {
+                    await this.playlistService.UpdatePlaylists(songId, selectedPlaylistIds);
+                    return Json(new { success = true });
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500);
+                }
             }
-            catch (Exception)
+            else
             {
-                return StatusCode(500);
+                return BadRequest();
             }
         }
     }

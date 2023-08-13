@@ -4,7 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
+using RedeyeMusic.Services.Mapping;
 using RedeyeMusic.Web.Infrastructure.Extensions;
+using RedeyeMusic.Web.ViewModels.Home;
+using System.Reflection;
 using static RedeyeMusic.Common.GeneralApplicationConstants;
 namespace RedeyeMusic
 {
@@ -55,6 +58,7 @@ namespace RedeyeMusic
 
             WebApplication app = builder.Build();
 
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
             // Configure the HTTP request pipeline.
 
             if (app.Environment.IsDevelopment())
@@ -78,7 +82,18 @@ namespace RedeyeMusic
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.SeedAdministrator(DevelopmentAdminEmail);
+            /// <summary>
+            /// This method seeds admin role if it does not exist
+            /// Passed email should be valid email of an existing user in the applciation
+            /// </summary>
+            /// <param name="application"></param>
+            /// <param name="email"></param>
+            /// <returns></returns>
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.SeedAdministrator(DevelopmentAdminEmail);
+            }
 
             app.MapControllerRoute(
                 name: "default",

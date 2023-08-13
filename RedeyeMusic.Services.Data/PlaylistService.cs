@@ -82,7 +82,7 @@ namespace RedeyeMusic.Services.Data
                         Lyrics = ps.Song.Lyrics,
                         ArtistName = ps.Song.Artist.Name,
                         GenreName = ps.Song.Genre.Name,
-                        Mp3FilePath = ps.Song.FilePath
+                        Mp3FilePath = ps.Song.Mp3FilePath
 
                     })
                 })
@@ -107,7 +107,7 @@ namespace RedeyeMusic.Services.Data
                 Lyrics = song.Lyrics,
                 ArtistName = song.Artist.Name,
                 GenreName = song.Genre.Name,
-                Mp3FilePath = song.FilePath
+                Mp3FilePath = song.Mp3FilePath
             };
 
             return songModel;

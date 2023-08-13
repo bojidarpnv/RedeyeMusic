@@ -30,7 +30,7 @@ namespace RedeyeMusic.Data.Models
         public string ImageUrl { get; set; } = null!;
 
         [Required]
-        public string FilePath { get; set; } = null!;
+        public string Mp3FilePath { get; set; } = null!;
 
 
         [ForeignKey(nameof(Artist))]

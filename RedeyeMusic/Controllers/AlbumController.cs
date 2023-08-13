@@ -34,16 +34,22 @@ namespace RedeyeMusic.Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            try
+            if (artistId != 0 || this.User.IsAdmin())
             {
-                await this.albumService.AddAlbum(viewModel, (int)artistId);
-                this.TempData[SuccessMessage] = "Successfully added album";
-                return Ok(new { albumId = viewModel.Id });
+                try
+                {
+                    await this.albumService.AddAlbum(viewModel, (int)artistId);
+                    this.TempData[SuccessMessage] = "Successfully added album";
+                    return Ok(new { albumId = viewModel.Id });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, "An error occurred while creating the album.");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                return StatusCode(500, "An error occurred while creating the album.");
+                return BadRequest();
             }
         }
         [HttpGet]
@@ -56,7 +62,7 @@ namespace RedeyeMusic.Web.Controllers
                 .ArtistExistsByUserIdAsync(userId);
             try
             {
-                if (isUserArtist)
+                if (isUserArtist || this.User.IsAdmin())
                 {
                     int artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
 
@@ -101,8 +107,18 @@ namespace RedeyeMusic.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            EditAlbumFormModel albumViewModel = await this.albumService.GetAlbumForEditAsync(id);
-            return View(albumViewModel);
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfAlbumWithIdAsync(artistId, id);
+            if (isArtistOwner || this.User.IsAdmin())
+            {
+                EditAlbumFormModel albumViewModel = await this.albumService.GetAlbumForEditAsync(id);
+                return View(albumViewModel);
+            }
+            else
+            {
+                this.TempData[ErrorMessage] = "You are not the owner of thisu album!";
+                return RedirectToAction("Mine", "Album");
+            }
         }
 
 
@@ -111,16 +127,24 @@ namespace RedeyeMusic.Web.Controllers
         public async Task<IActionResult> Edit(EditAlbumFormModel viewModel)
         {
             int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfAlbumWithIdAsync(artistId, viewModel.Id);
             if (!ModelState.IsValid)
             {
 
                 viewModel.Songs = await this.songService.GetSongsDropdownItemsAsync(artistId);
                 return View(viewModel);
             }
-
-            await this.albumService.UpdateAlbumAsync(viewModel);
-            this.TempData[SuccessMessage] = "Successfully edited Album";
-            return RedirectToAction("Details", new { id = viewModel.Id });
+            if (isArtistOwner || this.User.IsAdmin())
+            {
+                await this.albumService.UpdateAlbumAsync(viewModel);
+                this.TempData[SuccessMessage] = "Successfully edited Album";
+                return RedirectToAction("Details", new { id = viewModel.Id });
+            }
+            else
+            {
+                this.TempData[ErrorMessage] = "You are not the owner of this album";
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
@@ -138,14 +162,14 @@ namespace RedeyeMusic.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
             bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
-            if (!isUserArtist)
+            if (!isUserArtist && !this.User.IsAdmin())
             {
                 this.TempData[ErrorMessage] = "You must become an artist in order to edit album info!";
                 return RedirectToAction("Become", "Artist");
             }
             int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
             bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfAlbumWithIdAsync(artistId, id);
-            if (!isArtistOwner)
+            if (!isArtistOwner && !this.User.IsAdmin())
             {
                 this.TempData[ErrorMessage] = "You are not the artist of this album!";
                 return RedirectToAction("Mine", "Album");

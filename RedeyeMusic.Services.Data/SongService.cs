@@ -4,6 +4,7 @@ using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Services.Data.Models.Song;
+using RedeyeMusic.Services.Mapping;
 using RedeyeMusic.Web.ViewModels.Album;
 using RedeyeMusic.Web.ViewModels.Artist;
 using RedeyeMusic.Web.ViewModels.Genre;
@@ -37,7 +38,7 @@ namespace RedeyeMusic.Services.Data
                 Title = songModel.Title,
                 Lyrics = songModel.Lyrics,
                 ImageUrl = songModel.ImageUrl,
-                FilePath = songModel.FilePath,
+                Mp3FilePath = songModel.FilePath,
                 GenreId = songModel.GenreId,
                 ArtistId = artistId,
                 AlbumId = songModel.AlbumId,
@@ -61,17 +62,7 @@ namespace RedeyeMusic.Services.Data
                 .Where(s => s.IsDeleted == false)
                 .OrderByDescending(s => s.ListenCount)
                 .Take(100)
-                .Select(s => new IndexViewModel
-                {
-                    Id = s.Id,
-                    Title = s.Title,
-                    Lyrics = s.Lyrics,
-                    Duration = s.Duration,
-                    ImageUrl = s.ImageUrl,
-                    ArtistName = s.Artist.Name,
-                    ListenCount = s.ListenCount,
-                    Mp3FilePath = s.FilePath
-                })
+                .To<IndexViewModel>()
                 .ToArrayAsync();
             return songs;
         }
@@ -105,7 +96,7 @@ namespace RedeyeMusic.Services.Data
                 Title = songModel.Title,
                 Lyrics = songModel.Lyrics,
                 ImageUrl = songModel.ImageUrl,
-                FilePath = songModel.FilePath,
+                Mp3FilePath = songModel.FilePath,
                 GenreId = songModel.GenreId,
                 ArtistId = artistId,
                 AlbumId = album.Id,
@@ -114,7 +105,7 @@ namespace RedeyeMusic.Services.Data
             await this.dbContext.Songs.AddAsync(song);
             await this.dbContext.SaveChangesAsync();
 
-            int duration = GetSongDuration(song.FilePath);
+            int duration = GetSongDuration(song.Mp3FilePath);
             song.Duration = duration;
             await this.dbContext.SaveChangesAsync();
             return song.Id;
@@ -169,7 +160,7 @@ namespace RedeyeMusic.Services.Data
                         ImageUrl = s.ImageUrl,
                         ArtistName = s.Artist.Name,
                         ListenCount = s.ListenCount,
-                        Mp3FilePath = s.FilePath
+                        Mp3FilePath = s.Mp3FilePath
 
                     })
                     .ToListAsync();
@@ -184,7 +175,7 @@ namespace RedeyeMusic.Services.Data
                         ImageUrl = s.ImageUrl,
                         ArtistName = s.Artist.Name,
                         ListenCount = s.ListenCount,
-                        Mp3FilePath = s.FilePath
+                        Mp3FilePath = s.Mp3FilePath
 
                     })
                     .ToListAsync();
@@ -199,7 +190,7 @@ namespace RedeyeMusic.Services.Data
                         ImageUrl = s.ImageUrl,
                         ArtistName = s.Artist.Name,
                         ListenCount = s.ListenCount,
-                        Mp3FilePath = s.FilePath
+                        Mp3FilePath = s.Mp3FilePath
 
                     }).ToListAsync();
                 searchResult.SongsByLyrics = await songsQuery
@@ -214,7 +205,7 @@ namespace RedeyeMusic.Services.Data
                         ImageUrl = s.ImageUrl,
                         ArtistName = s.Artist.Name,
                         ListenCount = s.ListenCount,
-                        Mp3FilePath = s.FilePath
+                        Mp3FilePath = s.Mp3FilePath
 
                     })
                     .ToListAsync();
@@ -238,7 +229,7 @@ namespace RedeyeMusic.Services.Data
                     ImageUrl = s.ImageUrl,
                     ArtistName = s.Artist.Name,
                     ListenCount = s.ListenCount,
-                    Mp3FilePath = s.FilePath
+                    Mp3FilePath = s.Mp3FilePath
                 })
                 .ToArrayAsync();
 
@@ -268,7 +259,7 @@ namespace RedeyeMusic.Services.Data
                 ArtistName = song.Artist.Name,
                 AlbumName = song.Album.Name,
                 ListenCount = song.ListenCount,
-                Mp3FilePath = song.FilePath,
+                Mp3FilePath = song.Mp3FilePath,
                 Artist = new ArtistInfoOnSongViewModel()
                 {
                     Id = song.Artist.Id,

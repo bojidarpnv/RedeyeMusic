@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedeyeMusic.Data;
 
@@ -11,9 +12,10 @@ using RedeyeMusic.Data;
 namespace RedeyeMusic.Data.Migrations
 {
     [DbContext(typeof(RedeyeMusicDbContext))]
-    partial class RedeyeMusicDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230813134932_SeedAdmin")]
+    partial class SeedAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,7 +302,7 @@ namespace RedeyeMusic.Data.Migrations
                         {
                             Id = new Guid("3cdfc504-e0e3-41cd-bd90-7c711143fe69"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "564e5645-cca2-4fd7-8f75-8c332443f786",
+                            ConcurrencyStamp = "168db782-afdd-4202-ade8-5c86d165b4b5",
                             Email = "admin@redeye.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -309,16 +311,16 @@ namespace RedeyeMusic.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@REDEYE.COM",
                             NormalizedUserName = "ADMIN@REDEYE.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENujntg94efD0ivDAk9QHLatKpIFwMlBzEyIUKaUqizT+4aIGEaqgygb2U3q3jolew==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPbp7AL4DPnzMC0uEBpKIgfCCin2qX7butG9qgtZZDepW1ZZrFjnCO8fOzIChVZRag==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "admin@redeye.com"
                         },
                         new
                         {
-                            Id = new Guid("23343982-be97-42a3-932a-88ea79a787e5"),
+                            Id = new Guid("ca9700e4-2046-4b6b-950e-ba6d762ac6b1"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6ac5206c-564e-4012-8f3c-89047ae8685b",
+                            ConcurrencyStamp = "1dccb269-23d0-4cf5-bd04-688554e2ae4b",
                             Email = "guest@redeye.com",
                             EmailConfirmed = false,
                             FirstName = "Guest",
@@ -327,16 +329,16 @@ namespace RedeyeMusic.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "GUEST@REDEYE.COM",
                             NormalizedUserName = "GUEST@REDEYE.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECX60IVxqttDNMR83YKt7lZA1dYMuZe2uLsedk410HhPqxrhR6JzvIuXG78wlE/4Hg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEInYyKxX1z1n8k7sC2+E5KygUXSHxMWq+VHFPU0t5SkvZ8kTz917E7fjUwgm4Tjchg==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "guest@redeye.com"
                         },
                         new
                         {
-                            Id = new Guid("9550db9f-c038-4e5a-b7bc-7ce4ca67c760"),
+                            Id = new Guid("50b29c32-294d-495b-9035-ba909f23ef9f"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f83510a4-9a48-4e1f-a5bb-28d2fbd031ec",
+                            ConcurrencyStamp = "84ec6a4e-c79f-4082-a8d9-e245ff340fa7",
                             Email = "artist@redeye.com",
                             EmailConfirmed = false,
                             FirstName = "Artist",
@@ -345,7 +347,7 @@ namespace RedeyeMusic.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ARTIST@REDEYE.COM",
                             NormalizedUserName = "ARTIST@REDEYE.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDrsAYeXoDVkj37kgb+6iYOc1YMR6lcZu9IQTVI9lyXvs2NATkhmwlx3LXmj1FkLbA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEP0bTl5TMv7IQACgVhw9QvMwSDkeXV2+y5ILyn+w28k03fgTQtwXlbrQjRZKgaVsvw==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "artist@redeye.com"
@@ -504,6 +506,10 @@ namespace RedeyeMusic.Data.Migrations
                         .HasMaxLength(600)
                         .HasColumnType("int");
 
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
 
@@ -522,10 +528,6 @@ namespace RedeyeMusic.Data.Migrations
                     b.Property<string>("Lyrics")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("Mp3FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -549,11 +551,11 @@ namespace RedeyeMusic.Data.Migrations
                             AlbumId = 1,
                             ArtistId = 1,
                             Duration = 0,
+                            FilePath = "https://file-examples.com/storage/fee472ce6e64b122ba0c8b3/2017/11/file_example_MP3_1MG.mp3",
                             GenreId = 1,
                             ImageUrl = "https://images.theconversation.com/files/258026/original/file-20190208-174861-nms2kt.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
                             IsDeleted = false,
                             ListenCount = 0,
-                            Mp3FilePath = "https://file-examples.com/storage/fee472ce6e64b122ba0c8b3/2017/11/file_example_MP3_1MG.mp3",
                             Title = "SampleSong"
                         },
                         new
@@ -562,11 +564,11 @@ namespace RedeyeMusic.Data.Migrations
                             AlbumId = 2,
                             ArtistId = 1,
                             Duration = 0,
+                            FilePath = "https://file-examples.com/storage/fee472ce6e64b122ba0c8b3/2017/11/file_example_MP3_1MG.mp3",
                             GenreId = 2,
                             ImageUrl = "https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe529a64193929.5aca8500ba9ab.jpg",
                             IsDeleted = false,
                             ListenCount = 0,
-                            Mp3FilePath = "https://file-examples.com/storage/fee472ce6e64b122ba0c8b3/2017/11/file_example_MP3_1MG.mp3",
                             Title = "SampleSong2"
                         },
                         new
@@ -575,11 +577,11 @@ namespace RedeyeMusic.Data.Migrations
                             AlbumId = 1,
                             ArtistId = 1,
                             Duration = 0,
+                            FilePath = "https://file-examples.com/storage/fee472ce6e64b122ba0c8b3/2017/11/file_example_MP3_1MG.mp3",
                             GenreId = 1,
                             ImageUrl = "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/149562217/original/fc77d96de1229ad6ca6f83289fd2d4b4c068a568/make-album-and-song-covers.jpg",
                             IsDeleted = false,
                             ListenCount = 0,
-                            Mp3FilePath = "https://file-examples.com/storage/fee472ce6e64b122ba0c8b3/2017/11/file_example_MP3_1MG.mp3",
                             Title = "SampleSong3"
                         });
                 });

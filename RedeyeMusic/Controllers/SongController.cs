@@ -268,14 +268,14 @@ namespace RedeyeMusic.Web.Controllers
                 return RedirectToAction("All, Song");
             }
             bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
-            if (!isUserArtist)
+            if (!isUserArtist && !this.User.IsAdmin())
             {
-                this.TempData[ErrorMessage] = "You must become an agent in order to edit song info!";
+                this.TempData[ErrorMessage] = "You must become an artist in order to edit song info!";
                 return RedirectToAction("Become", "Artist");
             }
             int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
             bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(artistId, id);
-            if (!isArtistOwner)
+            if (!isArtistOwner && !this.User.IsAdmin())
             {
                 this.TempData[ErrorMessage] = "You are not the artist of this song!";
                 return RedirectToAction("Mine", "Song");
@@ -312,14 +312,14 @@ namespace RedeyeMusic.Web.Controllers
                 return RedirectToAction("All, Song");
             }
             bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
-            if (!isUserArtist)
+            if (!isUserArtist && !this.User.IsAdmin())
             {
-                this.TempData[ErrorMessage] = "You must become an agent in order to edit song info!";
+                this.TempData[ErrorMessage] = "You must become an artist in order to edit song info!";
                 return RedirectToAction("Become", "Artist");
             }
 
             bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(artistId, id);
-            if (!isArtistOwner)
+            if (!isArtistOwner && !this.User.IsAdmin())
             {
                 this.TempData[ErrorMessage] = "You are not the artist of this song!";
                 return RedirectToAction("Mine", "Song");
@@ -349,14 +349,14 @@ namespace RedeyeMusic.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
             bool isUserArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId()!);
-            if (!isUserArtist)
+            if (!isUserArtist && !this.User.IsAdmin())
             {
                 this.TempData[ErrorMessage] = "You must become an agent in order to edit song info!";
                 return RedirectToAction("Become", "Artist");
             }
             int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
             bool isArtistOwner = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(artistId, id);
-            if (!isArtistOwner)
+            if (!isArtistOwner && !this.User.IsAdmin())
             {
                 this.TempData[ErrorMessage] = "You are not the artist of this song!";
                 return RedirectToAction("Mine", "Song");

@@ -19,7 +19,7 @@
              <p>Total Songs: @Model.Songs.Count()</p>
             <p>Songs Total Listen Count: @Model.Songs.Sum(s=>s.ListenCount)</p>
             <div>
-               @if(isOwner)
+               @if(isOwner || this.User.IsAdmin())
                 {
                     <a asp-action="Edit" asp-controller="Album" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
                     <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-album-id="@Model.Id">Delete</a>

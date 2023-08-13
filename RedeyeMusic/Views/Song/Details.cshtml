@@ -29,7 +29,7 @@
             <div>
             @if(this.User.Identity?.IsAuthenticated ?? false)
             {
-                @if (isUserArtist && isArtistOwnerOfSong)
+                @if ((isUserArtist && isArtistOwnerOfSong) || this.User.IsAdmin())
                 {
                    <a asp-action="Edit" asp-controller="Song" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
                    <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-song-id="@Model.Id">Delete</a>

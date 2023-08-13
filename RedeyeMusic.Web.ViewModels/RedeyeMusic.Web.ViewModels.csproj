@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RedeyeMusic.Common\RedeyeMusic.Common.csproj" />
     <ProjectReference Include="..\RedeyeMusic.Data.Models\RedeyeMusic.Data.Models.csproj" />
+    <ProjectReference Include="..\RedeyeMusic.Services.Mapping\RedeyeMusic.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>

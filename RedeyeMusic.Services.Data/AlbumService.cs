@@ -127,7 +127,7 @@ namespace RedeyeMusic.Services.Data
                     Lyrics = s.Lyrics,
                     ArtistName = s.Artist.Name,
                     GenreName = s.Genre.Name,
-                    Mp3FilePath = s.FilePath
+                    Mp3FilePath = s.Mp3FilePath
 
                 })
             };

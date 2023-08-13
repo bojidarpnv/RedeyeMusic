@@ -1,6 +1,8 @@
 ﻿namespace RedeyeMusic.Web.ViewModels.Home
 {
-    public class IndexViewModel
+    using RedeyeMusic.Data.Models;
+    using RedeyeMusic.Services.Mapping;
+    public class IndexViewModel : IMapFrom<Song>
     {
         public int Id { get; set; }
         public string Title { get; set; } = null!;
