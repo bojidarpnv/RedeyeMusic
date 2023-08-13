@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Griesoft.AspNetCore.ReCaptcha;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Data.Models;
@@ -23,6 +24,8 @@ namespace RedeyeMusic.Web.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateRecaptcha(Action = nameof(Register),
+            ValidationFailedAction = ValidationFailedAction.ContinueRequest)]
         public async Task<IActionResult> Register(RegisterFormModel model)
         {
             if (!ModelState.IsValid)
@@ -65,6 +68,8 @@ namespace RedeyeMusic.Web.Controllers
             return this.View(model);
         }
         [HttpPost]
+        [ValidateRecaptcha(Action = nameof(Login),
+            ValidationFailedAction = ValidationFailedAction.ContinueRequest)]
         public async Task<IActionResult> Login(LoginFormModel model)
         {
             if (!ModelState.IsValid)

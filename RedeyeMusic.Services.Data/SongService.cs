@@ -38,7 +38,7 @@ namespace RedeyeMusic.Services.Data
                 Title = songModel.Title,
                 Lyrics = songModel.Lyrics,
                 ImageUrl = songModel.ImageUrl,
-                Mp3FilePath = songModel.FilePath,
+                Mp3FilePath = songModel.FilePath!,
                 GenreId = songModel.GenreId,
                 ArtistId = artistId,
                 AlbumId = songModel.AlbumId,
@@ -92,7 +92,7 @@ namespace RedeyeMusic.Services.Data
                 Title = songModel.Title,
                 Lyrics = songModel.Lyrics,
                 ImageUrl = songModel.ImageUrl,
-                Mp3FilePath = songModel.FilePath,
+                Mp3FilePath = songModel.FilePath!,
                 GenreId = songModel.GenreId,
                 ArtistId = artistId,
                 AlbumId = album.Id,
@@ -120,7 +120,7 @@ namespace RedeyeMusic.Services.Data
 
                 return durationInSeconds;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -158,7 +158,7 @@ namespace RedeyeMusic.Services.Data
                     .ToListAsync();
                 searchResult.SongsByLyrics = await songsQuery
                     .Where(s => s.IsDeleted == false)
-                    .Where(s => EF.Functions.Like(s.Lyrics, wildCard))
+                    .Where(s => EF.Functions.Like(s.Lyrics!, wildCard))
                     .To<IndexViewModel>()
                     .ToListAsync();
             }
@@ -194,7 +194,7 @@ namespace RedeyeMusic.Services.Data
 
                 Id = song.Id,
                 Title = song.Title,
-                Lyrics = song.Lyrics,
+                Lyrics = song.Lyrics!,
                 Duration = song.Duration,
                 GenreName = song.Genre.Name,
                 ImageUrl = song.ImageUrl,
@@ -214,7 +214,7 @@ namespace RedeyeMusic.Services.Data
                         Id = al.Id,
                         Name = al.Name,
                         Description = al.Description,
-                        ImageUrl = al.ImageUrl
+                        ImageUrl = al.ImageUrl!
                     })
 
                     .ToListAsync()
@@ -242,7 +242,7 @@ namespace RedeyeMusic.Services.Data
             return new EditSongFormModel()
             {
                 Title = song.Title,
-                Lyrics = song.Lyrics,
+                Lyrics = song.Lyrics!,
                 GenreId = song.GenreId,
                 AlbumId = song.AlbumId,
                 ImageUrl = song.ImageUrl,

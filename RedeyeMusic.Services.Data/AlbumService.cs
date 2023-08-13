@@ -104,7 +104,7 @@ namespace RedeyeMusic.Services.Data
                 ArtistId = album.ArtistId,
                 ArtistName = album.Artist.Name,
                 Description = album.Description,
-                ImageUrl = album.ImageUrl,
+                ImageUrl = album.ImageUrl!,
                 Songs = songs.Select(s => new IndexViewModel()
                 {
                     Id = s.Id,
@@ -112,7 +112,7 @@ namespace RedeyeMusic.Services.Data
                     Duration = s.Duration,
                     ImageUrl = s.ImageUrl,
                     ListenCount = s.ListenCount,
-                    Lyrics = s.Lyrics,
+                    Lyrics = s.Lyrics!,
                     ArtistName = s.Artist.Name,
                     GenreName = s.Genre.Name,
                     Mp3FilePath = s.Mp3FilePath
@@ -146,7 +146,7 @@ namespace RedeyeMusic.Services.Data
                 Id = album.Id,
                 Name = album.Name,
                 Description = album.Description,
-                ImageUrl = album.ImageUrl,
+                ImageUrl = album.ImageUrl!,
                 SelectedSongIds = selectedSongIds,
                 Songs = songItems
             };
