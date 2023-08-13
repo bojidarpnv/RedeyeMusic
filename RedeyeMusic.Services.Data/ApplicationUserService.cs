@@ -18,6 +18,7 @@ namespace RedeyeMusic.Services.Data
 
         public async Task<string> GetFullNameByEmailAsync(string email)
         {
+            var sanitizer = new HtmlSanitizer();
             ApplicationUser? user = await this.dbContext
                 .Users
                 .FirstOrDefaultAsync(u => u.Email == email);
@@ -26,7 +27,7 @@ namespace RedeyeMusic.Services.Data
                 return string.Empty;
             }
 
-            return user.FirstName + " " + user.LastName;
+            return Html.Sanitize(user.FirstName + " " + user.LastName);
 
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Ganss.Xss;
+using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
@@ -69,6 +70,7 @@ namespace RedeyeMusic.Services.Data
         }
         public async Task<bool> IsArtistWithIdOwnerOfAlbumWithIdAsync(int artistId, int albumId)
         {
+
             Album album = await this.dbContext
                 .Albums
                 .Where(a => a.IsDeleted == false)
@@ -78,6 +80,7 @@ namespace RedeyeMusic.Services.Data
 
         public async Task<string> GetArtistNameByUserIdAsync(string userId)
         {
+            var sanitizer = new HtmlSanitizer();
             Artist? artist = await this.dbContext
                 .Artists
                 .FirstOrDefaultAsync(a => a.ApplicationUserId == Guid.Parse(userId));
@@ -86,7 +89,7 @@ namespace RedeyeMusic.Services.Data
             {
                 return string.Empty;
             }
-            return artist.Name;
+            return sanitizer.Sanitize(artist.Name);
         }
     }
 }

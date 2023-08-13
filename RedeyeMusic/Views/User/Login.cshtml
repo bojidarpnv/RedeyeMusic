@@ -25,8 +25,11 @@
                 <div>
                     <div class="checkbox">
                         <label asp-for="RememberMe" class="form-label">
-                            <input class="form-check-input" asp-for="RememberMe" />
-                            @Html.DisplayNameFor(m => m.RememberMe)
+                            <label class="custom-checkbox-label">
+                                <input type="checkbox" name="RememberMe">
+                                <span class="custom-checkbox"></span>
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
                         </label>
                     </div>
                 </div>
@@ -47,5 +50,6 @@
 </div>
 
 @section Scripts {
+    <recaptcha-script />
     <partial name="_ValidationScriptsPartial" />
 }

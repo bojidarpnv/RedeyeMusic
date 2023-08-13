@@ -20,6 +20,7 @@ namespace RedeyeMusic.Services.Data
 
         public async Task<ICollection<GenreSelectViewModel>> SelectGenresAsync()
         {
+
             ICollection<GenreSelectViewModel> allGenres = await this.dbContext
                 .Genres
                 .Select(g => new GenreSelectViewModel()

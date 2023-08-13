@@ -45,12 +45,13 @@ namespace RedeyeMusic.Services.Data
         }
         public async Task<int> GetAlbumId(AddSongFormModel songModel)
         {
+
             Album album = await this.dbContext
                 .Albums
                 .Where(a => a.IsDeleted == false)
                 .FirstAsync(a => a.Name == songModel.AlbumName && a.Description == songModel.AlbumDescription);
 
-            return album.Id;
+            return (album.Id);
         }
 
         public async Task<ICollection<AlbumSelectViewModel>> SelectAlbumsByArtistIdAsync(int artistId)
@@ -122,6 +123,7 @@ namespace RedeyeMusic.Services.Data
         }
         public async Task<EditAlbumFormModel> GetAlbumForEditAsync(int albumId)
         {
+
             Album album = await this.dbContext.Albums
                 .Where(a => a.IsDeleted == false)
                 .Include(a => a.Artist)
