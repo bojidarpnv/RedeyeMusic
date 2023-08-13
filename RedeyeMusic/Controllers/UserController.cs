@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Web.ViewModels.User;
-
+using static RedeyeMusic.Common.NotificationMessagesConstants;
 namespace RedeyeMusic.Web.Controllers
 {
     public class UserController : Controller
@@ -45,11 +46,40 @@ namespace RedeyeMusic.Web.Controllers
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return View(model);
+                return this.View(model);
             }
 
             await this.signInManager.SignInAsync(user, isPersistent: false);
+            this.TempData[SuccessMessage] = "Successful registration!";
             return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Login(string? returnUrl = null)
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            LoginFormModel model = new LoginFormModel()
+            {
+                ReturnUrl = returnUrl,
+            };
+            return this.View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginFormModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            Microsoft.AspNetCore.Identity.SignInResult? result =
+                await this.signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            if (!result.Succeeded)
+            {
+                this.TempData[ErrorMessage] = "There was an error while signing in! Please try again later!";
+                return this.View(model);
+            }
+            return this.Redirect(model.ReturnUrl ?? "/Home/Index");
         }
     }
 }

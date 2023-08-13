@@ -4,7 +4,6 @@ using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Identity;
 
 namespace RedeyeMusic
 {
@@ -18,8 +17,8 @@ namespace RedeyeMusic
             string connectionString
                 = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-                        builder.Services.AddDbContext<RedeyeMusicDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<RedeyeMusicDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
             builder.Services
                 .AddDbContext<RedeyeMusicDbContext>(options =>
@@ -38,6 +37,12 @@ namespace RedeyeMusic
             })
                 .AddEntityFrameworkStores<RedeyeMusicDbContext>();
             builder.Services.AddApplicationService(typeof(ISongService));
+
+            builder.Services.ConfigureApplicationCookie(cfg =>
+            {
+                cfg.LoginPath = "/User/Login";
+            });
+
             builder.Services.AddControllersWithViews()
                 .AddMvcOptions(options =>
                 {
