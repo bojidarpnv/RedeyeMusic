@@ -7,5 +7,6 @@ namespace RedeyeMusic.Web.ViewModels.Song
     {
         public ArtistInfoOnSongViewModel Artist { get; set; } = null!;
         public string AlbumName { get; set; } = null!;
+        public string AlbumImageUrl { get; set; } = null!;
     }
 }

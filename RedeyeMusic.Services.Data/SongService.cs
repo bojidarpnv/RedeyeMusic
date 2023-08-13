@@ -281,6 +281,7 @@ namespace RedeyeMusic.Services.Data
                         Id = al.Id,
                         Name = al.Name,
                         Description = al.Description,
+                        ImageUrl = al.ImageUrl
                     })
 
                     .ToListAsync()

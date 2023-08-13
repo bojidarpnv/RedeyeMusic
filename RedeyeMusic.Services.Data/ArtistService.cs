@@ -75,5 +75,18 @@ namespace RedeyeMusic.Services.Data
                 .FirstAsync(a => a.Id == albumId);
             return album.ArtistId == artistId;
         }
+
+        public async Task<string> GetArtistNameByUserIdAsync(string userId)
+        {
+            Artist? artist = await this.dbContext
+                .Artists
+                .FirstOrDefaultAsync(a => a.ApplicationUserId == Guid.Parse(userId));
+
+            if (artist == null)
+            {
+                return string.Empty;
+            }
+            return artist.Name;
+        }
     }
 }

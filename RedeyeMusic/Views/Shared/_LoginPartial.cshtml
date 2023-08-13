@@ -4,9 +4,12 @@
 @using RedeyeMusic.Web.Infrastrucutre.Extensions;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IApplicationUserService UserService;
 @inject IArtistService ArtistService
 @{
     bool isArtist = await this.ArtistService.ArtistExistsByUserIdAsync(this.User.GetId());
+    string userFullName = await this.UserService.GetFullNameByEmailAsync(User.Identity?.Name!);
+    
 }
 
 <ul class="navbar-nav">
@@ -20,10 +23,20 @@
          }
         <img class="rounded-circle" src="~/images/Icon.png" style="width:50px; height=50px">
         <li class="nav-item dropdown mt-1">
-                <a class="nav-link dropdown-toggle"  id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    @User.Identity?.Name
+                @if(isArtist)
+                {
+                    string artistName = await this.ArtistService.GetArtistNameByUserIdAsync(this.User.GetId());
+                <a class="nav-link dropdown-toggle" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @artistName
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                }
+                else
+                {
+                    <a class="nav-link dropdown-toggle" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @userFullName
+                    </a>
+                }
+                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" type="button-submit" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a></li>
                 <li class="dropdown-item">
                     <form class="dropdown-item" type="button-submit" role="button" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

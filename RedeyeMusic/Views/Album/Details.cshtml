@@ -1,20 +1,29 @@
-﻿@model AlbumDetailsViewModel
-
+﻿@using RedeyeMusic.Services.Data.Interfaces;
+@using RedeyeMusic.Web.Infrastrucutre.Extensions;
+@model AlbumDetailsViewModel
+@inject IArtistService ArtistService;
+@{
+    int artistId = await this.ArtistService.GetArtistIdByUserIdAsync(this.User.GetId());
+    bool isOwner = await this.ArtistService.IsArtistWithIdOwnerOfAlbumWithIdAsync(artistId, Model.Id);
+}
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-6">
             <img src="@Model.ImageUrl" class="img-fluid rounded" alt="@Model.Name">
         </div>
         <div class="col-md-6">
-            <h1>@Model.Id</h1>
+            
             <h2 class="mb-3">@Model.Name</h2>
-            <p class="">@Model.ArtistName</p>
-            <p>@Model.Description</p>
+            <p class="">Artist: @Model.ArtistName</p>
+            <p>Album Description: @Model.Description</p>
              <p>Total Songs: @Model.Songs.Count()</p>
             <p>Songs Total Listen Count: @Model.Songs.Sum(s=>s.ListenCount)</p>
             <div>
-                <a asp-action="Edit" asp-controller="Album" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-album-id="@Model.Id">Delete</a>
+               @if(isOwner)
+                {
+                    <a asp-action="Edit" asp-controller="Album" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                    <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-album-id="@Model.Id">Delete</a>
+                }
                 <a asp-action="Mine" asp-controller="Album" class="btn btn-secondary">Back to List</a>
             </div>
         </div>

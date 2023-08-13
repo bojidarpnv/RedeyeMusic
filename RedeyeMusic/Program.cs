@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.Infrastructure.Extensions;
-
+using static RedeyeMusic.Common.GeneralApplicationConstants;
 namespace RedeyeMusic
 {
     public class Program
@@ -35,7 +36,9 @@ namespace RedeyeMusic
                 options.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:Password:RequireUppercase");
                 options.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
             })
+                .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<RedeyeMusicDbContext>();
+
             builder.Services.AddApplicationService(typeof(ISongService));
 
             builder.Services.ConfigureApplicationCookie(cfg =>
@@ -44,10 +47,10 @@ namespace RedeyeMusic
             });
 
             builder.Services.AddControllersWithViews()
-                .AddMvcOptions(options =>
-                {
-                    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-                });
+            .AddMvcOptions(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
 
 
             WebApplication app = builder.Build();
@@ -75,6 +78,7 @@ namespace RedeyeMusic
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.SeedAdministrator(DevelopmentAdminEmail);
 
             app.MapControllerRoute(
                 name: "default",
