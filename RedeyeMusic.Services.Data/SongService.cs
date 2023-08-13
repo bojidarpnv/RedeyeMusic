@@ -70,11 +70,7 @@ namespace RedeyeMusic.Services.Data
         {
             ICollection<GenreSelectViewModel> allGenres = await this.dbContext
                 .Genres
-                .Select(g => new GenreSelectViewModel()
-                {
-                    Id = g.Id,
-                    Name = g.Name
-                })
+                .To<GenreSelectViewModel>()
                 .ToArrayAsync();
             return allGenres;
         }
@@ -126,11 +122,7 @@ namespace RedeyeMusic.Services.Data
             }
             catch (Exception ex)
             {
-                // Handle exceptions here (e.g., file not found, invalid format, etc.)
-                // You may want to log the error or return a default duration.
-                // For example:
-                // return -1; // Indicating an error or unknown duration
-                throw; // Re-throw the exception or handle it according to your requirements
+                throw;
             }
         }
 
@@ -152,62 +144,22 @@ namespace RedeyeMusic.Services.Data
                 searchResult.SongsByTitle = await songsQuery
                     .Where(s => s.IsDeleted == false)
                     .Where(s => EF.Functions.Like(s.Title, wildCard))
-                    .Select(s => new IndexViewModel()
-                    {
-                        Id = s.Id,
-                        Title = s.Title,
-                        Duration = s.Duration,
-                        ImageUrl = s.ImageUrl,
-                        ArtistName = s.Artist.Name,
-                        ListenCount = s.ListenCount,
-                        Mp3FilePath = s.Mp3FilePath
-
-                    })
+                    .To<IndexViewModel>()
                     .ToListAsync();
                 searchResult.SongsByArtist = await songsQuery
                     .Where(s => s.IsDeleted == false)
                     .Where(s => EF.Functions.Like(s.Artist.Name, wildCard))
-                    .Select(s => new IndexViewModel()
-                    {
-                        Id = s.Id,
-                        Title = s.Title,
-                        Duration = s.Duration,
-                        ImageUrl = s.ImageUrl,
-                        ArtistName = s.Artist.Name,
-                        ListenCount = s.ListenCount,
-                        Mp3FilePath = s.Mp3FilePath
-
-                    })
+                    .To<IndexViewModel>()
                     .ToListAsync();
                 searchResult.SongsByGenre = await songsQuery
                     .Where(s => s.IsDeleted == false)
                     .Where(s => EF.Functions.Like(s.Genre.Name, wildCard))
-                    .Select(s => new IndexViewModel()
-                    {
-                        Id = s.Id,
-                        Title = s.Title,
-                        Duration = s.Duration,
-                        ImageUrl = s.ImageUrl,
-                        ArtistName = s.Artist.Name,
-                        ListenCount = s.ListenCount,
-                        Mp3FilePath = s.Mp3FilePath
-
-                    }).ToListAsync();
+                    .To<IndexViewModel>()
+                    .ToListAsync();
                 searchResult.SongsByLyrics = await songsQuery
                     .Where(s => s.IsDeleted == false)
                     .Where(s => EF.Functions.Like(s.Lyrics, wildCard))
-                    .Select(s => new IndexViewModel()
-                    {
-                        Id = s.Id,
-                        Title = s.Title,
-                        Lyrics = s.Lyrics,
-                        Duration = s.Duration,
-                        ImageUrl = s.ImageUrl,
-                        ArtistName = s.Artist.Name,
-                        ListenCount = s.ListenCount,
-                        Mp3FilePath = s.Mp3FilePath
-
-                    })
+                    .To<IndexViewModel>()
                     .ToListAsync();
             }
 
@@ -220,17 +172,7 @@ namespace RedeyeMusic.Services.Data
                 .Songs
                 .Where(s => s.IsDeleted == false)
                 .Where(s => s.ArtistId == artistId)
-                .Select(s => new IndexViewModel()
-                {
-                    Id = s.Id,
-                    Title = s.Title,
-                    Lyrics = s.Lyrics,
-                    Duration = s.Duration,
-                    ImageUrl = s.ImageUrl,
-                    ArtistName = s.Artist.Name,
-                    ListenCount = s.ListenCount,
-                    Mp3FilePath = s.Mp3FilePath
-                })
+                .To<IndexViewModel>()
                 .ToArrayAsync();
 
             return allArtistSongs;

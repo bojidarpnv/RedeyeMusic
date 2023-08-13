@@ -1,6 +1,9 @@
-﻿namespace RedeyeMusic.Web.ViewModels.Album
+﻿using RedeyeMusic.Services.Mapping;
+
+namespace RedeyeMusic.Web.ViewModels.Album
 {
-    public class AlbumSelectViewModel
+    using RedeyeMusic.Data.Models;
+    public class AlbumSelectViewModel : IMapFrom<Album>
     {
 
         public int Id { get; set; }
@@ -9,6 +12,7 @@
         public string Description { get; set; } = null!;
         public int ArtistId { get; set; }
         public string ImageUrl { get; set; } = null!;
+
 
 
     }

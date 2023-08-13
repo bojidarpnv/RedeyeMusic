@@ -80,7 +80,7 @@
 
             @if (Model.SongsByGenre.Any())
             {
-                int i = 1;
+                
 
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
                     @foreach (var song in Model.SongsByGenre)
@@ -121,7 +121,7 @@
 
             @if (Model.SongsByArtist.Any())
             {
-                int i = 1;
+                
                 <div class="tab-pane fade" id="pills-artist" role="tabpanel" aria-labelledby="pills-artist-tab" tabindex="0">
                     @foreach (var song in Model.SongsByArtist)
                     {
@@ -161,7 +161,7 @@
 
             @if (Model.SongsByLyrics.Any())
             {
-                int i = 1;
+                
                 <div class="tab-pane fade" id="pills-lyrics" role="tabpanel" aria-labelledby="pills-lyrics-tab" tabindex="0">
                     @foreach (var song in Model.SongsByLyrics)
                     {

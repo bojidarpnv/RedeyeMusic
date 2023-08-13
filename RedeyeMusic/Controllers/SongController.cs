@@ -87,7 +87,7 @@ namespace RedeyeMusic.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                string fullFilePath = null;
+                string fullFilePath = null!;
                 if (songModel.Mp3File != null)
                 {
                     string folder = "songs/Mp3s/";
@@ -106,7 +106,7 @@ namespace RedeyeMusic.Web.Controllers
                     TempData[SuccessMessage] = "Successfully added a song!";
                     return RedirectToAction("Details", "Song", new { id = songId });
                 }
-                catch (Exception _)
+                catch (Exception)
                 {
                     this.ModelState.AddModelError(string.Empty, "Unexpected error occurrer while trying to add your new Song! Please try again later!");
                     return View(songModel);
@@ -174,11 +174,11 @@ namespace RedeyeMusic.Web.Controllers
                 try
                 {
 
-                    int songId = await this.songService.AddFirstSongAsync(songModel, (int)artistId, fullFilePath);
+                    int songId = await this.songService.AddFirstSongAsync(songModel, (int)artistId!, fullFilePath);
                     TempData[SuccessMessage] = "Successfully added your first song!";
                     return RedirectToAction("Details", "Song", new { id = songId });
                 }
-                catch (Exception _)
+                catch (Exception)
                 {
                     this.ModelState.AddModelError(string.Empty, "Unexpected error occurrer while trying to add your new Song! Please try again later!");
                     return View(songModel);

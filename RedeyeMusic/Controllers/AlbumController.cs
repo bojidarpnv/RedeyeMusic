@@ -42,7 +42,7 @@ namespace RedeyeMusic.Web.Controllers
                     this.TempData[SuccessMessage] = "Successfully added album";
                     return Ok(new { albumId = viewModel.Id });
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return StatusCode(500, "An error occurred while creating the album.");
                 }
@@ -174,7 +174,7 @@ namespace RedeyeMusic.Web.Controllers
                 this.TempData[ErrorMessage] = "You are not the artist of this album!";
                 return RedirectToAction("Mine", "Album");
             }
-            var isPasswordValid = await this.applicationService.ValidatePasswordAsync(this.User.GetId(), password);
+            var isPasswordValid = await this.applicationService.ValidatePasswordAsync(this.User.GetId(), password!);
 
             if (isPasswordValid)
             {

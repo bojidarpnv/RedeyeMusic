@@ -24,7 +24,8 @@ namespace RedeyeMusic.Data.Models
 
 
         [StringLength(LyricsMaxLength)]
-        public string? Lyrics { get; set; }
+        [Required]
+        public string Lyrics { get; set; } = null!;
 
         [Required]
         public string ImageUrl { get; set; } = null!;

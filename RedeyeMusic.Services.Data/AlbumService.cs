@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
+using RedeyeMusic.Services.Mapping;
 using RedeyeMusic.Web.ViewModels.Album;
 using RedeyeMusic.Web.ViewModels.Home;
 using RedeyeMusic.Web.ViewModels.Song;
@@ -57,13 +58,7 @@ namespace RedeyeMusic.Services.Data
             ICollection<AlbumSelectViewModel> albums = await this.dbContext
                 .Albums
                 .Where(a => a.IsDeleted == false)
-                .Select(a => new AlbumSelectViewModel()
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    ArtistId = a.ArtistId,
-                    ImageUrl = a.ImageUrl,
-                })
+                .To<AlbumSelectViewModel>()
                 .Where(al => al.ArtistId == artistId)
                 .ToArrayAsync();
             return albums;
@@ -74,14 +69,7 @@ namespace RedeyeMusic.Services.Data
                 .Albums
                 .Where(a => a.IsDeleted == false)
                 .Where(a => a.ArtistId == artistId)
-                .Select(a => new AlbumSelectViewModel()
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    ArtistId = a.ArtistId,
-                    Description = a.Description,
-                    ImageUrl = a.ImageUrl
-                })
+                .To<AlbumSelectViewModel>()
                 .ToArrayAsync();
 
             return allArtistAlbums;

@@ -79,7 +79,7 @@ namespace RedeyeMusic.Services.Data
                         Duration = ps.Song.Duration,
                         ImageUrl = ps.Song.ImageUrl,
                         ListenCount = ps.Song.ListenCount,
-                        Lyrics = ps.Song.Lyrics,
+                        Lyrics = ps.Song.Lyrics!,
                         ArtistName = ps.Song.Artist.Name,
                         GenreName = ps.Song.Genre.Name,
                         Mp3FilePath = ps.Song.Mp3FilePath
@@ -104,7 +104,7 @@ namespace RedeyeMusic.Services.Data
                 Duration = song.Duration,
                 ImageUrl = song.ImageUrl,
                 ListenCount = song.ListenCount,
-                Lyrics = song.Lyrics,
+                Lyrics = song.Lyrics!,
                 ArtistName = song.Artist.Name,
                 GenreName = song.Genre.Name,
                 Mp3FilePath = song.Mp3FilePath

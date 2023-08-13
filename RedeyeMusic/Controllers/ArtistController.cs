@@ -60,7 +60,7 @@ namespace RedeyeMusic.Web.Controllers
                 await this.artistService.CreateAsync(userId, artistModel);
             }
 
-            catch (Exception _)
+            catch (Exception)
             {
                 this.ModelState.AddModelError(string.Empty, "Unexpected error occurrer while trying to add your new Song! Please try again later!");
             }
