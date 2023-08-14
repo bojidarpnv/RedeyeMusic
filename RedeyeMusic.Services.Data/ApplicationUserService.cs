@@ -18,9 +18,33 @@ namespace RedeyeMusic.Services.Data
             this.dbContext = dbContext;
         }
 
-        public Task<IEnumerable<UserViewModel>> GetAllAsync()
+        public async Task<IEnumerable<UserViewModel>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            List<UserViewModel> allUsers = await this.dbContext
+                .Users
+                .Select(u => new UserViewModel()
+                {
+                    Id = u.Id.ToString(),
+                    Email = u.Email,
+                    FullName = u.FirstName + " " + u.LastName,
+                })
+                .ToListAsync();
+
+            foreach (UserViewModel user in allUsers)
+            {
+                Artist? artist = await this.dbContext
+                    .Artists
+                    .FirstOrDefaultAsync(a => a.ApplicationUserId.ToString() == user.Id);
+                if (artist != null)
+                {
+                    user.ArtistName = artist.Name;
+                }
+                else
+                {
+                    user.ArtistName = string.Empty;
+                }
+            }
+            return allUsers;
         }
 
         public async Task<string> GetFullNameByEmailAsync(string email)
