@@ -212,6 +212,14 @@ namespace RedeyeMusic.Services.Data
                 .Albums
                 .Where(a => a.IsDeleted == false)
                 .FirstAsync(a => a.Id == albumId);
+
+            List<Song> songsFromAlbum = await this.dbContext.Songs
+                .Where(s => s.AlbumId == albumId && s.IsDeleted == false)
+                .ToListAsync();
+            foreach (var song in songsFromAlbum)
+            {
+                song.IsDeleted = true;
+            }
             album.IsDeleted = true;
             await this.dbContext.SaveChangesAsync();
         }

@@ -11,7 +11,8 @@
             @foreach (var playlist in Model.Playlists)
             {
                 <label class="custom-checkbox-label">
-                    <input type="checkbox" name="playlist-checkbox" value="@playlist.Id" @(playlist.Songs.Any(s => s.Id == Model.SongModel.Id) ? "checked" : "")>
+                    <input type="checkbox" name="playlist-checkbox" value="@playlist.Id" data-preselected="True" @(playlist.Songs.Any(s => s.Id == Model.SongModel.Id) ? "checked" : "")>
+
                     <span class="custom-checkbox"></span>
                     @playlist.Name
                 </label>
@@ -30,5 +31,13 @@
         </div>
     </div>
 </div>
-
+@*<script>
+    function toggleCheckbox(checkbox) {
+        if (checkbox.checked) {
+            checkbox.setAttribute("checked","");
+        } else {
+            checkbox.removeAttribute("checked");
+        }
+    }
+</script>*@
 

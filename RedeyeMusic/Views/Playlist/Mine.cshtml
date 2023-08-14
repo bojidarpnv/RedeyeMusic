@@ -1,0 +1,39 @@
+﻿@model IEnumerable<PlaylistViewModel>
+@{
+    ViewBag.Title = "My Playlists";
+    
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th><label>Name</label></th>
+            
+            <th><label>Number of Songs</label></th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var playlist in Model)
+        {
+            <tr>
+                <td><label>@playlist.Name</label></td>
+                <td><label>@playlist.Songs.Where(s=>s.IsDeleted==false).Count()</label></td>
+                <td><a asp-action="Details" asp-controller="Playlist" asp-route-id="@playlist.Id" class="btn btn-details">Details</a></td>
+                <td>
+                    <form asp-action="Delete" asp-controller="Playlist" method="post">
+                        <input type="hidden" name="playlistId" value="@playlist.Id" />
+                         <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}

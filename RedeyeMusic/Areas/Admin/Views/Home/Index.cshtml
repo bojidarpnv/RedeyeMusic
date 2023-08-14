@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Admin Panel";
 }
 <div class="mt-4 p-5 bg-light text-center">
     <h2 class="display-4">Hello, Admin!</h2>
@@ -18,13 +18,14 @@
     <a asp-area="" asp-controller="Song" asp-action="Add"
        class="btn btn-primary btn-lg">Add Song</a>
     <span> | </span>
-    <a asp-area="Admin" asp-controller="Genre" asp-action="Add"
-       class="btn btn-primary btn-lg">Add Genre</a>
+    
     <a asp-area="Admin" asp-controller="Song" asp-action="Mine"
        class="btn btn-primary btn-lg">My Songs</a>
     <span> | </span>
     <a asp-area="Admin" asp-controller="Playlist" asp-action="All"
        class="btn btn-primary btn-lg">All Playlists</a>
+    <a asp-area="Admin" asp-controller="Genre" asp-action="All"
+       class="btn btn-primary btn-lg">All Genres</a>
     <a asp-area="Admin" asp-controller="User" asp-action="All"
        class="btn btn-primary btn-lg">All Users</a>
     

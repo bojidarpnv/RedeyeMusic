@@ -59,7 +59,7 @@ namespace RedeyeMusic.Data.Configurations
             users.Add(GuestUser);
             ArtistUser = new ApplicationUser()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("A7B1ECAD-7870-4D98-85DD-4E2BB4952FE2"),
                 Email = "artist@redeye.com",
                 NormalizedEmail = "ARTIST@REDEYE.COM",
                 UserName = "artist@redeye.com",

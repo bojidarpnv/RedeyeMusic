@@ -4,15 +4,20 @@ using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.ViewModels.Home;
 using RedeyeMusic.Web.ViewModels.Playlist;
+using RedeyeMusic.Web.ViewModels.Song;
 
 namespace RedeyeMusic.Services.Data
 {
     public class PlaylistService : IPlaylistService
     {
         private readonly RedeyeMusicDbContext dbContext;
-        public PlaylistService(RedeyeMusicDbContext dbContext)
+        private readonly IArtistService artistService;
+        private readonly IAlbumService albumService;
+        public PlaylistService(RedeyeMusicDbContext dbContext, IArtistService artistService, IAlbumService albumService)
         {
             this.dbContext = dbContext;
+            this.artistService = artistService;
+            this.albumService = albumService;
         }
 
         public async Task AddSongToPlaylistAsync(int songId, int playlistId)
@@ -57,6 +62,21 @@ namespace RedeyeMusic.Services.Data
             return playlist.Id;
         }
 
+        public async Task DeletePlaylistWithIdAsync(int playlistId)
+        {
+            Playlist playlist = await this.dbContext
+                .Playlists
+                .FirstAsync(p => p.Id == playlistId && p.IsDeleted == false);
+            playlist.IsDeleted = true;
+            var playlistSong = await this.dbContext.PlaylistsSongs
+                 .FirstOrDefaultAsync(p => p.PlaylistId == playlist.Id);
+            if (playlistSong != null)
+            {
+                this.dbContext.PlaylistsSongs.Remove(playlistSong);
+            }
+            await this.dbContext.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<PlaylistViewModel>> GetAllPlaylistsByUserIdAsync(string userId)
         {
             IEnumerable<Song> songs = await this.dbContext
@@ -67,12 +87,14 @@ namespace RedeyeMusic.Services.Data
 
             IEnumerable<PlaylistViewModel> playlists = await this.dbContext
                 .Playlists
+                .Include(p => p.PlaylistsSongs)
+                .ThenInclude(ps => ps.Song)
                 .Where(p => p.IsDeleted == false && p.ApplicationUserId == Guid.Parse(userId))
                 .Select(p => new PlaylistViewModel()
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Songs = p.PlaylistsSongs.Select(ps => new IndexViewModel()
+                    Songs = p.PlaylistsSongs.Select(ps => new SongDetailsOnPlaylistViewModel()
                     {
                         Id = ps.Song.Id,
                         Title = ps.Song.Title,
@@ -82,12 +104,78 @@ namespace RedeyeMusic.Services.Data
                         Lyrics = ps.Song.Lyrics!,
                         ArtistName = ps.Song.Artist.Name,
                         GenreName = ps.Song.Genre.Name,
-                        Mp3FilePath = ps.Song.Mp3FilePath
-
+                        Mp3FilePath = ps.Song.Mp3FilePath,
+                        IsDeleted = ps.Song.IsDeleted,
                     })
+
                 })
                 .ToArrayAsync();
             return playlists;
+
+        }
+
+        public async Task<PlaylistViewModel> GetPlaylistByIdAsync(int playlistId)
+        {
+            Playlist playlist = await this.dbContext
+                .Playlists
+                .Where(p => p.IsDeleted == false)
+                .Include(ps => ps.PlaylistsSongs)
+                .ThenInclude(s => s.Song)
+                .ThenInclude(ss => ss.Genre)
+                .Include(p => p.PlaylistsSongs)
+                .ThenInclude(s => s.Song)
+                .ThenInclude(ss => ss.Artist)
+                .Include(p => p.PlaylistsSongs)
+                .ThenInclude(s => s.Song)
+                .ThenInclude(ss => ss.Album)
+                .FirstAsync(p => p.Id == playlistId);
+            List<SongDetailsOnPlaylistViewModel> songModels = new List<SongDetailsOnPlaylistViewModel>();
+            PlaylistViewModel viewModel;
+            if (playlist.PlaylistsSongs.Any())
+            {
+                IEnumerable<Song> songs = playlist.PlaylistsSongs
+                .Where(p => p.PlaylistId == playlistId && p.Song.IsDeleted == false)
+                .Select(s => s.Song)
+                .ToList();
+                foreach (Song song in songs)
+                {
+                    SongDetailsOnPlaylistViewModel songModel = new SongDetailsOnPlaylistViewModel
+                    {
+                        Id = song.Id,
+                        Title = song.Title,
+                        Duration = song.Duration,
+                        ImageUrl = song.ImageUrl,
+                        ListenCount = song.ListenCount,
+                        Lyrics = song.Lyrics!,
+                        ArtistName = song.Artist.Name,
+                        GenreName = song.Genre.Name,
+                        Mp3FilePath = song.Mp3FilePath
+
+                    };
+                    songModels.Add(songModel);
+                }
+            }
+            if (songModels.Any())
+            {
+                viewModel = new PlaylistViewModel
+                {
+                    Id = playlist.Id,
+                    Name = playlist.Name,
+                    Songs = songModels
+                };
+            }
+            else
+            {
+                viewModel = new PlaylistViewModel
+                {
+                    Id = playlist.Id,
+                    Name = playlist.Name,
+                    Songs = new List<SongDetailsOnPlaylistViewModel>()
+                };
+            }
+
+
+            return viewModel;
 
         }
 
@@ -113,7 +201,26 @@ namespace RedeyeMusic.Services.Data
             return songModel;
         }
 
-        public async Task UpdatePlaylists(int songId, List<int> selectedPlaylistsIds)
+        public async Task<bool> IsUserOwnerOfPlaylist(int playlistId, string userId)
+        {
+            Playlist playlist = await this.dbContext
+                .Playlists
+                .FirstAsync(p => p.IsDeleted == false && p.Id == playlistId);
+            return playlist.ApplicationUserId.ToString() == userId;
+        }
+
+        public async Task RemoveSongFromPlaylist(int playlistId, int songId)
+        {
+            PlaylistsSongs playlistSong = await this.dbContext
+                .PlaylistsSongs
+                .FirstAsync(ps => ps.PlaylistId == playlistId && ps.SongId == songId);
+
+            this.dbContext.PlaylistsSongs.Remove(playlistSong);
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdatePlaylists(int songId, List<int> selectedPlaylistsIds, string userId)
         {
             Song song = await this.dbContext
                 .Songs
@@ -122,7 +229,7 @@ namespace RedeyeMusic.Services.Data
 
 
             IEnumerable<Playlist> playlists = await this.dbContext.Playlists
-                .Where(p => p.IsDeleted == false)
+                .Where(p => p.IsDeleted == false && p.ApplicationUserId.ToString() == userId)
                 .Include(p => p.PlaylistsSongs)
                 .ToListAsync();
 
@@ -142,11 +249,14 @@ namespace RedeyeMusic.Services.Data
                 }
                 else
                 {
-                    var playlistsSongToRemove = playlist.PlaylistsSongs.FirstOrDefault(ps => ps.SongId == songId);
-                    if (playlistsSongToRemove != null)
                     {
-                        playlist.PlaylistsSongs.Remove(playlistsSongToRemove);
+                        var playlistsSongToRemove = playlist.PlaylistsSongs.FirstOrDefault(ps => ps.SongId == songId && ps.PlaylistId == playlist.Id);
+                        if (playlistsSongToRemove != null)
+                        {
+                            playlist.PlaylistsSongs.Remove(playlistsSongToRemove);
+                        }
                     }
+
                 }
             }
 

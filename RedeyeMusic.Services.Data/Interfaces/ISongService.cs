@@ -25,5 +25,6 @@ namespace RedeyeMusic.Services.Data.Interfaces
         Task<List<SelectListItem>> GetSongsDropdownItemsAsync(int artistId);
         Task<ListenCountServiceModel> GetListenCountAsync(int songId);
 
+
     }
 }

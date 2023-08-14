@@ -18,6 +18,7 @@ namespace RedeyeMusic.Data
         public DbSet<Genre> Genres { get; set; } = null!;
         public DbSet<Album> Albums { get; set; } = null!;
         public DbSet<Artist> Artists { get; set; } = null!;
+        public DbSet<PlaylistsSongs> PlaylistsSongs { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

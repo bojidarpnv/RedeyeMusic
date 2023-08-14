@@ -2,6 +2,7 @@
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.Infrastrucutre.Extensions;
 using RedeyeMusic.Web.ViewModels.Playlist;
+using static RedeyeMusic.Common.NotificationMessagesConstants;
 
 namespace RedeyeMusic.Web.Controllers
 {
@@ -54,7 +55,7 @@ namespace RedeyeMusic.Web.Controllers
             {
                 try
                 {
-                    await this.playlistService.UpdatePlaylists(songId, selectedPlaylistIds);
+                    await this.playlistService.UpdatePlaylists(songId, selectedPlaylistIds, this.User.GetId());
                     return Json(new { success = true });
                 }
                 catch (Exception)
@@ -66,6 +67,53 @@ namespace RedeyeMusic.Web.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Mine()
+        {
+            string userId = this.User.GetId();
+            IEnumerable<PlaylistViewModel> playlists = await this.playlistService.GetAllPlaylistsByUserIdAsync(userId);
+            return View(playlists);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            bool isOwner = await this.playlistService.IsUserOwnerOfPlaylist(id, this.User.GetId());
+            if (!isOwner && !this.User.IsAdmin())
+            {
+                TempData[ErrorMessage] = "You are not the owner of this playlist";
+                return RedirectToAction("Mine", "Playlist");
+            }
+            PlaylistViewModel playlist = await this.playlistService.GetPlaylistByIdAsync(id);
+            return View(playlist);
+        }
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromPlaylist(int playlistId, int songId)
+        {
+            bool isOwner = await this.playlistService.IsUserOwnerOfPlaylist(playlistId, this.User.GetId());
+            if (!isOwner && !this.User.IsAdmin())
+            {
+                TempData[ErrorMessage] = "You are not the owner of this playlist";
+                return RedirectToAction("Mine", "Playlist");
+            }
+            await this.playlistService.RemoveSongFromPlaylist(playlistId, songId);
+            TempData[SuccessMessage] = "Successfully removed from playlist!";
+            return RedirectToAction("Details", "Playlist", new { id = playlistId });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int playlistId)
+        {
+            bool isOwner = await this.playlistService.IsUserOwnerOfPlaylist(playlistId, this.User.GetId());
+            if (!isOwner && !this.User.IsAdmin())
+            {
+                TempData[ErrorMessage] = "You are not the owner of this playlist";
+                return RedirectToAction("Mine", "Playlist");
+            }
+            await this.playlistService.DeletePlaylistWithIdAsync(playlistId);
+            this.TempData[SuccessMessage] = "Successfully deleted playlist!";
+            return RedirectToAction("Mine", "Playlist");
+
         }
     }
 }

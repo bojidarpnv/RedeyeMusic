@@ -1,0 +1,78 @@
+﻿@model PlaylistViewModel
+
+@{
+    ViewBag.Title = "Playlist Details";
+}
+
+<h2>@Model.Name</h2>
+<hr />
+@if (!Model.Songs.Any())
+{
+    <div class="mt-4 p-5 bg-light">
+        <p class="lead">
+            There are no songs in this playlist, why dont you add Some?
+        </p>
+        <hr class="my-4">
+        <p class="lead">
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg"
+                   role="button">All Songs</a>
+            }
+        </p>
+    </div>
+}
+    <div class="homeview text-white pt-2">
+    <ul class="homeview-nav nav m-4 nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="text-white nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Songs in Playlist: @Model.Name</button>
+        </li>
+        
+    </ul>
+    <ul>
+        @foreach (var song in Model.Songs)
+        {
+            int seconds = song.Duration % 60;
+            int minutes = song.Duration / 60;
+            var span = new TimeSpan(0, 0, seconds);
+            var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
+            string songDuration = minutes + "+" + seconds;
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
+                        <div class="col d-flex">
+                            <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
+                            <div class="white ms-1">
+                                <div class="white">@song.Title</div>
+                                <div class="smallText"><small class="white">@song.Lyrics</small></div>
+                            </div>
+                        </div>
+                        <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
+                        <small class="white col-2">
+                            <i class="bi bi-ear"></i>
+                            <span class="listen-count-placeholder"></span>
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row justify-content-center pt-3 mb-2">
+                        <div class="col me-lg-5">
+                            <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
+                            <form asp-action="RemoveFromPlaylist" asp-controller="Playlist" method="post">
+                                <input type="hidden" name="playlistId" value="@Model.Id" />
+                                <input type="hidden" name="songId" value="@song.Id" />
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                          </div>
+                      </div>
+                </div>
+            </div>
+        }
+    </ul>
+    </div>
+
+<div class="">
+    <a asp-action="Mine" asp-controller="Playlist" class="btn btn-danger m-4">Back To Mine</a>
+    </div>
+

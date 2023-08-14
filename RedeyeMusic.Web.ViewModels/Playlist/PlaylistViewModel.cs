@@ -1,4 +1,4 @@
-﻿using RedeyeMusic.Web.ViewModels.Home;
+﻿using RedeyeMusic.Web.ViewModels.Song;
 
 namespace RedeyeMusic.Web.ViewModels.Playlist
 {
@@ -6,10 +6,10 @@ namespace RedeyeMusic.Web.ViewModels.Playlist
     {
         public PlaylistViewModel()
         {
-            this.Songs = new HashSet<IndexViewModel>();
+            this.Songs = new HashSet<SongDetailsOnPlaylistViewModel>();
         }
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public virtual IEnumerable<IndexViewModel> Songs { get; set; } = null!;
+        public virtual IEnumerable<SongDetailsOnPlaylistViewModel> Songs { get; set; } = null!;
     }
 }
