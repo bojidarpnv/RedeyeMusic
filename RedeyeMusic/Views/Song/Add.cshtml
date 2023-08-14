@@ -10,6 +10,7 @@
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form method="post" enctype="multipart/form-data" asp-action="Add" asp-controller="Song">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label asp-for="Title"></label>
                 <input asp-for="Title" class="form-control" placeholder="Song Title">
@@ -95,7 +96,7 @@
             } else {
                 $("#addnew").hide();
 
-                if (selectedAlbumId !== "-2") {
+                if (selectedAlbumId !== "-1") {
                     var selectedAlbumName = $(this).find(":selected").text();
                     var selectedAlbumDescription = $(this).find(":selected").data("description");
                     var selectedAlbumImageUrl = $(this).find(":selected").data("imageurl");
@@ -112,26 +113,34 @@
         $("#addSongButton").click(function (e) {
             e.preventDefault();
             var selectedAlbumId = $("#albumSelect").val();
-
+            var antiForgeryToken = $("input[name='__RequestVerificationToken']").val();
             if (selectedAlbumId === "-1") {
                 var albumName = $("#albumNameInput").val();
                 var albumDescription = $("#albumDescriptionInput").val();
                 var albumImageUrl = $("#albumImageUrlInput").val();
-
-                if (!albumName || !albumDescription || albumDescription.length < 10) {
-                    toastr.error("Album Name, Album Description, and Album URL are required.");
-                    return;
-                }
                 if (albumDescription.length < 10) {
                     toastr.error("Album Description must be at least 10 characters.");
                     return;
                 }
+                if (!albumName || !albumDescription) {
+                    toastr.error("Album Name, Album Description, and Album URL are required.");
+                    return;
+                }
+                
 
                 // Perform an ajax request to create the new album
                 $.ajax({
                     url: "/Album/Create",
                     method: "POST",
-                    data: { Name: albumName, Description: albumDescription, ImageUrl: albumImageUrl },
+                    data: { 
+                        Name: albumName,
+                        Description: albumDescription,
+                        ImageUrl: albumImageUrl 
+                    },
+                    headers: {
+                        // Include the anti-forgery token in the request headers
+                        RequestVerificationToken: antiForgeryToken
+                    },
                     success: function (response) {
                         $("#albumSelect").append($("<option></option>").val(response.albumId).text(albumName).attr("selected", "selected"));
 
@@ -139,13 +148,15 @@
                         $("#AlbumDescription").val(albumDescription);
                         $("#AlbumImageUrl").val(albumImageUrl);
 
-                        //$("#AlbumId").val(response.albumId);
+                        $("#AlbumId").val(response.albumId);
 
                         // Submit entire form to add the song with the newly created album
                         $("form").submit();
                     },
-                    error: function (xhr, status, error) {
+                    error: function (error) {
                         console.error("Error creating new album:", error);
+                        //toastr.error("Error creating new album")
+                        //location.reload();
                     }
                 });
             } else if (selectedAlbumId !== "-2") {

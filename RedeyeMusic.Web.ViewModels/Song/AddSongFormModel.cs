@@ -17,7 +17,7 @@ namespace RedeyeMusic.Web.ViewModels.Song
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength, ErrorMessage = "Title Length must be between {2} and {1} characters")]
         public string Title { get; set; } = null!;
         [Required]
-        [StringLength(LyricsMaxLength, MinimumLength = LyricsMinLength)]
+        [StringLength(LyricsMaxLength, MinimumLength = 1)]
         public string Lyrics { get; set; } = null!;
         //[Required]
         //[StringLength(NameMaxLength, MinimumLength = NameMinLength)]

@@ -30,22 +30,22 @@ namespace RedeyeMusic.Web.Controllers
             this.env = env;
         }
 
-        [AllowAnonymous]
-        public async Task<IActionResult> All()
-        {
-            IEnumerable<IndexViewModel> viewModel = await this.songService.GetAll();
-            return View(viewModel);
-        }
+
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            bool isAgent = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId());
-            int? artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            bool isArtist = await this.artistService.ArtistExistsByUserIdAsync(this.User.GetId());
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(this.User.GetId());
+            bool doesArtistHaveAnySongs = await this.artistService.DoesArtistHaveAnySongsAsync(artistId);
+            if (!doesArtistHaveAnySongs)
+            {
+                return RedirectToAction("AddFirstSong", "Song");
+            }
             if (artistId == null)
             {
                 throw new InvalidOperationException();
             }
-            if (!isAgent)
+            if (!isArtist)
             {
                 TempData[ErrorMessage] = "You must become an artist in order to add Songs";
                 return RedirectToAction("Become", "Artist");
@@ -63,11 +63,7 @@ namespace RedeyeMusic.Web.Controllers
 
             string userId = this.User.GetId();
             int artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
-            bool doesArtistHaveAnySongs = await this.artistService.DoesArtistHaveAnySongsAsync(artistId);
-            if (!doesArtistHaveAnySongs)
-            {
-                RedirectToAction("AddFirstSong", "Song");
-            }
+
             songModel.Genres = await this.genreService.SelectGenresAsync();
             songModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync(artistId);
             //if albumId is 0 it is because of being an already existing album, getting the id here from the Name and Description, cannot properly pass Id with JS;
@@ -177,7 +173,7 @@ namespace RedeyeMusic.Web.Controllers
 
                     int songId = await this.songService.AddFirstSongAsync(songModel, (int)artistId!, fullFilePath);
                     TempData[SuccessMessage] = "Successfully added your first song!";
-                    return RedirectToAction("Details", "Song", new { id = songId });
+                    return RedirectToAction("Mine", "Song");
                 }
                 catch (Exception)
                 {

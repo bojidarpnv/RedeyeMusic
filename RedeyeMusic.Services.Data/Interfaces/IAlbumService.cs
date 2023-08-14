@@ -6,7 +6,7 @@ namespace RedeyeMusic.Services.Data.Interfaces
     public interface IAlbumService
     {
         Task<ICollection<AlbumSelectViewModel>> SelectAlbumsByArtistIdAsync(int artistId);
-        Task AddAlbum(AlbumFormModel albumViewModel, int artistId);
+        Task<int> AddAlbum(AlbumFormModel albumViewModel, int artistId);
 
         Task<int> GetAlbumId(AddSongFormModel songModel);
         Task<AddSongFormModel> GetAlbumDescriptionAndNameAndUrlById(int albumId, AddSongFormModel songModel);

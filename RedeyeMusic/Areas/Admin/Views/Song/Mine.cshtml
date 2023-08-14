@@ -65,10 +65,10 @@
                     <div class="col-md-3">
                         <div class="row justify-content-center pt-3 mb-2">
                             <div class="col-auto">
-                                <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-details">Details</a>
+                                <a asp-area="" asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-details">Details</a>
                             </div>
                             <div class="col-auto">
-                                <a asp-action="Edit" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-edit">Edit</a>
+                                <a asp-area="" asp-action="Edit" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-edit">Edit</a>
                             </div>
                             <div class="col-auto">
                                 <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-song-id="@song.Id">Delete</a>
@@ -139,7 +139,7 @@
 
 
                 var songId = $("#songIdInput").val();
-
+                var antiForgeryToken = $("input[name='__RequestVerificationToken']").val();
 
                 var formData = new FormData();
                 formData.append("id", songId);
@@ -150,7 +150,11 @@
                     method: "POST",
                     data: formData,
                     processData: false,
-                    contentType: false
+                    contentType: false,
+                    headers: {
+                        // Include the anti-forgery token in the request headers
+                        RequestVerificationToken: antiForgeryToken
+                    }
                 }).done(function () {
 
                     window.location.href = "/Song/Mine";

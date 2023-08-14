@@ -18,7 +18,7 @@ namespace RedeyeMusic.Services.Data
             this.dbContext = dbContext;
         }
 
-        public async Task AddAlbum(AlbumFormModel albumViewModel, int artistId)
+        public async Task<int> AddAlbum(AlbumFormModel albumViewModel, int artistId)
         {
             Album album = new Album()
             {
@@ -29,6 +29,7 @@ namespace RedeyeMusic.Services.Data
             };
             await this.dbContext.Albums.AddAsync(album);
             await this.dbContext.SaveChangesAsync();
+            return album.Id;
         }
 
         public async Task<AddSongFormModel> GetAlbumDescriptionAndNameAndUrlById(int albumId, AddSongFormModel songModel)

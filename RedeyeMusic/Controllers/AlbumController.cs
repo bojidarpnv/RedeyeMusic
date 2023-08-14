@@ -28,19 +28,19 @@ namespace RedeyeMusic.Web.Controllers
         public async Task<IActionResult> Create(AlbumFormModel viewModel)
         {
             string userId = this.User.GetId();
-            int? artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
+            int artistId = await this.artistService.GetArtistIdByUserIdAsync(userId);
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
             if (artistId != 0 || this.User.IsAdmin())
             {
                 try
                 {
-                    await this.albumService.AddAlbum(viewModel, (int)artistId);
+                    int albumId = await this.albumService.AddAlbum(viewModel, (int)artistId);
                     this.TempData[SuccessMessage] = "Successfully added album";
-                    return Ok(new { albumId = viewModel.Id });
+                    return Ok(new { albumId = albumId });
                 }
                 catch (Exception)
                 {

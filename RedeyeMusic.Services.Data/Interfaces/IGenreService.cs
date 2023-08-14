@@ -4,7 +4,7 @@ namespace RedeyeMusic.Services.Data.Interfaces
 {
     public interface IGenreService
     {
-        public Task<ICollection<GenreSelectViewModel>> SelectGenresAsync();
-        public Task CreateGenreAsync(string genreName);
+        Task<ICollection<GenreSelectViewModel>> SelectGenresAsync();
+        Task CreateGenreAsync(string genreName);
     }
 }

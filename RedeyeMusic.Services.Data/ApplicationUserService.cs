@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
+using RedeyeMusic.Web.ViewModels.User;
 
 namespace RedeyeMusic.Services.Data
 {
@@ -15,6 +16,11 @@ namespace RedeyeMusic.Services.Data
         {
             this.userManager = userManager;
             this.dbContext = dbContext;
+        }
+
+        public Task<IEnumerable<UserViewModel>> GetAllAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<string> GetFullNameByEmailAsync(string email)
@@ -30,6 +36,19 @@ namespace RedeyeMusic.Services.Data
 
             return sanitizer.Sanitize(user.FirstName + " " + user.LastName);
 
+        }
+
+        public async Task<string> GetFullNameByIdAsync(string userId)
+        {
+            var sanitizer = new HtmlSanitizer();
+            ApplicationUser? user = await this.dbContext
+            .Users
+            .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+            if (user == null)
+            {
+                return string.Empty;
+            }
+            return sanitizer.Sanitize(user.FirstName + " " + user.LastName);
         }
 
         public async Task<bool> ValidatePasswordAsync(string userId, string password)

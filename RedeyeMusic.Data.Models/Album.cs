@@ -22,7 +22,8 @@ namespace RedeyeMusic.Data.Models
         public string Description { get; set; } = null!;
 
         //Shouldnt be nullable but is for now for testing purposes!
-        public string? ImageUrl { get; set; }
+        [Required]
+        public string ImageUrl { get; set; }
 
         [ForeignKey(nameof(Artist))]
         public int ArtistId { get; set; }

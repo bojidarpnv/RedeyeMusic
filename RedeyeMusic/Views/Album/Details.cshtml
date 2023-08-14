@@ -23,6 +23,7 @@
                 {
                     <a asp-action="Edit" asp-controller="Album" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
                     <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-album-id="@Model.Id">Delete</a>
+                    @Html.AntiForgeryToken()
                 }
                 <a asp-action="Mine" asp-controller="Album" class="btn btn-secondary">Back to List</a>
             </div>
@@ -75,7 +76,8 @@
 
                 var albumId = $("#albumIdInput").val();
 
-
+                var antiForgeryToken = $("input[name='__RequestVerificationToken']").val();
+                
                 var formData = new FormData();
                 formData.append("id", albumId);
                 formData.append("password", password);
@@ -85,7 +87,11 @@
                     method: "POST",
                     data: formData,
                     processData: false,
-                    contentType: false
+                    contentType: false,
+                    headers: {
+                        // Include the anti-forgery token in the request headers
+                        RequestVerificationToken: antiForgeryToken
+                    }
                 }).done(function () {
 
                     window.location.href = "/Album/Mine";

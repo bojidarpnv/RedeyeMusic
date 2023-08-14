@@ -69,41 +69,32 @@
                     <div class="col-md-3">
                         <div class="row justify-content-center pt-3 mb-2">
                             <div class="col me-lg-5">
-                                <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
+                                <a asp-area="" asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
                                 @if (User.Identity?.IsAuthenticated ?? false)
                                 {
                                     if (!isArtist || this.User.IsAdmin())
                                     {
-                                        <div class="col-md-3">
-                                            <div class="row justify-content-center pt-3 mb-2">
-                                                <div class="col-auto">
-                                                    <a asp-area="" asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-details">Details</a>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <a asp-area="" asp-action="Edit" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-edit">Edit</a>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <a class="btn btn-danger delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-song-id="@song.Id">Delete</a>
-                                                </div>
-                                                <div>
-                                                    <button asp-area ="" asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
+                                        <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
                                     }
                                 }
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
-                    @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
+                if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    if (!isArtist)
+                    {
+                        <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
+                            @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
                 {
                 SongModel = song,
                 Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
                 })
-                </div>
+                        </div>
+                    }
+                }
+
             }
         </div>
 
@@ -136,7 +127,7 @@
                     <div class="col-md-3">
                         <div class="row justify-content-center pt-3 mb-2">
                             <div class="col me-lg-5">
-                                <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
+                                <a asp-area="" asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
                                 @if (User.Identity?.IsAuthenticated ?? false)
                                 {
                                     if (!isArtist || this.User.IsAdmin())
@@ -148,13 +139,21 @@
                         </div>
                     </div>
                 </div>
-                <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
-                    @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
+                if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    if (!isArtist)
+                    {
+                        <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
+                            @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
                 {
                 SongModel = song,
                 Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
                 })
-                </div>
+                        </div>
+                    }
+                }
+
+
             }
         </div>
     </div>

@@ -24,6 +24,7 @@ namespace RedeyeMusic.Data.Configurations
                 Id = 1,
                 Name = "FirstAlbum",
                 ArtistId = 1,
+                ImageUrl = "https://images.nightcafe.studio/jobs/nrOcbGDvjDgIZPO7rbA6/nrOcbGDvjDgIZPO7rbA6.jpg?tr=w-1600,c-at_max",
                 //GenreId = 1,
                 Description = "Mauris suscipit, nunc sit amet sollicitudin varius, nisl eros consectetur diam, nec.",
             };
@@ -33,6 +34,7 @@ namespace RedeyeMusic.Data.Configurations
                 Id = 2,
                 Name = "SecondAlbum",
                 ArtistId = 1,
+                ImageUrl = "https://images.nightcafe.studio/jobs/nrOcbGDvjDgIZPO7rbA6/nrOcbGDvjDgIZPO7rbA6.jpg?tr=w-1600,c-at_max",
                 //GenreId = 2,
                 Description = "Nunc vitae imperdiet felis. Integer ac finibus turpis. Praesent ipsum arcu, placerat.",
             };

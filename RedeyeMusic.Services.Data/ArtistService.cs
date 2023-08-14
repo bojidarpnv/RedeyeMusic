@@ -57,7 +57,7 @@ namespace RedeyeMusic.Services.Data
         }
         public async Task<bool> DoesArtistHaveAnySongsAsync(int artistId)
         {
-            return await this.dbContext.Songs.AnyAsync(a => a.Id == artistId);
+            return await this.dbContext.Songs.AnyAsync(s => s.ArtistId == artistId);
         }
 
         public async Task<bool> IsArtistWithIdOwnerOfSongWithIdAsync(int artistId, int songId)
