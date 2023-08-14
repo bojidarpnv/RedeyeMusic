@@ -57,7 +57,7 @@ namespace RedeyeMusic.Services.Data
             return playlist.Id;
         }
 
-        public async Task<IEnumerable<PlaylistViewModel>> GetAllPlaylistsAsync()
+        public async Task<IEnumerable<PlaylistViewModel>> GetAllPlaylistsByUserIdAsync(string userId)
         {
             IEnumerable<Song> songs = await this.dbContext
                 .Songs
@@ -67,7 +67,7 @@ namespace RedeyeMusic.Services.Data
 
             IEnumerable<PlaylistViewModel> playlists = await this.dbContext
                 .Playlists
-                .Where(p => p.IsDeleted == false)
+                .Where(p => p.IsDeleted == false && p.ApplicationUserId == Guid.Parse(userId))
                 .Select(p => new PlaylistViewModel()
                 {
                     Id = p.Id,
@@ -87,8 +87,8 @@ namespace RedeyeMusic.Services.Data
                     })
                 })
                 .ToArrayAsync();
-
             return playlists;
+
         }
 
         public async Task<IndexViewModel> GetSongToAddToPlaylistByIdAsync(int songId)

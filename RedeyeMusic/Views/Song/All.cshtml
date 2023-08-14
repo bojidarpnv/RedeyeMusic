@@ -47,7 +47,7 @@
                 int seconds = song.Duration % 60;
                 int minutes = song.Duration / 60;
                 var span = new TimeSpan(0, 0, seconds);
-                var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes,span.Seconds);
+                var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
                 string songDuration = minutes + "+" + seconds;
                 <div class="row">
                     <div class="col-md-6">
@@ -72,29 +72,22 @@
                                 <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
                                 @if (User.Identity?.IsAuthenticated ?? false)
                                 {
-                                    if (!isArtist || this.User.IsAdmin())
+                                    if (!isArtist)
                                     {
-                                    <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
+                                        <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
                                     }
                                 }
                             </div>
-                          </div>
+                        </div>
                     </div>
                 </div>
-                if (User.Identity?.IsAuthenticated ?? false)
-                {
-                    if (!isArtist)
-                    {
-                        <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
-                            @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
+                <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
+                    @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
                 {
                 SongModel = song,
                 Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
                 })
-                        </div>
-                    }
-                }
-               
+                </div>
             }
         </div>
 
@@ -130,7 +123,7 @@
                                 <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
                                 @if (User.Identity?.IsAuthenticated ?? false)
                                 {
-                                    if (!isArtist || this.User.IsAdmin())
+                                    if (!isArtist)
                                     {
                                         <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
                                     }
@@ -139,26 +132,18 @@
                         </div>
                     </div>
                 </div>
-                if (User.Identity?.IsAuthenticated ?? false)
-                {
-                    if (!isArtist)
-                    {
-                        <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
-                            @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
+                <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
+                    @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
                 {
                 SongModel = song,
                 Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
                 })
-                        </div>
-                    }
-                }
-                
-                
+                </div>
             }
         </div>
     </div>
 
-    
+
 
 </div>
 @section Scripts {
@@ -173,4 +158,3 @@
 
 
 
-    

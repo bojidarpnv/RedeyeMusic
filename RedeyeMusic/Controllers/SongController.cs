@@ -33,7 +33,8 @@ namespace RedeyeMusic.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> All()
         {
-            return View();
+            IEnumerable<IndexViewModel> viewModel = await this.songService.GetAll();
+            return View(viewModel);
         }
         [HttpGet]
         public async Task<IActionResult> Add()

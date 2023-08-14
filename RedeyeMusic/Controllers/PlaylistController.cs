@@ -23,7 +23,7 @@ namespace RedeyeMusic.Web.Controllers
             AddToPlaylistViewModel model = new AddToPlaylistViewModel
             {
                 SongModel = await this.playlistService.GetSongToAddToPlaylistByIdAsync(songId),
-                Playlists = await this.playlistService.GetAllPlaylistsAsync()
+                Playlists = await this.playlistService.GetAllPlaylistsByUserIdAsync(this.User.GetId())
             };
 
             return PartialView("_AddToPlaylistModal", model);
