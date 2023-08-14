@@ -60,7 +60,7 @@ namespace RedeyeMusic.Web.Infrastructure.Middlewares
 
         public static bool CheckIfUserIsOnline(string userId)
         {
-            bool valueTaken = AllKeys.TryGetValue(userId, out bool success);
+            bool valueTaken = AllKeys.TryGetValue(userId.ToLower(), out bool success);
             return success && valueTaken;
         }
         private void RemoveKeyWhenExpired(object key, object value, EvictionReason reason, object state)

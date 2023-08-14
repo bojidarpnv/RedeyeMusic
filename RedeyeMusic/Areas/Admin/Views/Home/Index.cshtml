@@ -10,7 +10,7 @@
     </p>
     <p class="lead mt-1">
         You can also see <b>all users and artists</b> and <b>all playlists</b> in the
-        system.
+        system, as well as Add New <b>Genres</b>.
     </p>
     <hr class="my-4">
     <a asp-area="Admin" asp-controller="Song" asp-action="All"
@@ -18,6 +18,8 @@
     <a asp-area="" asp-controller="Song" asp-action="Add"
        class="btn btn-primary btn-lg">Add Song</a>
     <span> | </span>
+    <a asp-area="Admin" asp-controller="Genre" asp-action="Add"
+       class="btn btn-primary btn-lg">Add Genre</a>
     <a asp-area="Admin" asp-controller="Song" asp-action="Mine"
        class="btn btn-primary btn-lg">My Songs</a>
     <span> | </span>
@@ -25,4 +27,5 @@
        class="btn btn-primary btn-lg">All Playlists</a>
     <a asp-area="Admin" asp-controller="User" asp-action="All"
        class="btn btn-primary btn-lg">All Users</a>
+    
 </div>

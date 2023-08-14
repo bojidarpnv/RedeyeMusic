@@ -1,0 +1,28 @@
+﻿@model IEnumerable<GenreSelectViewModel>
+@{
+    ViewBag.Title = "All Genres";
+    
+}
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<table class="table table-striped ">
+    <thead>
+        <tr>
+            <th><label style="color: white;">Name</label></th>
+            
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var genre in Model)
+    {
+        <tr>
+        <td><label style="color: white;">@genre.Name</label></td>
+        </tr>
+        
+    }
+    </tbody>
+    <tbody>
+</table>
+<a asp-area="Admin" asp-action="Add" asp-controller="Genre" class="btn btn-secondary">Add a Genre</a>
+<a asp-area="Admin" asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back to AdminPanel</a>
+

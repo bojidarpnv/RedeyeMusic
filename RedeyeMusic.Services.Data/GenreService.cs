@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
+using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.ViewModels.Genre;
 
@@ -13,9 +14,14 @@ namespace RedeyeMusic.Services.Data
             this.dbContext = dbContext;
         }
 
-        public Task CreateGenreAsync(string genreName)
+        public async Task CreateGenreAsync(GenreFormModel formModel)
         {
-            throw new NotImplementedException();
+            Genre genre = new Genre()
+            {
+                Name = formModel.Name,
+            };
+            await this.dbContext.Genres.AddAsync(genre);
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<ICollection<GenreSelectViewModel>> SelectGenresAsync()
