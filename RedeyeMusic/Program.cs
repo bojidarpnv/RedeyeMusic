@@ -48,6 +48,7 @@ namespace RedeyeMusic
             builder.Services.ConfigureApplicationCookie(cfg =>
             {
                 cfg.LoginPath = "/User/Login";
+                cfg.AccessDeniedPath = "/Home/Error/401";
             });
 
             builder.Services.AddControllersWithViews()
@@ -96,10 +97,25 @@ namespace RedeyeMusic
                 app.SeedAdministrator(DevelopmentAdminEmail);
             }
 
-            app.MapControllerRoute(
+            app.UseEndpoints(config =>
+            {
+                config.MapControllerRoute(
+                    name: "areas",
+                pattern: "/{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
+                config.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
+
+
+                config.MapDefaultControllerRoute();
+                config.MapRazorPages();
+            });
+            //app.MapControllerRoute(
+            //    name: "default",
+            //    pattern: "{controller=Home}/{action=Index}/{id?}");
+            //app.MapRazorPages();
 
             app.Run();
         }

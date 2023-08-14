@@ -36,6 +36,7 @@ namespace RedeyeMusic.Data.Configurations
                 NormalizedEmail = "ADMIN@REDEYE.COM",
                 UserName = "admin@redeye.com",
                 NormalizedUserName = "ADMIN@REDEYE.COM",
+                SecurityStamp = Guid.NewGuid().ToString(),
                 FirstName = "Admin",
                 LastName = "Admin"
             };
@@ -49,6 +50,7 @@ namespace RedeyeMusic.Data.Configurations
                 NormalizedEmail = "GUEST@REDEYE.COM",
                 UserName = "guest@redeye.com",
                 NormalizedUserName = "GUEST@REDEYE.COM",
+                SecurityStamp = Guid.NewGuid().ToString(),
                 FirstName = "Guest",
                 LastName = "Guestov"
             };
@@ -62,6 +64,7 @@ namespace RedeyeMusic.Data.Configurations
                 NormalizedEmail = "ARTIST@REDEYE.COM",
                 UserName = "artist@redeye.com",
                 NormalizedUserName = "ARTIST@REDEYE.COM",
+                SecurityStamp = Guid.NewGuid().ToString(),
                 FirstName = "Artist",
                 LastName = "Artistov"
             };

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Ganss.Xss;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RedeyeMusic.Data;
 using RedeyeMusic.Data.Models;
@@ -27,7 +28,7 @@ namespace RedeyeMusic.Services.Data
                 return string.Empty;
             }
 
-            return Html.Sanitize(user.FirstName + " " + user.LastName);
+            return sanitizer.Sanitize(user.FirstName + " " + user.LastName);
 
         }
 

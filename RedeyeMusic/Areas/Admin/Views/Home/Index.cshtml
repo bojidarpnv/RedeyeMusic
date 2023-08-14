@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="mt-4 p-5 bg-light text-center">
+    <h2 class="display-4">Hello, Admin!</h2>
+    <p class="lead mb-1 mt-3">
+        This is your administrator area - you can <b>create</b>,
+        <b>delete</b> and <b>edit</b> songs.
+        <br />You can add songs to a<b>Playlist</b> and <b>Create</b> ones, too!
+    </p>
+    <p class="lead mt-1">
+        You can also see <b>all users and artists</b> and <b>all playlists</b> in the
+        system.
+    </p>
+    <hr class="my-4">
+    <a asp-area="" asp-controller="Song" asp-action="All"
+       class="btn btn-primary btn-lg">All Songs</a>
+    <a asp-area="" asp-controller="Song" asp-action="Add"
+       class="btn btn-primary btn-lg">Add House</a>
+    <span> | </span>
+    <a asp-area="Admin" asp-controller="Song" asp-action="Mine"
+       class="btn btn-primary btn-lg">My Songs</a>
+    <span> | </span>
+    <a asp-area="Admin" asp-controller="Playlist" asp-action="All"
+       class="btn btn-primary btn-lg">All Playlists</a>
+    <a asp-area="Admin" asp-controller="User" asp-action="All"
+       class="btn btn-primary btn-lg">All Users</a>
+</div>
