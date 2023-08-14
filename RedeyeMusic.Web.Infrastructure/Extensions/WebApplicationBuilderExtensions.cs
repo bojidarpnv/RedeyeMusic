@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using RedeyeMusic.Data.Models;
+    using RedeyeMusic.Web.Infrastructure.Middlewares;
     using System.Reflection;
     using static RedeyeMusic.Common.GeneralApplicationConstants;
 
@@ -60,5 +61,9 @@
             return application;
         }
 
+        public static IApplicationBuilder EnableOnlineUsersCheck(this IApplicationBuilder application)
+        {
+            return application.UseMiddleware<OnlineUsersMiddleware>();
+        }
     }
 }

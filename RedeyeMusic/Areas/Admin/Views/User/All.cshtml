@@ -1,8 +1,9 @@
-﻿@model IEnumerable<UserViewModel>
+﻿@using RedeyeMusic.Web.Infrastructure.Middlewares;
+@model IEnumerable<UserViewModel>
 @{
     ViewBag.Title = "All Users";
 }
-<h2 class="text-center">@ViewBag.Title</h2>
+<h2 class="text-center " style="color: white;">@ViewBag.Title</h2>
 <hr />
 <table class="table table-striped ">
     <thead>
@@ -11,6 +12,7 @@
             <th><label style="color: white;">Full Name</label></th>
                 <th><label style="color: white;">Artist Name</label></th>
             <th><label style="color: white;">User Is Artist</label></th>
+            <th><label style="color:white;">Is Online</label></th>
             </tr>
     </thead>
     <tbody>
@@ -22,6 +24,16 @@
                 <td><label style="color: white;">@user.ArtistName</label></td>
                 <td>
                     @if (user.ArtistName != string.Empty)
+                    {
+                        <label>✔</label>
+                    }
+                    else
+                    {
+                        <label class="text-center">❌</label>
+                    }
+                </td>
+                <td>
+                    @if(OnlineUsersMiddleware.CheckIfUserIsOnline(user.Id))
                     {
                         <label>✔</label>
                     }

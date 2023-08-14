@@ -84,6 +84,7 @@ namespace RedeyeMusic
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.EnableOnlineUsersCheck();
             /// <summary>
             /// This method seeds admin role if it does not exist
             /// Passed email should be valid email of an existing user in the applciation
