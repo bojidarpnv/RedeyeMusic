@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using RedeyeMusic.Data.Models;
 using RedeyeMusic.Web.ViewModels.User;
+using static RedeyeMusic.Common.GeneralApplicationConstants;
 using static RedeyeMusic.Common.NotificationMessagesConstants;
 namespace RedeyeMusic.Web.Controllers
 {
@@ -12,11 +14,13 @@ namespace RedeyeMusic.Web.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserStore<ApplicationUser> userStore;
-        public UserController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore)
+        private readonly IMemoryCache memoryCache;
+        public UserController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore, IMemoryCache memoryCache)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.userStore = userStore;
+            this.memoryCache = memoryCache;
         }
         [HttpGet]
         public IActionResult Register()
@@ -53,6 +57,7 @@ namespace RedeyeMusic.Web.Controllers
             }
 
             await this.signInManager.SignInAsync(user, isPersistent: false);
+            this.memoryCache.Remove(UsersCacheKey);
             this.TempData[SuccessMessage] = "Successful registration!";
             return RedirectToAction("Index", "Home");
         }

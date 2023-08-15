@@ -43,7 +43,11 @@ namespace RedeyeMusic
                 .AddEntityFrameworkStores<RedeyeMusicDbContext>();
 
             builder.Services.AddApplicationService(typeof(ISongService));
+
             builder.Services.AddRecaptchaService();
+
+            builder.Services.AddMemoryCache();
+            builder.Services.AddResponseCaching();
 
             builder.Services.ConfigureApplicationCookie(cfg =>
             {
@@ -80,6 +84,7 @@ namespace RedeyeMusic
 
             app.UseRouting();
 
+            app.UseResponseCaching();
 
             app.UseAuthentication();
             app.UseAuthorization();

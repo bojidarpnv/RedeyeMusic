@@ -22,11 +22,12 @@
         </li>
          }
         <img class="rounded-circle" src="~/images/Icon.png" style="width:50px; height=50px">
-        <li class="nav-item dropdown mt-1">
+        
+        <li class="nav-item btn-group dropstart">
                 @if(isArtist)
                 {
                     string artistName = await this.ArtistService.GetArtistNameByUserIdAsync(this.User.GetId());
-                <a class="nav-link dropdown-toggle" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <a class="nav-link dropdown-toggle" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     @artistName
                 </a>
                 }

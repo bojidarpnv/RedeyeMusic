@@ -58,9 +58,10 @@
 
             success: function () {
                 // Handle success
-                location.reload();
+                
                 $('#addToPlaylistModal-' + songId).modal('hide');
                 toastr.success("Successfully created playlist!");
+                localStorage.removeItem('selectedPlaylistIds');
                 selectedPlaylistIds = [];
             },
             error: function () {
@@ -91,6 +92,7 @@
                 // Handle success, close the modal, or show a success message
                 $('#addToPlaylistModal-' + songId).modal('hide');
                 toastr.success("Successfully saved playlists!");
+                localStorage.removeItem('selectedPlaylistIds');
                 selectedPlaylistIds = [];
             },
             error: function () {
