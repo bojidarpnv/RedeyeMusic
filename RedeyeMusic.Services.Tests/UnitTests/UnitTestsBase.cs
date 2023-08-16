@@ -10,6 +10,7 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         public ApplicationUser GuestUser;
         public Artist SeededArtist;
         public Song SeededSong;
+        public Song SeededSong2;
         public Album SeededAlbum;
         public Genre SeededGenre;
         public Playlist SeededPlaylist;
@@ -20,6 +21,7 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         public void SetUpBase()
         {
             dbContext = DatabaseMock.Instance;
+
             SeedDatabase();
         }
         [OneTimeTearDown]
@@ -69,6 +71,7 @@ namespace RedeyeMusic.Services.Tests.UnitTests
                 Name = "SeededGenre"
             };
 
+
             SeededAlbum = new Album()
             {
                 Name = "FirstAlbum",
@@ -89,12 +92,24 @@ namespace RedeyeMusic.Services.Tests.UnitTests
                 AlbumId = 1,
                 GenreId = 1,
             };
+            SeededSong2 = new Song()
+            {
+                Id = 2,
+                Title = "SampleSong2",
+                Lyrics = "SampleSongLyrics2",
+                ImageUrl = "https://images.theconversation.com/files/258026/original/file-20190208-174861-nms2kt.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+                Mp3FilePath = "songs/Mp3s/2410a001-848d-449f-bb02-abbafdda6447test.mp3",
+                ArtistId = 2,
+                AlbumId = 2,
+                GenreId = 1,
+            };
 
             dbContext.Users.Add(ArtistUser);
             dbContext.Users.Add(GuestUser);
             dbContext.Artists.Add(SeededArtist);
             dbContext.Albums.Add(SeededAlbum);
             dbContext.Songs.Add(SeededSong);
+            dbContext.Songs.Add(SeededSong2);
             dbContext.Genres.Add(SeededGenre);
 
 

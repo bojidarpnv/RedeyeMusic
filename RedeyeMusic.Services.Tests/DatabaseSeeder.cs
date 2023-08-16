@@ -10,6 +10,7 @@ namespace RedeyeMusic.Services.Tests
         public static ApplicationUser GuestUser;
         public static Artist SeededArtist;
         public static Song SeededSong;
+        public static Song SeededSong2;
         public static Album SeededAlbum;
         public static Genre SeededGenre;
         public static Playlist SeededPlaylist;
@@ -64,6 +65,10 @@ namespace RedeyeMusic.Services.Tests
                 ArtistId = 1,
                 ImageUrl = "https://images.nightcafe.studio/jobs/nrOcbGDvjDgIZPO7rbA6/nrOcbGDvjDgIZPO7rbA6.jpg?tr=w-1600,c-at_max",
                 Description = "Mauris suscipit, nunc sit amet sollicitudin varius, nisl eros consectetur diam, nec.",
+                Songs = new List<Song>()
+                {
+                    SeededSong,
+                }
             };
 
 
@@ -78,12 +83,24 @@ namespace RedeyeMusic.Services.Tests
                 AlbumId = 1,
                 GenreId = 1,
             };
+            SeededSong2 = new Song()
+            {
+                Id = 2,
+                Title = "SampleSong2",
+                Lyrics = "SampleSongLyrics2",
+                ImageUrl = "https://images.theconversation.com/files/258026/original/file-20190208-174861-nms2kt.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+                Mp3FilePath = "songs/Mp3s/2410a001-848d-449f-bb02-abbafdda6447test.mp3",
+                ArtistId = 1,
+                AlbumId = 1,
+                GenreId = 1,
+            };
 
             dbContext.Users.Add(ArtistUser);
             dbContext.Users.Add(GuestUser);
             dbContext.Artists.Add(SeededArtist);
             dbContext.Albums.Add(SeededAlbum);
             dbContext.Songs.Add(SeededSong);
+            dbContext.Songs.Add(SeededSong2);
             dbContext.Genres.Add(SeededGenre);
 
 

@@ -11,13 +11,11 @@ namespace RedeyeMusic.Services.Data
     public class PlaylistService : IPlaylistService
     {
         private readonly RedeyeMusicDbContext dbContext;
-        private readonly IArtistService artistService;
-        private readonly IAlbumService albumService;
-        public PlaylistService(RedeyeMusicDbContext dbContext, IArtistService artistService, IAlbumService albumService)
+
+        public PlaylistService(RedeyeMusicDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.artistService = artistService;
-            this.albumService = albumService;
+
         }
 
         public async Task AddSongToPlaylistAsync(int songId, int playlistId)

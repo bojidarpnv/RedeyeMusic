@@ -1,3 +1,4 @@
+using RedeyeMusic.Data.Models;
 using RedeyeMusic.Services.Data;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Web.ViewModels.Artist;
@@ -56,24 +57,75 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         }
 
         [Test]
-        public async Task ArtistNameExistsShouldReturnFalseIfDoesNotExist()
+        public async Task ArtistNameExists_ShouldReturnFalseIfDoesNotExist()
         {
             bool artistNameExists = await this.artistService.ArtistNameExistsAsync("DoesNotExist");
             Assert.False(artistNameExists);
         }
         [Test]
-        public async Task ArtistNameAlreadyExistsShouldReturnFalseIfDoesNotExist()
+        public async Task ArtistNameAlreadyExists_ShouldReturnFalseIfDoesNotExist()
         {
             bool artistNameExists = await this.artistService.ArtistNameExistsAsync("DoesNotExist");
             Assert.False(artistNameExists);
         }
         [Test]
-        public async Task GetArtistNameByUserIdShouldReturnEmptyStringIfDoesNotExist()
+        public async Task GetArtistNameByUserId_ShouldReturnEmptyStringIfDoesNotExist()
         {
             string randomGuid = Guid.NewGuid().ToString();
             string result = await this.artistService.GetArtistNameByUserIdAsync(randomGuid);
             Assert.IsEmpty(result);
         }
+        [Test]
+        public async Task IsArtistWithIdOwnerOfSongWithIdAsync_ShouldReturnTrueWithValidInformation()
+        {
+            bool result = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(SeededArtist.Id, SeededSong.Id);
+            Assert.True(result);
+
+        }
+        [Test]
+        public async Task IsArtistWithIdOwnerOfSongWithIdAsync_ShouldReturnFalseWithInValidInformation()
+        {
+            int invalidId = 100;
+            bool result = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(invalidId, SeededSong2.Id);
+            Assert.That(result, Is.EqualTo(false));
+            bool result2 = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(SeededArtist.Id, invalidId);
+            Assert.That(result2, Is.EqualTo(false));
+        }
+        [Test]
+        public async Task IsArtistWithIdOwnerOfAlbumWithIdAsync_ShouldReturnTrueWithValidInformation()
+        {
+            bool result = await this.artistService.IsArtistWithIdOwnerOfAlbumWithIdAsync(SeededArtist.Id, SeededAlbum.Id);
+            Assert.True(result);
+
+        }
+        [Test]
+        public async Task IsArtistWithIdOwnerOfAlbumWithIdAsync_ShouldReturnFalseWithInValidInformation()
+        {
+            int invalidId = 100;
+            bool result = await this.artistService.IsArtistWithIdOwnerOfAlbumWithIdAsync(invalidId, SeededAlbum.Id);
+            Assert.False(result);
+            bool result2 = await this.artistService.IsArtistWithIdOwnerOfAlbumWithIdAsync(SeededArtist.Id, invalidId);
+            Assert.False(result2);
+        }
+        [Test]
+        public async Task DoesArtistHaveAnySongsAsync_ShouldReturnTrueIfThereAreSongsOfArtist()
+        {
+            bool result = await this.artistService.DoesArtistHaveAnySongsAsync(SeededArtist.Id);
+            Assert.True(result);
+        }
+        [Test]
+        public async Task DoesArtistHaveAnySongsAsync_ShouldReturnFalseIfThereAreNoSongsOfArtist()
+        {
+            List<Song> songs = new List<Song>();
+            songs.Add(SeededSong);
+            songs.Add(SeededSong2);
+            dbContext.Songs.RemoveRange(songs);
+            dbContext.SaveChanges();
+            bool result = await this.artistService.DoesArtistHaveAnySongsAsync(SeededArtist.Id);
+            Assert.False(result);
+        }
+
+
     }
 
 
