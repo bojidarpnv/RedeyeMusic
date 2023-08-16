@@ -95,5 +95,15 @@ namespace RedeyeMusic.Services.Data
             }
             return sanitizer.Sanitize(artist.Name);
         }
+        public async Task<string> GetArtistNameByIdAsync(int artistId)
+        {
+            Artist? artist = await this.dbContext.Artists.
+                FirstOrDefaultAsync(a => a.Id == artistId);
+            if (artist == null)
+            {
+                return string.Empty;
+            }
+            return artist.Name;
+        }
     }
 }

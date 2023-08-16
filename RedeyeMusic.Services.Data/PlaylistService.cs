@@ -11,31 +11,33 @@ namespace RedeyeMusic.Services.Data
     public class PlaylistService : IPlaylistService
     {
         private readonly RedeyeMusicDbContext dbContext;
-
-        public PlaylistService(RedeyeMusicDbContext dbContext)
+        private readonly IArtistService artistService;
+        private readonly IAlbumService albumService;
+        public PlaylistService(RedeyeMusicDbContext dbContext, IArtistService artistService, IAlbumService albumService)
         {
             this.dbContext = dbContext;
-
+            this.artistService = artistService;
+            this.albumService = albumService;
         }
 
         public async Task AddSongToPlaylistAsync(int songId, int playlistId)
         {
             Playlist playlist = await this.dbContext
                 .Playlists
-                .FirstAsync(p => p.IsDeleted == false && p.Id == playlistId);
+                .FirstOrDefaultAsync(p => p.IsDeleted == false && p.Id == playlistId);
             Song song = await this.dbContext
                 .Songs
-                .FirstAsync(s => s.IsDeleted == false && s.Id == songId);
-            if (playlist != null)
+                .FirstOrDefaultAsync(s => s.IsDeleted == false && s.Id == songId);
+            if (playlist != null && song != null)
             {
-                playlist.PlaylistsSongs.Add(new PlaylistsSongs
+                PlaylistsSongs playlistsSongs = new PlaylistsSongs()
                 {
                     SongId = songId,
                     PlaylistId = playlistId
-                });
-
+                };
+                await this.dbContext.PlaylistsSongs.AddAsync(playlistsSongs);
+                await this.dbContext.SaveChangesAsync();
             }
-            await this.dbContext.SaveChangesAsync();
 
         }
 
@@ -119,10 +121,10 @@ namespace RedeyeMusic.Services.Data
                 .Where(p => p.IsDeleted == false)
                 .Include(ps => ps.PlaylistsSongs)
                 .ThenInclude(s => s.Song)
-                .ThenInclude(ss => ss.Genre)
+                .ThenInclude(ss => ss.Artist)
                 .Include(p => p.PlaylistsSongs)
                 .ThenInclude(s => s.Song)
-                .ThenInclude(ss => ss.Artist)
+                .ThenInclude(ss => ss.Genre)
                 .Include(p => p.PlaylistsSongs)
                 .ThenInclude(s => s.Song)
                 .ThenInclude(ss => ss.Album)
@@ -137,6 +139,8 @@ namespace RedeyeMusic.Services.Data
                 .ToList();
                 foreach (Song song in songs)
                 {
+                    string artistName = await this.artistService.GetArtistNameByIdAsync(song.ArtistId);
+
                     SongDetailsOnPlaylistViewModel songModel = new SongDetailsOnPlaylistViewModel
                     {
                         Id = song.Id,
@@ -145,7 +149,7 @@ namespace RedeyeMusic.Services.Data
                         ImageUrl = song.ImageUrl,
                         ListenCount = song.ListenCount,
                         Lyrics = song.Lyrics!,
-                        ArtistName = song.Artist.Name,
+                        ArtistName = artistName,
                         GenreName = song.Genre.Name,
                         Mp3FilePath = song.Mp3FilePath
 
@@ -211,11 +215,14 @@ namespace RedeyeMusic.Services.Data
         {
             PlaylistsSongs playlistSong = await this.dbContext
                 .PlaylistsSongs
-                .FirstAsync(ps => ps.PlaylistId == playlistId && ps.SongId == songId);
+                .FirstOrDefaultAsync(ps => ps.PlaylistId == playlistId && ps.SongId == songId);
+            if (playlistSong != null)
+            {
+                this.dbContext.PlaylistsSongs.Remove(playlistSong);
 
-            this.dbContext.PlaylistsSongs.Remove(playlistSong);
+                await this.dbContext.SaveChangesAsync();
+            }
 
-            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task UpdatePlaylists(int songId, List<int> selectedPlaylistsIds, string userId)

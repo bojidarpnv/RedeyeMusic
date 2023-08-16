@@ -9,7 +9,15 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         private IGenreService genreService;
         [OneTimeSetUp]
         public void SetUp()
-            => this.genreService = new GenreService(dbContext);
+        {
+            this.genreService = new GenreService(dbContext);
+            dbContext.Database.EnsureCreated();
+        }
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            dbContext.Database.EnsureDeleted();
+        }
         [Test]
         public async Task CreateGenreAsync_ShouldProperlyCreateGenre()
         {

@@ -1,4 +1,5 @@
-﻿using RedeyeMusic.Services.Data;
+﻿using Moq;
+using RedeyeMusic.Services.Data;
 using RedeyeMusic.Services.Data.Interfaces;
 
 namespace RedeyeMusic.Services.Tests.UnitTests
@@ -10,8 +11,18 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         [OneTimeSetUp]
         public void SetUp()
         {
-            this.playlistService = new PlaylistService(dbContext);
+            var artistId = SeededArtist.Id;
+            var artistName = SeededArtist.Name;
+
+            var mockArtistService = new Mock<ArtistService>(dbContext);
+
+            var mockAlbumService = new Mock<AlbumService>(dbContext);
+
+
+            this.playlistService = new PlaylistService(dbContext, mockArtistService.Object, mockAlbumService.Object);
+
         }
+
         [Test]
         public async Task AddSongToPlaylistAsync_ShouldAddEntryToPlaylistsSongs()
         {
@@ -39,6 +50,33 @@ namespace RedeyeMusic.Services.Tests.UnitTests
             Assert.That(result, Is.EqualTo(expectedResult));
         }
         [Test]
+        public async Task GetAllPlaylistsByUserIdAsync_ShouldReturnCorrectNumberOfPlaylists()
+        {
+            //Arrange
+            var userId = GuestUser.Id.ToString();
+            var expectedResult = this.dbContext.Playlists
+                .Where(p => p.ApplicationUserId.ToString() == userId && p.IsDeleted == false)
+                .Count();
+            //Act
+            var playlists = await this.playlistService.GetAllPlaylistsByUserIdAsync(userId);
+            var actualResult = playlists.Count();
+            //Assert
+            Assert.That(actualResult, Is.EqualTo(expectedResult));
+        }
+        [Test]
+        public async Task GetPlaylistByIdAsync_ShouldReturnCorrectDataForPlaylist()
+        {
+            // Arrange
+            var playlistId = SeededPlaylist2.Id;
+
+            //Act
+            var result = await this.playlistService.GetPlaylistByIdAsync(playlistId);
+            //Assert
+            var playlistInDb = this.dbContext.Playlists.Find(playlistId);
+            Assert.That(result.Id, Is.EqualTo(playlistInDb.Id));
+            Assert.That(result.Name, Is.EqualTo(playlistInDb.Name));
+        }
+        [Test]
         public async Task DeletePlaylistWithIdAsync_ShouldSetThePlaylistIsDeletedToTrue_AndRemovePlaylistsSongsEntry()
         {
             //Arrange
@@ -53,33 +91,8 @@ namespace RedeyeMusic.Services.Tests.UnitTests
             Assert.That(playlistsSongsCountAfter, Is.EqualTo(playlistsSongsCountBefore - 1));
             Assert.That(playlistIsDeletedAfter, Is.EqualTo(!playlistIsDeletedBefore));
         }
-        [Test]
-        public async Task GetAllPlaylistsByUserIdAsync_ShouldReturnCorrectNumberOfPlaylists()
-        {
-            //Arrange
-            var userId = GuestUser.Id.ToString();
-            var expectedResult = this.dbContext.Playlists
-                .Where(p => p.ApplicationUserId.ToString() == userId)
-                .Count();
-            //Act
-            var playlists = await this.playlistService.GetAllPlaylistsByUserIdAsync(userId);
-            var actualResult = playlists.Count();
-            //Assert
-            Assert.That(actualResult, Is.EqualTo(expectedResult));
-        }
-        [Test]
-        public async Task GetPlaylistByIdAsync_ShouldReturnCorrectDataForPlaylist()
-        {
-            // Arrange
-            var playlisId = SeededPlaylist.Id;
-            var playlistName = SeededPlaylist.Name;
-            //Act
-            var result = await this.playlistService.GetPlaylistByIdAsync(playlisId);
-            //Assert
-            var playlistInDb = this.dbContext.Playlists.Find(playlisId);
-            Assert.That(result.Id, Is.EqualTo(playlistInDb.Id));
-            Assert.That(result.Name, Is.EqualTo(playlistInDb.Name));
-        }
+
+
         [Test]
         public async Task GetSongToAddToPlaylistByIdAsync_ShouldReturnCorrectSongData()
         {
@@ -98,7 +111,7 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         {
             //Arrange
             var userId = GuestUser.Id.ToString();
-            var playlistId = SeededPlaylist.Id;
+            var playlistId = SeededPlaylist2.Id;
             //Act
             var result = await this.playlistService.IsUserOwnerOfPlaylist(playlistId, userId);
             //Assert
@@ -109,7 +122,7 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         {
             //Arrange
             var userId = SeededArtist.Id.ToString();
-            var playlistId = SeededPlaylist.Id;
+            var playlistId = SeededPlaylist2.Id;
             //Act
             var result = await this.playlistService.IsUserOwnerOfPlaylist(playlistId, userId);
             //Assert
@@ -120,7 +133,7 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         {
             //Arrange
             var playlistsSongsCountBefore = this.dbContext.PlaylistsSongs.Count();
-            var songId = SeededSong.Id;
+            var songId = SeededSong2.Id;
             var playlistId = SeededPlaylist.Id;
             //Act
             await this.playlistService.RemoveSongFromPlaylist(playlistId, songId);

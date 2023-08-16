@@ -14,7 +14,9 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         public Album SeededAlbum;
         public Genre SeededGenre;
         public Playlist SeededPlaylist;
+        public Playlist SeededPlaylist2;
         public PlaylistsSongs SeededPlaylistSongs;
+        public PlaylistsSongs SeededPlaylistSongs2;
         protected RedeyeMusicDbContext dbContext;
 
         [OneTimeSetUp]
@@ -27,7 +29,7 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         [OneTimeTearDown]
         public void TearDownBase()
         => dbContext.Database.EnsureDeleted();
-        private void SeedDatabase()
+        public void SeedDatabase()
         {
             ArtistUser = new ApplicationUser()
             {
@@ -121,13 +123,28 @@ namespace RedeyeMusic.Services.Tests.UnitTests
                 ApplicationUserId = GuestUser.Id,
 
             };
+            SeededPlaylist2 = new Playlist()
+            {
+
+                Id = 2,
+                Name = "SeededPlaylist2",
+                ApplicationUserId = GuestUser.Id,
+            };
             SeededPlaylistSongs = new PlaylistsSongs()
             {
                 SongId = 1,
                 PlaylistId = 1,
             };
+            SeededPlaylistSongs2 = new PlaylistsSongs()
+            {
+                SongId = 2,
+                PlaylistId = 2,
+
+            };
             dbContext.Playlists.Add(SeededPlaylist);
+            dbContext.Playlists.Add(SeededPlaylist2);
             dbContext.PlaylistsSongs.Add(SeededPlaylistSongs);
+            dbContext.PlaylistsSongs.Add(SeededPlaylistSongs2);
             dbContext.SaveChanges();
 
         }

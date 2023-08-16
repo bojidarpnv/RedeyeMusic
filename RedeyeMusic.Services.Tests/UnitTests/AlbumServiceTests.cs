@@ -123,7 +123,39 @@ namespace RedeyeMusic.Services.Tests.UnitTests
             var songInAlbum = album.Songs.First(s => s.Id == 2);
             Assert.That(songInAlbum.IsDeleted, Is.EqualTo(true));
         }
+        [Test]
+        public async Task UpdateAlbumAsync_ShouldEditAlbumCorrectly()
+        {
+            Album album = new Album()
+            {
 
+                Name = "TestAlbum",
+                Description = "AlbumDescription",
+                ImageUrl = SeededAlbum.ImageUrl,
+                IsDeleted = false,
+                Songs = new List<Song>()
+            };
+            album.Songs.Add(SeededSong);
+            dbContext.Albums.Add(album);
+            dbContext.SaveChanges();
+            int albumId = album.Id;
+            var albumFormModel = new EditAlbumFormModel()
+            {
+                Id = albumId,
+                Name = album.Name,
+                Description = album.Description,
+                ImageUrl = SeededAlbum.ImageUrl,
+                SelectedSongIds = { 1 },
+            };
+            var changedDescription = "ChangedDescription";
+            albumFormModel.Description = changedDescription;
+            await this.albumService.UpdateAlbumAsync(albumFormModel);
+
+            var newAlbumInDb = dbContext.Albums.FirstOrDefault(a => a.Id == albumId);
+            Assert.IsNotNull(newAlbumInDb);
+            Assert.That(newAlbumInDb.Name, Is.EqualTo(album.Name));
+            Assert.That(newAlbumInDb.Description, Is.EqualTo(changedDescription));
+        }
 
     }
 }

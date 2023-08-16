@@ -14,7 +14,9 @@ namespace RedeyeMusic.Services.Tests
         public static Album SeededAlbum;
         public static Genre SeededGenre;
         public static Playlist SeededPlaylist;
+        public static Playlist SeededPlaylist2;
         public static PlaylistsSongs SeededPlaylistSongs;
+        public static PlaylistsSongs SeededPlaylistSongs2;
         public static void SeedDatabase(RedeyeMusicDbContext dbContext)
         {
             ArtistUser = new ApplicationUser()
@@ -112,13 +114,28 @@ namespace RedeyeMusic.Services.Tests
                 ApplicationUserId = GuestUser.Id,
 
             };
+            SeededPlaylist2 = new Playlist()
+            {
+
+                Id = 2,
+                Name = "SeededPlaylist2",
+                ApplicationUserId = GuestUser.Id,
+
+            };
             SeededPlaylistSongs = new PlaylistsSongs()
             {
                 SongId = 1,
                 PlaylistId = 1,
             };
+            SeededPlaylistSongs2 = new PlaylistsSongs()
+            {
+                SongId = 2,
+                PlaylistId = 2
+            };
             dbContext.Playlists.Add(SeededPlaylist);
+            dbContext.Playlists.Add(SeededPlaylist2);
             dbContext.PlaylistsSongs.Add(SeededPlaylistSongs);
+            dbContext.PlaylistsSongs.Add(SeededPlaylistSongs2);
             dbContext.SaveChanges();
 
         }

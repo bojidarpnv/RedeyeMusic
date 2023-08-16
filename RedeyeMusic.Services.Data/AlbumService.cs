@@ -159,8 +159,7 @@ namespace RedeyeMusic.Services.Data
         {
             Album album = await this.dbContext.Albums
                 .Include(a => a.Songs)
-                .Where(s => s.IsDeleted == false)
-                .FirstAsync(a => a.Id == viewModel.Id);
+                .FirstOrDefaultAsync(a => a.Id == viewModel.Id && a.IsDeleted == false);
 
             if (album == null)
             {
@@ -224,5 +223,13 @@ namespace RedeyeMusic.Services.Data
             await this.dbContext.SaveChangesAsync();
         }
 
+        public async Task<string> GetAlbumNameById(int albumId)
+        {
+            Album album = await this.dbContext
+                .Albums
+                .Where(a => a.IsDeleted == false)
+                .FirstAsync(a => a.Id == albumId);
+            return album.Name;
+        }
     }
 }

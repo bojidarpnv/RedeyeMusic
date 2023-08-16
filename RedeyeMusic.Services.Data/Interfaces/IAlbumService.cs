@@ -16,5 +16,6 @@ namespace RedeyeMusic.Services.Data.Interfaces
         Task<EditAlbumFormModel> GetAlbumForEditAsync(int albumId);
         Task UpdateAlbumAsync(EditAlbumFormModel viewModel);
         Task DeleteAlbumByIdAsync(int albumId);
+        Task<string> GetAlbumNameById(int albumId);
     }
 }

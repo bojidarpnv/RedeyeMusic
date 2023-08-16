@@ -15,7 +15,6 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         public void SetUp()
             => this.artistService = new ArtistService(dbContext);
 
-
         [Test]
         public async Task ArtistExistsByUserIdAsyncShouldReturnTrueWhenExists()
         {
@@ -78,8 +77,8 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         [Test]
         public async Task IsArtistWithIdOwnerOfSongWithIdAsync_ShouldReturnTrueWithValidInformation()
         {
-            bool result = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(SeededArtist.Id, SeededSong.Id);
-            Assert.True(result);
+            bool result = await this.artistService.IsArtistWithIdOwnerOfSongWithIdAsync(SeededArtist.Id, SeededSong.Artist.Id);
+            Assert.That(result, Is.EqualTo(true));
 
         }
         [Test]
@@ -110,6 +109,8 @@ namespace RedeyeMusic.Services.Tests.UnitTests
         [Test]
         public async Task DoesArtistHaveAnySongsAsync_ShouldReturnTrueIfThereAreSongsOfArtist()
         {
+            dbContext.Songs.Add(SeededSong);
+            dbContext.SaveChangesAsync();
             bool result = await this.artistService.DoesArtistHaveAnySongsAsync(SeededArtist.Id);
             Assert.True(result);
         }
@@ -125,7 +126,16 @@ namespace RedeyeMusic.Services.Tests.UnitTests
             Assert.False(result);
         }
 
+        [Test]
+        public async Task GetArtistNameByIdAsync_ShouldReturnCorrectArtistName()
+        {
+            var artistId = SeededArtist.Id;
 
+            var expectedResult = SeededArtist.Name;
+
+            var result = await this.artistService.GetArtistNameByIdAsync(artistId);
+            Assert.That(result, Is.EqualTo(expectedResult));
+        }
     }
 
 
