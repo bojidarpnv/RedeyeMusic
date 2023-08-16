@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RedeyeMusic.Services.Data.Interfaces;
 using RedeyeMusic.Services.Data.Models.Song;
+using RedeyeMusic.Web.ViewModels.Song;
 
 namespace RedeyeMusic.WebApi.Controllers
 {
@@ -29,6 +30,23 @@ namespace RedeyeMusic.WebApi.Controllers
                 return this.BadRequest();
             }
 
+        }
+
+        [HttpPost("increment")]
+        [Produces("application/json")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> IncrementListenCount([FromBody] IncrementListenCountServiceModel model)
+        {
+            try
+            {
+                await this.songService.IncrementListenCountAsync(model.SongId);
+                return this.Ok();
+            }
+            catch (Exception)
+            {
+                return this.BadRequest();
+            }
         }
     }
 }

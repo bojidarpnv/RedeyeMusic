@@ -13,12 +13,7 @@ namespace RedeyeMusic.Web.Areas.Admin.Controllers
             this.artistService = artistService;
             this.songService = songService;
         }
-        [HttpGet]
-        public async Task<IActionResult> All()
-        {
-            IEnumerable<IndexViewModel> viewModel = await this.songService.GetAll();
-            return View(viewModel);
-        }
+
         [HttpGet]
         public async Task<IActionResult> Mine()
         {

@@ -60,8 +60,6 @@ namespace RedeyeMusic.Services.Data
             IEnumerable<IndexViewModel> songs = await this.dbContext
                 .Songs
                 .Where(s => s.IsDeleted == false)
-                .OrderByDescending(s => s.ListenCount)
-                .Take(100)
                 .To<IndexViewModel>()
                 .ToArrayAsync();
             return songs;
@@ -303,6 +301,19 @@ namespace RedeyeMusic.Services.Data
             {
                 ListenCount = song.ListenCount,
             };
+        }
+        public async Task IncrementListenCountAsync(int songId)
+        {
+            Song song = await this.dbContext.Songs.FirstOrDefaultAsync(s => s.Id == songId);
+            if (song != null)
+            {
+                song.ListenCount++;
+                await this.dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException($"Song with ID {songId} not found.");
+            }
         }
     }
 }

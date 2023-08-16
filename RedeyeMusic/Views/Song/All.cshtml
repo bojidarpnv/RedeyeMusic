@@ -10,6 +10,7 @@
     var songs = Model.ToList();
     var popularSongs = Model.OrderByDescending(s => s.ListenCount).ToList();
     bool isArtist = await this.ArtistService.ArtistExistsByUserIdAsync(this.User.GetId());
+    bool isAdmin = this.User.IsAdmin();
 }
 @if (!songs.Any())
 {
@@ -83,7 +84,7 @@
                 </div>
                 if (User.Identity?.IsAuthenticated ?? false)
                 {
-                    if (!isArtist)
+                    if (!isArtist || isAdmin)
                     {
                         <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
                             @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
@@ -130,7 +131,7 @@
                                 <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
                                 @if (User.Identity?.IsAuthenticated ?? false)
                                 {
-                                    if (!isArtist || this.User.IsAdmin())
+                                    if (!isArtist || isAdmin)
                                     {
                                         <button asp-area="" asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
                                     }
@@ -141,21 +142,20 @@
                 </div>
                 if (User.Identity?.IsAuthenticated ?? false)
                 {
-                    if (!isArtist || this.User.IsAdmin())
+                    if (!isArtist || isAdmin)
                     {
                         <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
                             @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
-                            {
-                            SongModel = song,
-                            Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
-                            })
+                {
+                SongModel = song,
+                Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
+                })
                         </div>
                     }
                 }
 
-
             }
-        </div>
+         </div>
     </div>
 
 
@@ -167,7 +167,8 @@
         var createPlaylistUrl = '@Url.Action("Create", "Playlist")'; // Generate the URL here
     </script>
     <script src="~/js/addToPlaylist.js"></script>
-    <script>getListenCount();</script>
+    <script src="~/js/getListenCount.js"></script>
+
 }
 
 

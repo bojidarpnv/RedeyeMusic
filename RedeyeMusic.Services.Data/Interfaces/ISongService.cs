@@ -24,6 +24,7 @@ namespace RedeyeMusic.Services.Data.Interfaces
         Task DeleteSongByIdAsync(int songId);
         Task<List<SelectListItem>> GetSongsDropdownItemsAsync(int artistId);
         Task<ListenCountServiceModel> GetListenCountAsync(int songId);
+        Task IncrementListenCountAsync(int songId);
 
 
     }

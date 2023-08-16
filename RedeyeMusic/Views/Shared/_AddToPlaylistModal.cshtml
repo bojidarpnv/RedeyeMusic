@@ -14,7 +14,7 @@
                 var modalId = $"addToPlaylistModal-{Model.SongModel.Id}-{playlist.Id}";
 
                 <label class="custom-checkbox-label">
-                    <input type="checkbox" name="playlist-checkbox" value="@playlist.Id" data-preselected="@preselect" @(playlist.Songs.Any(s => s.Id == Model.SongModel.Id) ? "checked" : "")>
+                    <input type="checkbox" name="playlist-checkbox" onclick="toggleCheckbox(this)" value="@playlist.Id" data-preselected="@preselect" @(playlist.Songs.Any(s => s.Id == Model.SongModel.Id) ? "checked" : "")>
 
                     <span class="custom-checkbox"></span>
                     @playlist.Name
@@ -36,13 +36,14 @@
         </div>
     </div>
 </div>
-@*<script>
+<script>
     function toggleCheckbox(checkbox) {
         if (checkbox.checked) {
-            checkbox.setAttribute("checked","");
+            checkbox.dataset.preselected = "true";
+            checkbox.dataset.checked="";
         } else {
-            checkbox.removeAttribute("checked");
+            delete checkbox.dataset.preselected;
         }
     }
-</script>*@
+</script>
 

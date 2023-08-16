@@ -243,7 +243,7 @@ namespace RedeyeMusic.Services.Data
             {
                 if (selectedPlaylistsIds.Contains(playlist.Id))
                 {
-                    if (!playlist.PlaylistsSongs.Any(ps => ps.SongId == songId || ps.PlaylistId == playlist.Id))
+                    if (!playlist.PlaylistsSongs.Any(ps => ps.SongId == songId))
                     {
                         playlist.PlaylistsSongs.Add(new PlaylistsSongs
                         {
