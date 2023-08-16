@@ -76,8 +76,8 @@
             success: function () {
                 // Handle success
                 localStorage.setItem('createPlaylistSuccess', 'true');
-                window.location.reload();
                 $(modalId).modal('hide');
+                window.location.reload();
             },
             error: function () {
                 // Handle error

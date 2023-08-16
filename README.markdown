@@ -15,7 +15,7 @@ Clone this repository to your local machine using the following command:
 
 bash
 Copy code
-git clone https://github.com/your-username/RedeyeMusic.git
+git clone https://github.com/bojidarpnv/RedeyeMusic.git
 Step 2: Configure Connection Strings
 Open the RedeyeMusic.Web project in Visual Studio.
 Locate the appsettings.json file in the RedeyeMusic.Web project.
