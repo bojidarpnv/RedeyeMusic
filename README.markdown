@@ -15,8 +15,8 @@ Before you begin, ensure you have the following software installed:
 ### Step 1: Clone the Repository
 Clone this repository to your local machine using the following command:
 
-```bash
-git clone https://github.com/your-username/RedeyeMusic.git
+``bash
+git clone https://github.com/your-username/RedeyeMusic.git``
 
 ## Step 2: Configure Connection Strings
 
