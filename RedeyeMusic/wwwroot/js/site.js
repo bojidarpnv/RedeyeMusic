@@ -3,7 +3,7 @@
     const audioPlayer = document.getElementById("audioPlayer");
     const audioWrapper = document.getElementById("audioWrapper");
 
-    // Hide audio wrapper initially
+    
     audioWrapper.style.display = "none";
 
     songItems.forEach(songItem => {
@@ -20,16 +20,16 @@
 
                 audioWrapper.style.display = "block";
 
-                // Increment listen count via AJAX
+                
                 const songId = songItem.getAttribute("data-song-id");
                 incrementListenCount(songId);
             }
         });
     });
 
-    // Listen for audio ended event
+   
     audioPlayer.addEventListener("ended", function () {
-        // Hide the audio player wrapper when playback ends
+        
         audioWrapper.style.display = "none";
     });
 
@@ -42,7 +42,7 @@
             data: requestData,
             contentType: 'application/json',
             success: function (response) {
-                console.log('Listen count incremented successfully');
+                
             },
             error: function () {
                 console.error('Failed to increment listen count');

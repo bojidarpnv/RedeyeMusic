@@ -71,12 +71,12 @@ namespace RedeyeMusic.Web.Controllers
 
             songModel.Genres = await this.genreService.SelectGenresAsync();
             songModel.Albums = await this.albumService.SelectAlbumsByArtistIdAsync(artistId);
-            //if albumId is 0 it is because of being an already existing album, getting the id here from the Name and Description, cannot properly pass Id with JS;
+            //if albumId is 0 it is because of being a new album, getting the id here from the Name and Description, from the just created album // cannot properly pass Id with JS;
             if (songModel.AlbumId == 0)
             {
                 songModel.AlbumId = await this.albumService.GetAlbumId(songModel);
             }
-            //if albumName and albumDescription are null it is because of it being a new Album so we need to get them from the new album.
+            //if albumName and albumDescription are null it is because of it being an old Album so we need to get them from the albumService.
             if (songModel.AlbumName == null && songModel.AlbumDescription == null)
             {
                 songModel = await this.albumService.GetAlbumDescriptionAndNameAndUrlById(songModel.AlbumId, songModel);

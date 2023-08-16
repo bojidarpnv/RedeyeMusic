@@ -120,7 +120,7 @@ namespace RedeyeMusic.Services.Data
             }
             catch (Exception)
             {
-                throw;
+                return 0;
             }
         }
 

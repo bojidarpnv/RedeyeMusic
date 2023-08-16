@@ -17,14 +17,14 @@ namespace RedeyeMusic.Data.Models
         [Required]
         [StringLength(NameMaxLength)]
         public string Name { get; set; } = null!;
-        public virtual ICollection<Song> Songs { get; set; }
+        public ICollection<Song> Songs { get; set; }
 
-        public virtual ICollection<Album> Albums { get; set; }
+        public ICollection<Album> Albums { get; set; }
 
         //Null for now before implementing code to use this functionality (having users become artists)
         [ForeignKey(nameof(ApplicationUser))]
-        public Guid? ApplicationUserId { get; set; }
-        public virtual ApplicationUser? ApplicationUser { get; set; } = null!;
+        public Guid ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; } = null!;
 
     }
 }

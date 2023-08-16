@@ -51,7 +51,7 @@
     });
     $('.create-playlist-btn').click(function () {
         var antiForgeryToken = $("input[name='__RequestVerificationToken']").val();
-        var songId = $(this).closest('.modal').data('song-id');
+        var songId = $(this).data('song-id');
         var modalId = '#addToPlaylistModal-' + songId;
         var newPlaylistName = $('#newPlaylistName').val();
 

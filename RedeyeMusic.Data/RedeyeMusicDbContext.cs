@@ -37,19 +37,19 @@ namespace RedeyeMusic.Data
             //Applying Configuration from SongEntityConfigurations
             //Assembly configAssembly = Assembly.GetAssembly(typeof(RedeyeMusicDbContext)) ?? Assembly.GetExecutingAssembly();
             //builder.ApplyConfigurationsFromAssembly(configAssembly);
-            builder.ApplyConfiguration(new AlbumEntityConfigurations());
             builder.ApplyConfiguration(new ApplicationUserEntityConfigurations());
             builder.ApplyConfiguration(new ArtistEntityConfigurations());
+            builder.ApplyConfiguration(new AlbumEntityConfigurations());
             builder.ApplyConfiguration(new GenreEntityConfigurations());
             builder.ApplyConfiguration(new PlaylistEntityConfigurations());
             builder.ApplyConfiguration(new PlaylistsSongsEntityConfigurations());
             builder.ApplyConfiguration(new SongEntityConfigurations());
             if (this.seedDb)
             {
-                builder.ApplyConfiguration(new SeedAlbumEntityConfigurations());
                 builder.ApplyConfiguration(new SeedApplicationUserEntityConfigurations());
                 builder.ApplyConfiguration(new SeedArtistEntityConfigurations());
                 builder.ApplyConfiguration(new SeedGenreEntityConfigurations());
+                builder.ApplyConfiguration(new SeedAlbumEntityConfigurations());
                 builder.ApplyConfiguration(new SeedSongEntityConfigurations());
             }
             //Remove these when in production

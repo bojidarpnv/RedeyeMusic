@@ -55,7 +55,7 @@
                                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                         <div class="white ms-1">
                                             <div class="white">@song.Title</div>
-                                            <div class="smallText"><small class="white">@song.Lyrics</small></div>
+                                            <div class="smallText"><small class="white truncate-lyrics">@song.Lyrics</small></div>
                                         </div>
                                     </div>
                                     <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
@@ -209,7 +209,7 @@ else
     <div class="mt-4 p-5 bg-light">
         <h1 class="display-4">No Results Found</h1>
         <p class="lead">
-            There are no songs matching your search query.
+            There are no songs matching your search.
         </p>
     </div>
 }
@@ -217,7 +217,7 @@ else
 @section Scripts {
     
     <partial name="_ValidationScriptsPartial" />
-    <script>getListenCount();</script>
+    <script src="~/js/getListenCount.js"></script>
     <script>
         $(document).ready(function () {
             var activated = false;

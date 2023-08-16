@@ -89,8 +89,9 @@ body a{
 .toast-container .toast-error {
     background-color: #BD362F;
 }
-.smallText {
-   max-width:50ch;
+.smallText !important{
+   max-width:20ch;
+   max-height: 10px;
     overflow: hidden;
     white-space: nowrap;
     
@@ -193,5 +194,12 @@ input[type="checkbox"]:checked + .custom-checkbox::before {
     .audio-player-wrapper audio {
         width: 100%;
     }*/
-
+.truncate-lyrics {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Number of lines to display */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size:12px;
+}
 
