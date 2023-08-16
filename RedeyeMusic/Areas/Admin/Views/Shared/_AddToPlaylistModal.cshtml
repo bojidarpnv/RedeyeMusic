@@ -10,19 +10,14 @@
             <h5>Select or create a playlist:</h5>
             @foreach (var playlist in Model.Playlists)
             {
-                var preselect = playlist.Songs.Any(s => s.Id == Model.SongModel.Id);
-                var modalId = $"addToPlaylistModal-{Model.SongModel.Id}-{playlist.Id}";
-
                 <label class="custom-checkbox-label">
-                    <input type="checkbox" name="playlist-checkbox" value="@playlist.Id" data-preselected="@preselect" @(playlist.Songs.Any(s => s.Id == Model.SongModel.Id) ? "checked" : "")>
+                    <input type="checkbox" name="playlist-checkbox" value="@playlist.Id" data-preselected="True" @(playlist.Songs.Any(s => s.Id == Model.SongModel.Id) ? "checked" : "")>
 
                     <span class="custom-checkbox"></span>
                     @playlist.Name
                 </label>
                 <br />
-                <div id="@modalId" class="modal fade" tabindex="-1" role="dialog">
-                    <!-- Rest of the modal content -->
-                </div>
+                
             }
             <div>
                 <label>Create a new playlist:</label>

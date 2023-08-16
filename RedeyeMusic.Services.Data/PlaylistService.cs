@@ -243,7 +243,7 @@ namespace RedeyeMusic.Services.Data
             {
                 if (selectedPlaylistsIds.Contains(playlist.Id))
                 {
-                    if (!playlist.PlaylistsSongs.Any(ps => ps.SongId == songId))
+                    if (!playlist.PlaylistsSongs.Any(ps => ps.SongId == songId || ps.PlaylistId == playlist.Id))
                     {
                         playlist.PlaylistsSongs.Add(new PlaylistsSongs
                         {
@@ -254,6 +254,7 @@ namespace RedeyeMusic.Services.Data
                 }
                 else
                 {
+
                     {
                         var playlistsSongToRemove = playlist.PlaylistsSongs.FirstOrDefault(ps => ps.SongId == songId && ps.PlaylistId == playlist.Id);
                         if (playlistsSongToRemove != null)

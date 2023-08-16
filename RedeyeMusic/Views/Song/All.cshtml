@@ -1,4 +1,4 @@
-﻿@*@using RedeyeMusic.Services.Data.Interfaces;
+﻿@using RedeyeMusic.Services.Data.Interfaces;
 @using RedeyeMusic.Web.Infrastrucutre.Extensions;
 @using RedeyeMusic.Web.ViewModels.Playlist;
 @model IEnumerable<IndexViewModel>
@@ -69,12 +69,12 @@
                     <div class="col-md-3">
                         <div class="row justify-content-center pt-3 mb-2">
                             <div class="col me-lg-5">
-                                <a asp-area="" asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
+                                <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
                                 @if (User.Identity?.IsAuthenticated ?? false)
                                 {
                                     if (!isArtist || this.User.IsAdmin())
                                     {
-                                        <button asp-area="" asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
+                                        <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
                                     }
                                 }
                             </div>
@@ -127,12 +127,12 @@
                     <div class="col-md-3">
                         <div class="row justify-content-center pt-3 mb-2">
                             <div class="col me-lg-5">
-                                <a asp-area="" asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
+                                <a asp-action="Details" asp-controller="Song" asp-route-id="@song.Id" class="btn btn-danger">Details</a>
                                 @if (User.Identity?.IsAuthenticated ?? false)
                                 {
                                     if (!isArtist || this.User.IsAdmin())
                                     {
-                                        <button asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
+                                        <button asp-area="" asp-action="AddToPlaylist" asp-controller="Playlist" class="btn btn-primary add-to-playlist" data-song-id="@song.Id">Add to Playlist</button>
                                     }
                                 }
                             </div>
@@ -141,14 +141,14 @@
                 </div>
                 if (User.Identity?.IsAuthenticated ?? false)
                 {
-                    if (!isArtist)
+                    if (!isArtist || this.User.IsAdmin())
                     {
                         <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
                             @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
-                {
-                SongModel = song,
-                Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
-                })
+                            {
+                            SongModel = song,
+                            Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
+                            })
                         </div>
                     }
                 }
@@ -173,4 +173,3 @@
 
 
 
-*@

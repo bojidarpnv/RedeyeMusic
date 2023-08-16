@@ -7,7 +7,6 @@ using RedeyeMusic.Web.ViewModels.Home;
 using RedeyeMusic.Web.ViewModels.Song;
 using static RedeyeMusic.Common.NotificationMessagesConstants;
 
-
 namespace RedeyeMusic.Web.Controllers
 {
     public class SongController : BaseController
@@ -29,7 +28,13 @@ namespace RedeyeMusic.Web.Controllers
             this.logger = logger;
             this.env = env;
         }
-
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> All()
+        {
+            IEnumerable<IndexViewModel> viewModel = await this.songService.GetAll();
+            return View(viewModel);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Add()

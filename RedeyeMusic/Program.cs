@@ -22,7 +22,7 @@ namespace RedeyeMusic
                 = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services.AddDbContext<RedeyeMusicDbContext>(options =>
-    options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString));
 
             builder.Services
                 .AddDbContext<RedeyeMusicDbContext>(options =>

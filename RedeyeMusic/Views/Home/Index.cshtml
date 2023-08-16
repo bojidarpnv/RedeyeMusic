@@ -145,10 +145,10 @@
                     {
                         <div id="addToPlaylistModal-@song.Id" class="modal fade" tabindex="-1" role="dialog">
                             @await Html.PartialAsync("_AddToPlaylistModal", new AddToPlaylistViewModel
-                {
-                SongModel = song,
-                Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
-                })
+                            {
+                                SongModel = song,
+                                Playlists = await this.PlaylistSerivce.GetAllPlaylistsByUserIdAsync(this.User.GetId())
+                            })
                         </div>
                     }
                 }

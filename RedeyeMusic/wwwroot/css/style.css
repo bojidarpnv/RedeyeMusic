@@ -3,15 +3,16 @@
 }
 footer {
     position: fixed;
-    left: 0px;
-    bottom: 0px;
-    height: 80px;
+    left: 0;
+    bottom: 0;
     width: 100%;
-    
+    background-color: #f1f1f1;
+    padding: 10px 0; /* Add padding to top and bottom */
+    text-align: center; /* Center content horizontally */
 }
 footer {
     background-color: #f1f1f1;
-    padding: 0px 20px;
+    padding: 0px 0px;
 }
 
 .audio-player {
@@ -24,7 +25,7 @@ footer {
 
 audio {
     width: 100%;
-    max-width: 1000px;
+    max-width: 500px;
     background-color: red; /* White background for the audio player */
     border: 2px solid #e94f4f; /* Red border color */
     border-radius: 230px; /* Rounded corners */
@@ -175,9 +176,22 @@ input[type="checkbox"]:checked + .custom-checkbox::before {
     color: #333; /* Use a dark color code here */
 }
 
-    /* Change the text color for labels inside the modal */
-    .modal-content label {
+.modal-content label {
         color: #333; /* Use the same or different color code as above */
-    }
+ }
+/*.audio-player-wrapper {
+    position: absolute;
+
+    bottom: 0;
+   width: 120%;
+    background-color: rgba(0, 0, 0, 0.8);*/ /* Overlay background color */
+    /*padding: 0px 400px;*/ /* Add some padding for spacing */
+    /*display: none;*/ /* Initially hide the audio player wrapper */
+    /*box-sizing: border-box;*/ /* Include padding in width calculations */
+/*}
+
+    .audio-player-wrapper audio {
+        width: 100%;
+    }*/
 
 

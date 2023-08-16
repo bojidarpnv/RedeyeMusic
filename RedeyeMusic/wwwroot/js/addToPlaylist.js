@@ -1,105 +1,94 @@
 ﻿$(document).ready(function () {
-    // Array to store selected playlist IDs
-    
-    var selectedPlaylistIds = [];
+    $('.add-to-playlist').click(function () {
+        var songId = $(this).data('song-id');
+        var modalId = '#addToPlaylistModal-' + songId;
+        var selectedPlaylistIds = [];
 
-    $('input[name="playlist-checkbox"][data-preselected="True"]:checked').each(function () {
-        var playlistId = $(this).val();
-        if (selectedPlaylistIds.indexOf(playlistId) === -1) {
-            selectedPlaylistIds.push(playlistId);
-        }
-        
-    });
+        // Log selected playlist IDs before opening the modal
+        console.log(`Before opening modal - ${modalId} - selectedPlaylistIds:`, selectedPlaylistIds);
 
-    // Listen for checkbox changes
-    $('input[name="playlist-checkbox"]').on('change', function () {
-        var playlistId = $(this).val();
-
-        if ($(this).prop('checked')) {
+        $('input[name="playlist-checkbox"][data-preselected="True"]:checked', modalId).each(function () {
+            var playlistId = $(this).val();
             if (selectedPlaylistIds.indexOf(playlistId) === -1) {
                 selectedPlaylistIds.push(playlistId);
             }
-        } else {
-            var index = selectedPlaylistIds.indexOf(playlistId);
-            if (index !== -1) {
-                selectedPlaylistIds.splice(index, 1);
-            }
-        }
-    });
+        });
 
-    $('.add-to-playlist').click(function () {
-        var antiForgeryToken = $("input[name='__RequestVerificationToken']").val();
-        var songId = $(this).data('song-id');
+        // Store the array in modal's data attribute
+        $(modalId).data('selected-playlist-ids', selectedPlaylistIds);
+        $(modalId).on('hidden.bs.modal', function () {
+            $(modalId).data('selected-playlist-ids', []);
+        });
+        // Log selected playlist IDs after opening the modal
+        console.log(`After opening modal - ${modalId} - selectedPlaylistIds:`, $(modalId).data('selected-playlist-ids'));
 
-        $('#addToPlaylistModal-' + songId).data('song-id', songId); // Store songId in the modal's data attribute
-        $('#addToPlaylistModal-' + songId).modal('show');
-
-        // Don't clear the selectedPlaylistIds array here
+        $(modalId).modal('show');
     });
 
     $('.create-playlist-btn').click(function () {
         var antiForgeryToken = $("input[name='__RequestVerificationToken']").val();
-        var songId = $(this).closest('.modal').data('song-id'); // Retrieve songId from the modal's data attribute
+        var songId = $(this).closest('.modal').data('song-id');
+        var modalId = '#addToPlaylistModal-' + songId;
         var newPlaylistName = $('#newPlaylistName').val();
+
+        var selectedPlaylistIds = $(modalId).data('selected-playlist-ids');
+
+        // Log selected playlist IDs before sending in AJAX request
+        console.log(`Before sending AJAX - ${modalId} - selectedPlaylistIds:`, selectedPlaylistIds);
 
         // Perform AJAX request to create a playlist
         $.ajax({
             type: 'POST',
-            url: '/Playlist/Create', // Change the URL to the correct route
+            url: '/Playlist/Create',
             data: {
                 songId: songId,
                 playlistName: newPlaylistName,
                 selectedPlaylistIds: selectedPlaylistIds,
             },
             headers: {
-                // Include the anti-forgery token in the request headers
                 RequestVerificationToken: antiForgeryToken
             },
-
             success: function () {
                 // Handle success
-                
-                $('#addToPlaylistModal-' + songId).modal('hide');
+                window.location.reload();
+                $(modalId).modal('hide');
                 toastr.success("Successfully created playlist!");
-                localStorage.removeItem('selectedPlaylistIds');
-                selectedPlaylistIds = [];
             },
             error: function () {
                 // Handle error
-                selectedPlaylistIds = [];
             }
         });
     });
 
     $('.save-playlist-btn').click(function () {
         var antiForgeryToken = $("input[name='__RequestVerificationToken']").val();
-        var songId = $(this).data('song-id'); // Get the song ID
+        var songId = $(this).data('song-id');
+        var modalId = '#addToPlaylistModal-' + songId;
+
+        var selectedPlaylistIds = $(modalId).data('selected-playlist-ids');
+
+        // Log selected playlist IDs before sending in AJAX request
+        console.log(`Before sending AJAX - ${modalId} - selectedPlaylistIds:`, selectedPlaylistIds);
 
         // Perform AJAX request to update playlists
         $.ajax({
             type: 'POST',
-            url: '/Playlist/Update', // Change the URL to the correct route
+            url: '/Playlist/Update',
             data: {
                 songId: songId,
                 selectedPlaylistIds: selectedPlaylistIds,
             },
             headers: {
-                // Include the anti-forgery token in the request headers
                 RequestVerificationToken: antiForgeryToken
             },
-
             success: function (data) {
-                // Handle success, close the modal, or show a success message
-                $('#addToPlaylistModal-' + songId).modal('hide');
+                // Handle success
+                $(modalId).modal('hide');
                 toastr.success("Successfully saved playlists!");
-                localStorage.removeItem('selectedPlaylistIds');
-                selectedPlaylistIds = [];
             },
             error: function () {
                 // Handle error
-                selectedPlaylistIds = [];
             }
         });
     });
-
 });

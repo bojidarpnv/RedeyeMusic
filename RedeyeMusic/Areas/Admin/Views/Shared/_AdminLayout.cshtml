@@ -44,7 +44,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                        <li class="nav-item active">
-                        <a class="nav-link  text-light" asp-area="" asp-controller="Home" asp-action="Index">Songs</a>
+                        <a class="nav-link  text-light" asp-area="" asp-controller="Song" asp-action="All">All Songs</a>
                         </li>
                         <li class="nav-item dropdown">
                             <div>
@@ -84,21 +84,23 @@
         
         
     </div>
+    
     <partial name="_NotificationsPartial" />
     <footer class="border-top footer text-muted bg-dark">
-        <div class="container">
-            <div class="">
-                <audio controls id="musicPlayer" style="width: 100%;">
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
-            &copy; RedeyeMusic @ReleaseYear
-            @if(DateTime.UtcNow.Year != ReleaseYear)
-            {
-                @Html.Raw($" - {DateTime.UtcNow.Year}")
-            }
+    <div class="">
+        <div id="audioWrapper" style="display: none;">
+            <audio controls id="audioPlayer" style="width: 100%;">
+                Your browser does not support the audio element.
+            </audio>
         </div>
-        
+    </div>
+    <div>
+        &copy; RedeyeMusic @ReleaseYear
+        @if (DateTime.UtcNow.Year != ReleaseYear)
+        {
+            @Html.Raw($" - {DateTime.UtcNow.Year}")
+        }
+    </div>
     </footer>
    @await RenderSectionAsync("Scripts", required: false)
     @section Scripts {
