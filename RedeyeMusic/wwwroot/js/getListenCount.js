@@ -32,4 +32,5 @@
     }
 
     updateListenCounts();
+    setInterval(updateListenCounts, 5000);
 });

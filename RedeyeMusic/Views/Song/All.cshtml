@@ -47,9 +47,9 @@
                 var song = popularSongs[i];
                 int seconds = song.Duration % 60;
                 int minutes = song.Duration / 60;
-                var span = new TimeSpan(0, 0, seconds);
-                var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
-                string songDuration = minutes + "+" + seconds;
+
+                // Formatting the duration as "minutes:seconds"
+                string durationInMinutes = $"{minutes}:{seconds:00}";
                 <div class="row">
                     <div class="col-md-6">
                         <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
@@ -105,9 +105,9 @@
                 var song = songs[i];
                 int seconds = song.Duration % 60;
                 int minutes = song.Duration / 60;
-                var span = new TimeSpan(0, 0, seconds);
-                var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
-                string songDuration = minutes + "+" + seconds;
+
+                // Formatting the duration as "minutes:seconds"
+                string durationInMinutes = $"{minutes}:{seconds:00}";
                 <div class="row">
                     <div class="col-md-6">
                         <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">

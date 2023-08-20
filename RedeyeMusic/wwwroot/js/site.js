@@ -2,7 +2,7 @@
     const songItems = document.querySelectorAll(".song-item");
     const audioPlayer = document.getElementById("audioPlayer");
     const audioWrapper = document.getElementById("audioWrapper");
-
+    audioPlayer.volume = 0.2;
     
     audioWrapper.style.display = "none";
 

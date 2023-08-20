@@ -99,7 +99,7 @@ namespace RedeyeMusic.Services.Data
             await this.dbContext.Songs.AddAsync(song);
             await this.dbContext.SaveChangesAsync();
 
-            int duration = GetSongDuration(song.Mp3FilePath);
+            int duration = GetSongDuration(fullFilePath);
             song.Duration = duration;
             await this.dbContext.SaveChangesAsync();
             return song.Id;

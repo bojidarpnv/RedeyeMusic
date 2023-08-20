@@ -45,9 +45,9 @@
                     {
                         int seconds = song.Duration % 60;
                         int minutes = song.Duration / 60;
-                        var span = new TimeSpan(0, 0, seconds);
-                        var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
-                        string songDuration = minutes + "+" + seconds;
+
+                        // Formatting the duration as "minutes:seconds"
+                        string durationInMinutes = $"{minutes}:{seconds:00}";
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
@@ -87,9 +87,9 @@
                     {
                         int seconds = song.Duration % 60;
                         int minutes = song.Duration / 60;
-                        var span = new TimeSpan(0, 0, seconds);
-                        var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
-                        string songDuration = minutes + "+" + seconds;
+
+                        // Formatting the duration as "minutes:seconds"
+                        string durationInMinutes = $"{minutes}:{seconds:00}";
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
@@ -97,7 +97,7 @@
                                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                         <div class="white ms-1">
                                             <div class="white">@song.Title</div>
-                                            <div class="smallText"><small class="white">@song.Lyrics</small></div>
+                                            <div class="smallText"><small class="white truncate-lyrics">@song.Lyrics</small></div>
                                         </div>
                                     </div>
                                     <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
@@ -127,9 +127,9 @@
                     {
                         int seconds = song.Duration % 60;
                         int minutes = song.Duration / 60;
-                        var span = new TimeSpan(0, 0, seconds);
-                        var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
-                        string songDuration = minutes + "+" + seconds;
+
+                        // Formatting the duration as "minutes:seconds"
+                        string durationInMinutes = $"{minutes}:{seconds:00}";
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
@@ -137,7 +137,7 @@
                                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                         <div class="white ms-1">
                                             <div class="white">@song.Title</div>
-                                            <div class="smallText"><small class="white">@song.Lyrics</small></div>
+                                            <div class="smallText"><small class="white truncate-lyrics">@song.Lyrics</small></div>
                                         </div>
                                     </div>
                                     <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>
@@ -167,9 +167,9 @@
                     {
                         int seconds = song.Duration % 60;
                         int minutes = song.Duration / 60;
-                        var span = new TimeSpan(0, 0, seconds);
-                        var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
-                        string songDuration = minutes + "+" + seconds;
+
+                        // Formatting the duration as "minutes:seconds"
+                        string durationInMinutes = $"{minutes}:{seconds:00}";
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="white song m-2 ms-4 row align-items-center song-item" data-song-id="@song.Id" data-src="@Url.Content(song.Mp3FilePath)">
@@ -177,7 +177,7 @@
                                         <img class="rounded m-1" src="@song.ImageUrl" style="width:50px;height:50px; object-fit:cover;">
                                         <div class="white ms-1">
                                             <div class="white">@song.Title</div>
-                                            <div class="smallText"><small class="white">@song.Lyrics</small></div>
+                                            <div class="smallText"><small class="white truncate-lyrics">@song.Lyrics</small></div>
                                         </div>
                                     </div>
                                     <div class="col-2 text-decoration-none">@durationInMinutes<i class="bi bi-play ml-2"></i></div>

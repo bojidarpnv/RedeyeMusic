@@ -7,8 +7,9 @@
     ViewData["Title"] = "Song Details";
     int seconds = Model.Duration % 60;
     int minutes = Model.Duration / 60;
-    var span = new TimeSpan(0, 0, seconds);
-    var durationInMinutes = string.Format("{0}:{1:00}", (int)span.TotalMinutes, span.Seconds);
+
+    // Formatting the duration as "minutes:seconds"
+    string durationInMinutes = $"{minutes}:{seconds:00}";
     int artistId = await this.ArtistService.GetArtistIdByUserIdAsync(this.User.GetId());
     bool isUserArtist = await this.ArtistService.ArtistExistsByUserIdAsync(this.User.GetId());
     bool isArtistOwnerOfSong = await this.ArtistService.IsArtistWithIdOwnerOfSongWithIdAsync(artistId, Model.Id);
